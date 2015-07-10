@@ -1,0 +1,13 @@
+## Database access setup
+# spring.datasource.username=_your-db-username_
+# spring.datasource.password=_your-db-passowrd_
+
+# MySQL
+# spring.datasource.url: jdbc:mysql://localhost/freezo
+# spring.datasource.driverClassName: com.mysql.jdbc.Driver
+
+# Hibernate - update tables during system startup (not recommended in production system)
+# spring.jpa.hibernate.ddl-auto: update
+
+# Print Hybris SQL commands into console (not recommended in production system)
+# spring.jpa.show-sql: true
