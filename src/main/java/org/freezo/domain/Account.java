@@ -64,7 +64,7 @@ public class Account implements UserDetails
 	@Type(type = "yes_no")
 	private boolean credentialsExpired;
 
-	@ElementCollection(fetch = FetchType.LAZY)
+	@ElementCollection(fetch = FetchType.EAGER)
 	private final Set<String> authorities = new HashSet<>();
 
 	@OneToOne(fetch = FetchType.LAZY)
