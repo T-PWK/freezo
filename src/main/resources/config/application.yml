@@ -1,6 +1,4 @@
 freezo:
-  enableAdmin: true
-  enableWeb: true
   security:
     authentiation:
       account:
@@ -10,12 +8,14 @@ freezo:
       password:
         strength: 10
 spring:
-    jmx:
-        enabled: false
-    jpa:
-        show-sql: false
-        hibernate:
-            ddl-auto: validate
+  jmx:
+    enabled: false
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+  thymeleaf:
+    cache: false
 security:
-    basic:
-        enabled: false
+  basic:
+    enabled: false
