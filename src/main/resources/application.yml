@@ -1,0 +1,21 @@
+freezo:
+  enableAdmin: true
+  enableWeb: true
+  security:
+    authentiation:
+      account:
+        updateOnSuccess: true
+        updateOnFailure: true
+        maxFailuresToLock: -1
+      password:
+        strength: 10
+spring:
+    jmx:
+        enabled: false
+    jpa:
+        show-sql: false
+        hibernate:
+            ddl-auto: validate
+security:
+    basic:
+        enabled: false
