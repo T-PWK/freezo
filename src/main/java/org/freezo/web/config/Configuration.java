@@ -1,9 +1,9 @@
 package org.freezo.web.config;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Profile;
 
 @org.springframework.context.annotation.Configuration
-@ConditionalOnProperty(prefix = "freezo", name = "enableWeb", havingValue = "true")
+@Profile("web")
 public class Configuration
 {
 
