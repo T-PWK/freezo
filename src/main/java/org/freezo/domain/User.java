@@ -1,5 +1,6 @@
 package org.freezo.domain;
 
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -11,9 +12,14 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 @Entity
-public class User
+public class User implements UserDetails
 {
+	private static final long serialVersionUID = -194182420823397720L;
+
 	@Id
 	@GeneratedValue
 	private long id;
@@ -38,7 +44,7 @@ public class User
 	public User()
 	{
 		account = new Account();
-		account.setUser(this);
+		getAccount().setUser(this);
 	}
 
 	public long getId()
@@ -114,6 +120,53 @@ public class User
 	public void setBio(final String bio)
 	{
 		this.bio = bio;
+	}
+
+	public Account getAccount()
+	{
+		return account;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities()
+	{
+		return getAccount().getAuthorities();
+	}
+
+	@Override
+	public String getPassword()
+	{
+		return getAccount().getPassword();
+	}
+
+	@Override
+	public String getUsername()
+	{
+		return getAccount().getUsername();
+	}
+
+	@Override
+	public boolean isAccountNonExpired()
+	{
+		return getAccount().isAccountNonExpired();
+	}
+
+	@Override
+	public boolean isAccountNonLocked()
+	{
+		return getAccount().isAccountNonLocked();
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired()
+	{
+		return getAccount().isCredentialsNonExpired();
+	}
+
+	@Override
+	public boolean isEnabled()
+	{
+		return getAccount().isEnabled();
 	}
 
 }
