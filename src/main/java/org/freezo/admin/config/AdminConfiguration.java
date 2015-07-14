@@ -1,15 +1,21 @@
 package org.freezo.admin.config;
 
 import org.freezo.admin.service.AdminUserDetailsService;
+import org.freezo.admin.service.FailedAuthHandler;
+import org.freezo.admin.service.SuccessfulAuthHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
+import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,6 +32,20 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Profile("admin")
 public class AdminConfiguration
 {
+	@Bean
+	@ConditionalOnProperty(prefix = "freezo.security.authentication.account", name = "updateOnSuccess", havingValue = "true", matchIfMissing = true)
+	public ApplicationListener<AuthenticationSuccessEvent> successfulAuthHandler()
+	{
+		return new SuccessfulAuthHandler();
+	}
+
+	@Bean
+	@ConditionalOnProperty(prefix = "freezo.security.authentication.account", name = "updateOnFailure", havingValue = "true", matchIfMissing = true)
+	public ApplicationListener<AuthenticationFailureBadCredentialsEvent> failedAuthHandler()
+	{
+		return new FailedAuthHandler();
+	}
+
 	@Bean
 	@ConditionalOnMissingBean
 	public UserDetailsService userDetailsService()
@@ -79,7 +99,7 @@ public class AdminConfiguration
 		@Override
 		public void init(final AuthenticationManagerBuilder auth) throws Exception
 		{
-//			auth.userDetailsService(userDetailsService).passwordEncoder(encoder);
+			// auth.userDetailsService(userDetailsService).passwordEncoder(encoder);
 			auth.userDetailsService(userDetailsService);
 		}
 	}
