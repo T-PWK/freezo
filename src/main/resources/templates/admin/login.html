@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.thymeleaf.org/thymeleaf/layout"
+      layout:decorator="admin/layout">
+<div layout:fragment="content">
+    <div class="ui two column centered padded grid">
+        <div class="column">
+            <form th:action="@{/admin/login}" method="post" class="ui form segment">
+
+                <h2 class="ui dividing centered header">
+                    <img th:src="#{login.head.img}" class="ui middle aligned image"/>
+
+                    <div class="content">
+                        <span th:text="#{login.head}" th:remove="tag">Welcome to JPanda</span>
+
+                        <div class="sub header" th:text="#{login.subhead}">Blogging platform</div>
+                    </div>
+                </h2>
+
+                <div class="ui negative icon message" th:if="${param.error}">
+                    <i class="close icon"/> <i th:class="|#{login.err.invalidLogin.ico} icon|"/>
+
+                    <div class="content">
+                        <h3 class="header" th:text="#{login.err.invalidLogin.head}">Login Failure</h3>
+
+                        <p th:text="#{login.err.invalidLogin.txt}">Invalid user name or password</p>
+                    </div>
+                </div>
+
+                <div class="ui positive icon message" th:if="${param.logout}">
+                    <i class="close icon"/> <i th:class="|#{login.msg.logout.ico} icon|"/>
+
+                    <div class="content">
+                        <h3 class="header" th:text="#{login.msg.logout.head}">Logout</h3>
+
+                        <p th:text="#{login.msg.logout.txt}">You have been logged out</p>
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="required field">
+                        <label for="username" th:text="#{login.username.label}">Username</label>
+
+                        <div class="ui icon input">
+                            <input type="text" th:placeholder="#{login.username.placeholder}" id="username"
+                                   name="username"/>
+                            <i class="user icon"></i>
+                        </div>
+                    </div>
+                    <div class="required field">
+                        <label for="password" th:text="#{login.password.label}">Password</label>
+
+                        <div class="ui icon input">
+                            <input type="password" id="password" name="password"/>
+                            <i class="lock icon"></i>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit">Login</button>
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            </form>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="body-bottom">
+    <script type="text/javascript">
+    jQuery(function($){
+        $('.ui.form').form(null, { onSuccess: function(){ $(this).addClass('loading'); }});
+        $('.message .close').on('click', function(){ $(this).closest('.message').transition('fade'); });
+    });
+    </script>
+</th:block>
+</html>

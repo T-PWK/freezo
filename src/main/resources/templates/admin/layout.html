@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.thymeleaf.org/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <title th:text="#{meta.title}">JPanda CMS</title>
+    <meta name="description" th:attr="content=#{meta.description}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" th:href="@{/webjars/Semantic-UI/2.0.3/semantic.min.css}"/>
+    <style>
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak { display: none !important; }
+    </style>
+</head>
+<body>
+<th:block layout:fragment="content"/>
+
+<script th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"/>
+<script th:src="@{/webjars/Semantic-UI/2.0.3/semantic.min.js}"/>
+<th:block layout:fragment="body-bottom"></th:block>
+</body>
+</html>
