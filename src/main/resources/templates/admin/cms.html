@@ -4,5 +4,10 @@
 </head>
 <body>
 	<h1>CMS Main page</h1>
+
+	<form th:action="@{/admin/logout}" method="post">
+		<button type="submit">Logout</button>
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+	</form>
 </body>
 </html>
