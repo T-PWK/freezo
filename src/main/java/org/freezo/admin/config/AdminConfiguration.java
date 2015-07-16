@@ -99,8 +99,7 @@ public class AdminConfiguration
 		@Override
 		public void init(final AuthenticationManagerBuilder auth) throws Exception
 		{
-			// auth.userDetailsService(userDetailsService).passwordEncoder(encoder);
-			auth.userDetailsService(userDetailsService);
+			auth.userDetailsService(userDetailsService).passwordEncoder(encoder);
 		}
 	}
 }
