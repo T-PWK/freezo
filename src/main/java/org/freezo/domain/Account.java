@@ -61,8 +61,14 @@ public class Account implements UserDetails
 	@Type(type = "yes_no")
 	private boolean expired;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date accountExpirationDate;
+
 	@Type(type = "yes_no")
 	private boolean credentialsExpired;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date credentialsExpirationDate;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	private final Set<String> authorities = new HashSet<>();
@@ -186,7 +192,7 @@ public class Account implements UserDetails
 	@Override
 	public boolean isAccountNonExpired()
 	{
-		return !expired;
+		return !expired && (accountExpirationDate == null || accountExpirationDate.after(new Date()));
 	}
 
 	public boolean isExpired()
@@ -202,7 +208,8 @@ public class Account implements UserDetails
 	@Override
 	public boolean isCredentialsNonExpired()
 	{
-		return !credentialsExpired;
+		return !credentialsExpired
+				&& (credentialsExpirationDate == null || credentialsExpirationDate.after(new Date()));
 	}
 
 	public boolean isCredentialsExpired()
@@ -244,5 +251,25 @@ public class Account implements UserDetails
 	public long getVersion()
 	{
 		return version;
+	}
+
+	public Date getAccountExpirationDate()
+	{
+		return accountExpirationDate;
+	}
+
+	public void setAccountExpirationDate(final Date accountExpirationDate)
+	{
+		this.accountExpirationDate = accountExpirationDate;
+	}
+
+	public Date getCredentialsExpirationDate()
+	{
+		return credentialsExpirationDate;
+	}
+
+	public void setCredentialsExpirationDate(final Date credentialsExpirationDate)
+	{
+		this.credentialsExpirationDate = credentialsExpirationDate;
 	}
 }
