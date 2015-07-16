@@ -44,7 +44,7 @@
 				<div class="ui dropdown item">Website Management
 					<i class="dropdown icon"></i>
 					<div class="menu">
-						<div class="item">New</div>
+						<a class="item" href="#/blah">New</a>
 						<div class="item">
 							<span class="description">ctrl + o</span>Open...</div>
 						<div class="item">
@@ -75,7 +75,7 @@
 				<div class="ui dropdown item">Administration
 					<i class="dropdown icon"></i>
 					<div class="menu">
-						<a class="item"><i class="icon user"></i>Edit Profile</a>
+						<a class="item" href="#/profile/edit"><i class="icon user"></i>Edit Profile</a>
 					</div>
 				</div>
 				<div class="right menu">
@@ -83,7 +83,9 @@
 						<img src="/images/profile-pic-300px.jpg" class="ui image circular mini" />
 						<i class="dropdown icon"></i>
 						<div class="menu">
-							<a class="item" herf="#/profile/edit"><i class="user icon"></i>Edit Profile</a>
+							<div class="item">Logged in as <strong>admin</strong></div>
+							<div class="divider"></div>
+							<a class="item" href="#/profile/edit"><i class="icon user"></i>Edit Profile</a>
 							<div class="divider"></div>
 							<a class="item logout">Logout</a>
 						</div>
@@ -119,7 +121,7 @@
 	<th:block layout:fragment="body-bottom">
 		<script type="text/javascript">
 			$('.logout.item').click(function(){ $('#logout').submit(); })
-			$('.ui.dropdown').dropdown()
+			$('.ui.dropdown').dropdown({ action: 'hide'})
 		</script>
 	</th:block>
 
