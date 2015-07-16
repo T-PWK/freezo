@@ -48,6 +48,7 @@
 		<script type="text/javascript" th:inline="javascript">
 			$(document).ready(function() {
 				$('.message .close').on('click', function(){ $(this).closest('.message').transition('fade'); });
+				setTimeout(function(){ $('.ui.message.negative,.ui.message.warning').closest('.message').transition('fade'); }, 5000);
 				$('.ui.form').form({
 					onSuccess: function() {
 						$(this).addClass('loading');
