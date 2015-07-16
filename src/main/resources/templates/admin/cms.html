@@ -1,13 +1,62 @@
-<html xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
-<head>
-<title tiles:fragment="title">Messages : Create</title>
-</head>
-<body>
-	<h1>CMS Main page</h1>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.thymeleaf.org/thymeleaf/layout" layout:decorator="admin/layout">
+	<style type="text/css" layout:fragment="head">
+		.container { padding: 1em; margin-right: 260px; }
+	</style>
+	<th:block layout:fragment="content">
+		<div class="ui left vertical inverted sidebar menu visible">
+			<a class="item" href="#dashboard"><i class="home icon"></i><strong>Dashboard</strong></a>
+			<div class="item">
+				<div class="header">Content</div>
+				<div class="menu">
+					<a class="item" href="#posts"><i class="file text icon"></i>Posts &amp; Pages</a>
+				</div>
+			</div>
+			<div class="item">
+				<div class="header">Website Management</div>
+				<div class="menu">
+					<a class="item" href="#basic-settings"><i class="cog icon"></i>Basic</a>
+					<a class="item" href="#ip-settings"><i class="grid layout icon"></i>IP Settings</a>
+					<a class="item" href="#redirect-settings"><i class="share square icon"></i>Redirects</a>
+					<a class="item" href="#theme-settings"><i class="desktop icon"></i>Theme</a>
+				</div>
+			</div>
+			<div class="item">
+				<div class="header">Administration</div>
+				<div class="menu">
+					<a class="item" href="#/admin/websites"><i class="globe icon"></i>Websites</a>
+					<a class="item" href="#/admin/users"><i class="users icon"></i>Users</a>
+					<a class="item" href="#/admin/themes"><i class="desktop icon"></i>Themes</a>
+					<a class="item" href="#/admin/plugins"><i class="puzzle piece icon"></i>Plugins</a>
+				</div>
+			</div>
+		</div>
+		<div class="pusher">
+			<div class="container">
+				<!-- Site content !-->
+				<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam molestie sem et est condimentum, sit amet pretium sapien
+					ullamcorper. In ac sapien id arcu facilisis fringilla sit amet ut purus. Ut vestibulum felis at semper commodo. Ut ullamcorper
+					finibus pretium. Etiam tristique imperdiet imperdiet. Suspendisse potenti. Praesent neque erat, feugiat non dictum et, volutpat
+					vel urna. Suspendisse et facilisis metus, dapibus porttitor massa. Vestibulum efficitur eleifend urna sed semper. Suspendisse
+					gravida faucibus dictum.</div>
+				<!-- Site content !-->
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam molestie sem et est condimentum, sit amet pretium sapien
+					ullamcorper. In ac sapien id arcu facilisis fringilla sit amet ut purus. Ut vestibulum felis at semper commodo. Ut ullamcorper
+					finibus pretium. Etiam tristique imperdiet imperdiet. Suspendisse potenti. Praesent neque erat, feugiat non dictum et, volutpat
+					vel urna. Suspendisse et facilisis metus, dapibus porttitor massa. Vestibulum efficitur eleifend urna sed semper. Suspendisse
+					gravida faucibus dictum.</p>
+				<!-- Site content !-->
+				<div class="ui segment">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam molestie sem et est condimentum, sit amet pretium sapien
+					ullamcorper. In ac sapien id arcu facilisis fringilla sit amet ut purus. Ut vestibulum felis at semper commodo. Ut ullamcorper
+					finibus pretium. Etiam tristique imperdiet imperdiet. Suspendisse potenti. Praesent neque erat, feugiat non dictum et, volutpat
+					vel urna. Suspendisse et facilisis metus, dapibus porttitor massa. Vestibulum efficitur eleifend urna sed semper. Suspendisse
+					gravida faucibus dictum.</div>
+				<form th:action="@{/admin/logout}" method="post">
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+					<button class="negative ui button" type="submit">Negative Button</button>
+				</form>
+			</div>
+		</div>
+	</th:block>
 
-	<form th:action="@{/admin/logout}" method="post">
-		<button type="submit">Logout</button>
-		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-	</form>
-</body>
 </html>
