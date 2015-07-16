@@ -1,44 +1,103 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.thymeleaf.org/thymeleaf/layout" layout:decorator="admin/layout">
 	<style type="text/css" layout:fragment="head">
-		.container { padding: 1em; margin-right: 260px; }
+		.main.container { margin-top: 6em; }
+		.ui.fixed.secondary.menu { background: #f5f5f5; border-bottom: 1px solid #e5e5e5; }
 	</style>
 	<th:block layout:fragment="content">
-		<div class="ui left vertical inverted sidebar menu visible">
-			<a class="item" href="#dashboard"><i class="home icon"></i><strong>Dashboard</strong></a>
-			<div class="item">
-				<div class="header">Content</div>
-				<div class="menu">
-					<a class="item" href="#posts"><i class="file text icon"></i>Posts &amp; Pages</a>
+		<div class="ui fixed secondary menu">
+			<div class="ui container">
+				<!--<div class="item"><img src="/images/snowflake-inv.svg"/></div>-->
+				<!--<img src="/images/profile-pic-300px.jpg" class="ui image circular mini"/>-->
+				<a class="active item"><i class="icon dashboard"></i>Dashboard</a>
+				<div class="ui dropdown item">Content
+					<i class="dropdown icon"></i>
+					<div class="menu">
+						<div class="item">New</div>
+						<div class="item">
+							<span class="description">ctrl + o</span>Open...</div>
+						<div class="item">
+							<span class="description">ctrl + s</span>Save as...</div>
+						<div class="item">
+							<span class="description">ctrl + r</span>Rename</div>
+						<div class="item">Make a copy</div>
+						<div class="item">
+							<i class="folder icon"></i>Move to folder</div>
+						<div class="item">
+							<i class="trash icon"></i>Move to trash</div>
+						<div class="divider"></div>
+						<div class="item">Download As...</div>
+						<div class="item">
+							<i class="dropdown icon"></i>Publish To Web
+							<div class="menu">
+								<div class="item">Google Docs</div>
+								<div class="item">Google Drive</div>
+								<div class="item">Dropbox</div>
+								<div class="item">Adobe Creative Cloud</div>
+								<div class="item">Private FTP</div>
+								<div class="item">Another Service...</div>
+							</div>
+						</div>
+						<div class="item">E-mail Collaborators</div>
+					</div>
 				</div>
-			</div>
-			<div class="item">
-				<div class="header">Website Management</div>
-				<div class="menu">
-					<a class="item" href="#basic-settings"><i class="cog icon"></i>Basic</a>
-					<a class="item" href="#ip-settings"><i class="grid layout icon"></i>IP Settings</a>
-					<a class="item" href="#redirect-settings"><i class="share square icon"></i>Redirects</a>
-					<a class="item" href="#theme-settings"><i class="desktop icon"></i>Theme</a>
+				<div class="ui dropdown item">Website Management
+					<i class="dropdown icon"></i>
+					<div class="menu">
+						<div class="item">New</div>
+						<div class="item">
+							<span class="description">ctrl + o</span>Open...</div>
+						<div class="item">
+							<span class="description">ctrl + s</span>Save as...</div>
+						<div class="item">
+							<span class="description">ctrl + r</span>Rename</div>
+						<div class="item">Make a copy</div>
+						<div class="item">
+							<i class="folder icon"></i>Move to folder</div>
+						<div class="item">
+							<i class="trash icon"></i>Move to trash</div>
+						<div class="divider"></div>
+						<div class="item">Download As...</div>
+						<div class="item">
+							<i class="dropdown icon"></i>Publish To Web
+							<div class="menu">
+								<div class="item">Google Docs</div>
+								<div class="item">Google Drive</div>
+								<div class="item">Dropbox</div>
+								<div class="item">Adobe Creative Cloud</div>
+								<div class="item">Private FTP</div>
+								<div class="item">Another Service...</div>
+							</div>
+						</div>
+						<div class="item">E-mail Collaborators</div>
+					</div>
 				</div>
-			</div>
-			<div class="item">
-				<div class="header">Administration</div>
-				<div class="menu">
-					<a class="item" href="#/admin/websites"><i class="globe icon"></i>Websites</a>
-					<a class="item" href="#/admin/users"><i class="users icon"></i>Users</a>
-					<a class="item" href="#/admin/themes"><i class="desktop icon"></i>Themes</a>
-					<a class="item" href="#/admin/plugins"><i class="puzzle piece icon"></i>Plugins</a>
+				<div class="ui dropdown item">Administration
+					<i class="dropdown icon"></i>
+					<div class="menu">
+						<a class="item"><i class="icon user"></i>Edit Profile</a>
+					</div>
+				</div>
+				<div class="right menu">
+					<div class="ui dropdown item">
+						<img src="/images/profile-pic-300px.jpg" class="ui image circular mini" />
+						<i class="dropdown icon"></i>
+						<div class="menu">
+							<a class="item" herf="#/profile/edit"><i class="user icon"></i>Edit Profile</a>
+							<div class="divider"></div>
+							<a class="item logout">Logout</a>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="pusher">
-			<div class="container">
+		<div class="ui container main">
 				<!-- Site content !-->
-				<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam molestie sem et est condimentum, sit amet pretium sapien
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam molestie sem et est condimentum, sit amet pretium sapien
 					ullamcorper. In ac sapien id arcu facilisis fringilla sit amet ut purus. Ut vestibulum felis at semper commodo. Ut ullamcorper
 					finibus pretium. Etiam tristique imperdiet imperdiet. Suspendisse potenti. Praesent neque erat, feugiat non dictum et, volutpat
 					vel urna. Suspendisse et facilisis metus, dapibus porttitor massa. Vestibulum efficitur eleifend urna sed semper. Suspendisse
-					gravida faucibus dictum.</div>
+					gravida faucibus dictum.</p>
 				<!-- Site content !-->
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam molestie sem et est condimentum, sit amet pretium sapien
 					ullamcorper. In ac sapien id arcu facilisis fringilla sit amet ut purus. Ut vestibulum felis at semper commodo. Ut ullamcorper
@@ -51,12 +110,17 @@
 					finibus pretium. Etiam tristique imperdiet imperdiet. Suspendisse potenti. Praesent neque erat, feugiat non dictum et, volutpat
 					vel urna. Suspendisse et facilisis metus, dapibus porttitor massa. Vestibulum efficitur eleifend urna sed semper. Suspendisse
 					gravida faucibus dictum.</div>
-				<form th:action="@{/admin/logout}" method="post">
-					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-					<button class="negative ui button" type="submit">Negative Button</button>
-				</form>
+				
 			</div>
-		</div>
+		<form id="logout" th:action="@{/admin/logout}" method="post">
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+		</form>
+	</th:block>
+	<th:block layout:fragment="body-bottom">
+		<script type="text/javascript">
+			$('.logout.item').click(function(){ $('#logout').submit(); })
+			$('.ui.dropdown').dropdown()
+		</script>
 	</th:block>
 
 </html>
