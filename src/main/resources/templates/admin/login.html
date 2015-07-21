@@ -7,12 +7,11 @@
     	.column { max-width: 450px; }
 		.ui.message.negative,.ui.message.warning { text-align: left; }
 		.logo { opacity: 0.8; }
+		.ui.segment a { font-size: 1rem; }
 	</style>
 	<th:block layout:fragment="content">
 		<div class="ui middle aligned center aligned grid">
 			<div class="column">
-				<th:block th:include="this :: logout-message" />
-				<th:block th:include="this :: error-message" />
 				<h2 class="ui inverted header">
 					<img src="/images/snowflake.svg" alt="Freezo" class="ui image logo" />
 					<div class="content">Freezo
@@ -34,21 +33,23 @@
 							</div>
 						</div>
 						<button class="ui fluid blue large submit button">Login</button>
+						<div class="ui divider"></div>
+						<a href="#" th:text="#{label.forgottenPassword}">Forgotten your username or password?</a>
 					</div>
 					<div class="ui error message"></div>
 					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 				</form>
-				<div class="ui message">
-					<a href="#">Forgotten your username or password?</a>
-				</div>
+				<th:block th:include="this :: logout-message" />
+				<th:block th:include="this :: error-message" />
 			</div>
 		</div>
 	</th:block>
 	<th:block layout:fragment="body-bottom">
 		<script type="text/javascript" th:inline="javascript">
 			$(document).ready(function() {
+				$("input[name='username']").focus();
 				$('.message .close').on('click', function(){ $(this).closest('.message').transition('fade'); });
-				setTimeout(function(){ $('.ui.message.negative,.ui.message.warning').closest('.message').transition('fade'); }, 5000);
+				setTimeout(function(){ $('.ui.message.negative:visible,.ui.message.warning:visible').closest('.message').transition('fade'); }, 5000);
 				$('.ui.form').form({
 					onSuccess: function() {
 						$(this).addClass('loading');
