@@ -42,8 +42,8 @@
 								<strong th:text="${#authentication.name}">admin</strong>
 							</div>
 							<div class="divider"></div>
-							<a class="item" href="#/profile/edit"><i class="user icon"></i>User Profile</a>
-							<a class="item" href="#/profile/settings"><i class="options icon"></i>Settings</a>
+							<a class="item" href="#/user/profile"><i class="user icon"></i>User Profile</a>
+							<a class="item" href="#/user/settings"><i class="options icon"></i>Settings</a>
 							<div class="divider"></div>
 							<a class="item logout"><i class="sign out icon"></i>Logout</a>
 						</div>
@@ -51,37 +51,21 @@
 				</div>
 			</div>
 		</div>
-		<div class="ui container main">
-			<div class="ui four statistics">
-				<div class="statistic">
-					<div class="value">22</div>
-					<div class="label">Saves</div>
-				</div>
-				<div class="statistic">
-					<div class="text value">Three
-						<br/>Thousand</div>
-					<div class="label">Signups</div>
-				</div>
-				<div class="statistic">
-					<div class="value">
-						<i class="plane icon"></i>5</div>
-					<div class="label">Flights</div>
-				</div>
-				<div class="statistic">
-					<div class="value">
-						<img src="/images/profile-pic-300px.jpg" class="ui circular inline image"/>42</div>
-					<div class="label">Team Members</div>
-				</div>
-			</div>
-		</div>
+		<div ng-view="" class="ui container main"></div>
 		<form id="logout" th:action="@{/admin/logout}" method="post">
 			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 		</form>
 	</th:block>
 	<th:block layout:fragment="body-bottom">
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular-route.min.js"></script>
+		<script src="/admin/js/application.js"></script>
 		<script type="text/javascript">
-			$('.logout.item').click(function(){ $('#logout').submit(); })
-			$('.ui.dropdown').dropdown({ action: 'hide'})
+			angular.element(document).ready(function(){
+				$('.logout.item').click(function(){ $('#logout').submit(); })
+				$('.ui.dropdown').dropdown({ action: 'hide'})
+				angular.bootstrap(document, ['tbs']);
+			})
 		</script>
 	</th:block>
 
