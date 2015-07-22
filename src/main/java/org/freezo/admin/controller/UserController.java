@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,7 +21,7 @@ public class UserController
 	private UserRepository repository;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public Page<User> usersByType(final Pageable pageable,
+	public Page<User> usersByType(@PageableDefault(size = 10) final Pageable pageable,
 			@RequestParam(value = "filter", required = false, defaultValue = "ALL") final UserType type)
 	{
 		switch (type)
