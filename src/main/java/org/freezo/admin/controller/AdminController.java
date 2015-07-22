@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("admin")
 @Profile("admin")
-public class CmsController
+public class AdminController
 {
-	@RequestMapping("cms")
+	@RequestMapping("")
 	public String cms()
 	{
 		return "admin/cms";
