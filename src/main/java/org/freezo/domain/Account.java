@@ -23,7 +23,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
+@JsonIgnoreProperties({ "id", "version", "password", "user", "disabled", "accountNonLocked", "credentialsNonExpired",
+		"accountNonExpired" })
 public class Account implements UserDetails
 {
 	private static final long serialVersionUID = 572162725149530080L;
