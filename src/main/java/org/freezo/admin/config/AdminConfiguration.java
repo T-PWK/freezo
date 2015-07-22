@@ -81,8 +81,19 @@ public class AdminConfiguration
 		protected void configure(final HttpSecurity http) throws Exception
 		{
 			http.antMatcher("/admin/**").authorizeRequests().anyRequest().authenticated()
-					.and().formLogin().loginPage("/admin/login").defaultSuccessUrl("/admin/cms", true).permitAll()
+					.and().formLogin().loginPage("/admin/login").defaultSuccessUrl("/admin", true).permitAll()
 					.and().logout().logoutUrl("/admin/logout").permitAll();
+		}
+	}
+
+	@Configuration
+	@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER - 1)
+	public static class ApiSecurityConfig extends WebSecurityConfigurerAdapter
+	{
+		@Override
+		protected void configure(final HttpSecurity http) throws Exception
+		{
+			http.antMatcher("/api/**").authorizeRequests().anyRequest().hasAnyRole("ADMIN", "API");
 		}
 	}
 
