@@ -1,1 +1,136 @@
-Users
+<div class="ui breadcrumb">
+	<a class="section">Dashboard</a>
+	<i class="right angle icon divider"></i>
+	<a class="section">Administration</a>
+	<i class="right angle icon divider"></i>
+	<div class="active section">Users</div>
+</div>
+<div class="ui hidden divider"></div>
+<div class="ui stackable grid">
+	<div class="six wide tablet four wide computer column">
+		<div class="ui vertical menu">
+			<a class="teal item">Users<div class="ui teal label">{{details.totalElements}}</div></a>
+			<a class="item">Locked<div class="ui label">0</div></a>
+			<a class="item">Expired<div class="ui label">0</div></a>
+			<div class="item">
+				<button class="ui primary button fluid" ng-click="reload()">Reload</button>
+			</div>
+		</div>
+	</div>
+	<div class="ten wide tablet twelve wide computer column">
+		<div class="ui floating labeled icon dropdown button">
+			<i class="filter icon"></i>
+			<span class="text">Filter</span>
+			<div class="menu">
+				<div class="header">
+					<i class="tags icon"></i>Filter by type</div>
+				<div class="item" ng-click="filterBy('ALL')">All</div>
+				<div class="item" ng-click="filterBy('ENABLED')">
+					<i class="green checkmark icon"></i>Enabled</div>
+				<div class="item" ng-click="filterBy('DISABLED')">
+					<i class="red remove icon"></i>Disabled</div>
+				<div class="item" ng-click="filterBy('NONLOCKED')">
+					<i class="icon green unlock"></i>Non-Locked</div>
+				<div class="item" ng-click="filterBy('LOCKED')">
+					<i class="icon red lock"></i>Locked</div>
+			</div>
+		</div>
+		<div class="ui floating labeled icon dropdown button">
+			<i class="sort icon"></i>
+			<span class="text">Sort</span>
+			<div class="menu">
+				<div class="header">
+					<i class="tags icon"></i>Sort by property</div>
+				<div class="item" ng-click="sortBy('accountUsername')">Username</div>
+				<div class="item" ng-click="sortBy('email')">Email</div>
+				<div class="item" ng-click="sortBy('firstName')">First Name</div>
+				<div class="item" ng-click="sortBy('lastName')">Last Name</div>
+			</div>
+		</div>
+		<table class="ui very basic celled table">
+			<thead>
+				<tr>
+					<th>User</th>
+					<th>Enabled</th>
+					<th>Locked</th>
+					<th>Expired</th>
+					<th>Credentials Expired</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="user in users">
+					<td>
+						<h4 class="ui image header">
+							<img ng-src="{{user.picture || '/images/profile-pic-300px.jpg'}}" class="ui mini rounded image" />
+							<div class="content">{{user.firstName}} {{user.lastName}}
+								<div class="sub header">{{user.email}}</div>
+								<div class="sub header">
+									<strong>{{user.account.username}}</strong>
+								</div>
+							</div>
+						</h4>
+					</td>
+					<td class="center aligned" ng-switch="user.account.enabled">
+						<i class="green checkmark icon" ng-switch-when="true"></i>
+						<i class="red remove icon" ng-switch-when="false"></i>
+					</td>
+					<td class="center aligned" ng-switch="user.account.locked">
+						<i class="green unlock icon" ng-switch-when="false"></i>
+						<i class="red lock icon" ng-switch-when="true"></i>
+					</td>
+					<td class="center aligned" ng-switch="user.account.expired">
+						<i class="green calendar outline icon" ng-switch-when="false"></i>
+						<i class="red calendar icon" ng-switch-when="true"></i>
+					</td>
+					<td class="center aligned" ng-switch="user.account.credentialsExpired">
+						<i class="green calendar outline  icon" ng-switch-when="false"></i>
+						<i class="red calendar icon" ng-switch-when="true"></i>
+					</td>
+					<td class="center aligned">
+						<button class="ui icon button tiny basic" ng-click="info(user)">
+							<i class="icon info"></i>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="ui icon info message" ng-if="details.totalElements==0">
+			<i class="users icon"></i>
+			<div class="content">
+				<div class="header">No user profiles found!</div>
+				<p>There is no user profiles meeting your search criteria.</p>
+			</div>
+		</div>
+		<div class="ui pagination menu float right" ng-if="details.totalPages>1">
+			<a class="active item" ng-click="page(1)">1</a>
+			<a class="active item" ng-click="page(2)">2</a>
+			<a class="active item" ng-click="page(3)">3</a>
+			<div class="disabled item">...</div>
+			<a class="item">10</a>
+			<a class="item">11</a>
+			<a class="item">12</a>
+		</div>
+	</div>
+	<div class="ui modal">
+		<i class="close icon"></i>
+		<div class="header">Profile Picture</div>
+		<div class="image content">
+			<div class="ui medium image">
+				<img ng-src="{{user.picture || '/images/profile-pic-300px.jpg'}}" />
+			</div>
+			<div class="description">
+				<div class="ui header">We've auto-chosen a profile image for you.</div>
+				<p>We've grabbed the following image from the
+					<a href="https://www.gravatar.com" target="_blank">gravatar</a>image associated with your registered e-mail address.</p>
+				<p>Is it okay to use this photo?</p>
+			</div>
+		</div>
+		<div class="actions">
+			<div class="ui black deny button">Nope</div>
+			<div class="ui positive right labeled icon button">Yep, that's me
+				<i class="checkmark icon"></i>
+			</div>
+		</div>
+	</div>
+</div>
