@@ -80,7 +80,7 @@ public class AdminConfiguration
 		@Override
 		protected void configure(final HttpSecurity http) throws Exception
 		{
-			http.antMatcher("/admin/**").authorizeRequests().anyRequest().authenticated()
+			http.antMatcher("/admin/**").authorizeRequests().anyRequest().hasAnyRole("ADMIN", "USER")
 					.and().formLogin().loginPage("/admin/login").defaultSuccessUrl("/admin", true).permitAll()
 					.and().logout().logoutUrl("/admin/logout").permitAll();
 		}
