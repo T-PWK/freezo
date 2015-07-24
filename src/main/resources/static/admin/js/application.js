@@ -15,6 +15,30 @@
 		.factory('User', ['$resource', function ($resource) {
 			return $resource('/api/v1/users');
 		}])
+		.filter('roleName', function() {
+			function roleName(role) {
+				switch (role) {
+					case 'ROLE_ADMIN':
+						return 'Administrator';
+					case 'ROLE_API':
+						return 'API Consumer';
+					case 'ROLE_USER':
+						return 'User';
+					default:
+						return 'Unknown';
+				}				
+			}
+			return function(role) {
+				if(angular.isString(role)) {
+					return roleName(role);
+				}
+				if(angular.isArray(role)) {
+					var roles = [];
+					angular.forEach(role, function(value){ roles.push(roleName(value)); });
+					return roles;
+				}
+			}
+		})
 		.controller('DashboardCtrl', ['$scope', function ($scope) {
 			$scope.data = 'Hi';
 		}])
@@ -38,7 +62,7 @@
 					$scope.asc = true;
 				}
 			};
-			$scope.page = function (page) {
+			$scope.pageAt = function (page) {
 				$scope.pageNumber = page < 2 ? null : page - 1;
 			};
 			$scope.reload = function () {
@@ -54,6 +78,9 @@
 				$scope.user = user;
 				$('.ui.modal').modal('show');
 			}
+			$scope.$on('$destroy', function(){
+				$('.ui.modal').remove();
+			})
 			$scope.$watchGroup(['filter', 'sort', 'asc', 'pageNumber'], $scope.reload);
 		}])
 } ());

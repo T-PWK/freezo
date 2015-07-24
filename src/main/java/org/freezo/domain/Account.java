@@ -23,7 +23,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @JsonIgnoreProperties({ "id", "version", "password", "user", "disabled", "accountNonLocked", "credentialsNonExpired",
@@ -227,10 +229,18 @@ public class Account implements UserDetails
 	}
 
 	@Override
+	@JsonIgnore
 	public Collection<? extends GrantedAuthority> getAuthorities()
 	{
 		return AuthorityUtils.createAuthorityList(authorities.toArray(new String[authorities.size()]));
 	}
+
+	@JsonProperty("authorities")
+	public Collection<String> getAuthoritiesAsStrings()
+	{
+		return authorities;
+	}
+
 
 	public void addAuthorities(final String... authorities)
 	{
