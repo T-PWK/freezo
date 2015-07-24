@@ -8,105 +8,55 @@
 <div class="ui hidden divider"></div>
 <div class="ui stackable grid">
 	<div class="four wide column">
-		<div class="ui vertical menu">
+		<div class="ui vertical large menu">
 			<div class="item">
 				<div class="ui input">
 					<input type="text" placeholder="Filter users..." />
 				</div>
 			</div>
-			<div class="item">Home
+			<a class="item" ng-click="reload()">Refresh users<i class="icon refresh"></i></a>
+			<a class="item">New<i class="icon add"></i></a>
+			<div class="item">Sort by
+				<i class="sort icon"></i>
 				<div class="menu">
-					<a class="active item">Search</a>
-					<a class="item">Add</a>
-					<a class="item">Remove</a>
+					<a class="item" ng-click="sortBy('account.username')" ng-class="{active:isSortActive('account.username')}">Username
+						<i ng-if="isSortActive('account.username')" class="icon sort" ng-class="asc?'ascending':'descending'"></i></a>
+					<a class="item" ng-click="sortBy('email')" ng-class="{active:isSortActive('email')}">Email
+						<i ng-if="isSortActive('email')" class="icon sort" ng-class="asc?'ascending':'descending'"></i></a>
+					<a class="item" ng-click="sortBy('firstName')" ng-class="{active:isSortActive('firstName')}">First Name
+						<i ng-if="isSortActive('firstName')" class="icon sort" ng-class="asc?'ascending':'descending'"></i></a>
+					<a class="item" ng-click="sortBy('lastName')" ng-class="{active:isSortActive('lastName')}">Last Name
+						<i ng-if="isSortActive('lastName')" class="icon sort" ng-class="asc?'ascending':'descending'"></i></a>
 				</div>
 			</div>
-			<a class="item">
-    <i class="grid layout icon"></i> Browse
-  </a>
-			<a class="item">
-    Messages
-  </a>
-			<div class="ui dropdown item">Filter
-				<i class="dropdown icon"></i>
+			<div class="item">
+				<i class="filter icon"></i>Show
 				<div class="menu">
-						<div class="header">
-							<i class="tags icon"></i>Filter by user availability</div>
-						<div class="item" ng-click="filterBy('ALL')">All</div>
-						<div class="item" ng-click="filterBy('ENABLED')">
-							<i class="green checkmark icon"></i>Enabled</div>
-						<div class="item" ng-click="filterBy('DISABLED')">
-							<i class="red remove icon"></i>Disabled</div>
-						<div class="item" ng-click="filterBy('NONLOCKED')">
-							<i class="icon green unlock"></i>Non-Locked</div>
-						<div class="item" ng-click="filterBy('LOCKED')">
-							<i class="icon red lock"></i>Locked</div>
-						<div class="item" ng-click="filterBy('NONEXPIRED')">
-							<i class="icon green calendar"></i>Non-Expired</div>
-						<div class="item" ng-click="filterBy('EXPIRED')">
-							<i class="icon calendar red"></i>Expired</div>
-						<div class="header">
-							<i class="tags icon"></i>Filter by user credentials</div>
-						<div class="item" ng-click="filterBy('CREDENTIALS_NONEXPIRED')">
-							<i class="icon green calendar"></i>Non-Expired</div>
-						<div class="item" ng-click="filterBy('CREDENTIALS_EXPIRED')">
-							<i class="icon calendar red"></i>Expired</div>
-					</div>
+					<a class="item" ng-click="filterBy('ALL')" ng-class="{active:!filter || filter=='ALL'}">All</a>
+					<a class="item" ng-click="filterBy('ENABLED')" ng-class="{active:filter=='ENABLED'}">
+						<i class="checkmark icon"></i>Enabled</a>
+					<a class="item" ng-click="filterBy('DISABLED')" ng-class="{active:filter=='DISABLED'}">
+						<i class="remove icon"></i>Disabled</a>
+					<a class="item" ng-click="filterBy('NONLOCKED')" ng-class="{active:filter=='NONLOCKED'}">
+						<i class="icon unlock"></i>Non-Locked</a>
+					<a class="item" ng-click="filterBy('LOCKED')" ng-class="{active:filter=='LOCKED'}">
+						<i class="icon lock"></i>Locked</a>
+					<a class="item" ng-click="filterBy('NONEXPIRED')" ng-class="{active:filter=='NONEXPIRED'}">
+						<i class="icon calendar"></i>Non-Expired</a>
+					<a class="item" ng-click="filterBy('EXPIRED')" ng-class="{active:filter=='EXPIRED'}">
+						<i class="icon calendar "></i>Expired</a>
+					<a class="item" ng-click="filterBy('CREDENTIALS_NONEXPIRED')" ng-class="{active:filter=='CREDENTIALS_NONEXPIRED'}">
+						<i class="icon calendar"></i>Credentials Non-Expired</a>
+					<a class="item" ng-click="filterBy('CREDENTIALS_EXPIRED')" ng-class="{active:filter=='CREDENTIALS_EXPIRED'}">
+						<i class="icon calendar"></i>Credentials Expired</a>
+				</div>
 			</div>
 		</div>
 	</div>
 	<div class="twelve wide column">
-		<div class="ui secondary  menu">
-			<div class="item">
-				<div class="ui labeled icon dropdown button basic">
-					<i class="filter icon"></i>
-					<span class="text">Filter</span>
-					<div class="menu">
-						<div class="header">
-							<i class="tags icon"></i>Filter by user availability</div>
-						<div class="item" ng-click="filterBy('ALL')">All</div>
-						<div class="item" ng-click="filterBy('ENABLED')">
-							<i class="green checkmark icon"></i>Enabled</div>
-						<div class="item" ng-click="filterBy('DISABLED')">
-							<i class="red remove icon"></i>Disabled</div>
-						<div class="item" ng-click="filterBy('NONLOCKED')">
-							<i class="icon green unlock"></i>Non-Locked</div>
-						<div class="item" ng-click="filterBy('LOCKED')">
-							<i class="icon red lock"></i>Locked</div>
-						<div class="item" ng-click="filterBy('NONEXPIRED')">
-							<i class="icon green calendar"></i>Non-Expired</div>
-						<div class="item" ng-click="filterBy('EXPIRED')">
-							<i class="icon calendar red"></i>Expired</div>
-						<div class="header">
-							<i class="tags icon"></i>Filter by user credentials</div>
-						<div class="item" ng-click="filterBy('CREDENTIALS_NONEXPIRED')">
-							<i class="icon green calendar"></i>Non-Expired</div>
-						<div class="item" ng-click="filterBy('CREDENTIALS_EXPIRED')">
-							<i class="icon calendar red"></i>Expired</div>
-					</div>
-				</div>
-			</div>
-			<div class="item">
-				<div class="ui labeled icon dropdown button basic">
-					<i class="sort icon"></i>
-					<span class="text">Sort</span>
-					<div class="menu">
-						<div class="item" ng-click="sortBy('accountUsername')">Username</div>
-						<div class="item" ng-click="sortBy('firstName')">First Name</div>
-						<div class="item" ng-click="sortBy('lastName')">Last Name</div>
-						<div class="item" ng-click="sortBy('email')">E-mail Address</div>
-					</div>
-				</div>
-			</div>
-			<div class="right menu">
-				<div class="item">
-					<div class="ui icon input">
-						<input type="text" placeholder="Filter users..." />
-						<i class="search link icon"></i>
-					</div>
-				</div>
-			</div>
-		</div>
+		<p>Showing
+			<strong>5</strong>out of
+			<strong>23</strong>users</p>
 		<div class="ui divider"></div>
 		<div class="ui very relaxed list divided fz-users">
 			<div class="item" ng-repeat="user in users">
@@ -166,8 +116,8 @@
 			</div>
 		</div>
 		<div class="ui pagination menu floated right" ng-if="details.totalPages>1">
-			<a class="item" ng-click="pageAt(1)">1</a>
-			<a class="item" ng-click="pageAt(page)" ng-repeat="page in pages">{{page}}</a>
+			<a class="item" ng-click="pageAt(1)" ng-class="{active:!pageNumber}">1</a>
+			<a class="item" ng-click="pageAt(page)" ng-repeat="page in pagination()" ng-class="{active:pageNumber==page-1}">{{page}}</a>
 		</div>
 	</div>
 	<div class="ui modal">
