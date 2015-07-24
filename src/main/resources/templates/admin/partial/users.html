@@ -55,8 +55,8 @@
 	</div>
 	<div class="twelve wide column">
 		<p>Showing
-			<strong>5</strong>out of
-			<strong>23</strong>users</p>
+			<strong>{{details.numberOfElements}}</strong> out of
+			<strong>{{details.totalElements}}</strong> user(s)</p>
 		<div class="ui divider"></div>
 		<div class="ui very relaxed list divided fz-users">
 			<div class="item" ng-repeat="user in users">
@@ -81,7 +81,7 @@
 							</div>
 							<div class="item" ng-if="user.account.authorities.length">
 								<i class="users icon"></i>
-								<div class="content">{{(user.account.authorities|roleName).join(',')}}</div>
+								<div class="content">{{(user.account.authorities|roleNames).join(',')}}</div>
 							</div>
 						</div>
 					</div>
