@@ -26,28 +26,29 @@ public class FailedAuthHandler implements ApplicationListener<AuthenticationFail
 	@Autowired
 	private AccountRepository repository;
 
-	@Value("${freezo.security.authentiation.maxBadCredentialsToLockAccount:-1}")
+	@Value("${freezo.security.authentiation.account.maxBadCredentials:-1}")
 	private int badCredentialsToLockAccount;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void onApplicationEvent(final AuthenticationFailureBadCredentialsEvent event)
 	{
-		LOG.info("Updating details of ACCOUNT:[{}] upon bad credentials", event.getAuthentication().getPrincipal());
-
 		repository.findByUsername((String) event.getAuthentication().getPrincipal())
 				.ifPresent(account -> updateAccount(account));
 	}
 
 	/**
-	 * Updates account with failed login details such as: last failed login date and time, users IP address, increases
-	 * failed logins counter etc.
+	 * Updates account with failed login details such as: last failed login date
+	 * and time, users IP address, increases failed logins counter etc.
 	 *
-	 * @param account current account
+	 * @param account
+	 *            current account
 	 * @see #checkIfAccountLocked(Account)
 	 */
 	private void updateAccount(final Account account)
 	{
+		LOG.info("Updating details of ACCOUNT:[{}] upon bad credentials", account.getUsername());
+
 		account.setLastFailedAuth(new Date());
 		account.setLastFailedAuthIp(currentRequestRemoteAddr());
 		account.setFailedAuthCounter(account.getFailedAuthCounter() + 1);
@@ -58,21 +59,28 @@ public class FailedAuthHandler implements ApplicationListener<AuthenticationFail
 	}
 
 	/**
-	 * Locks the given account if the maximum number of login failures (bad credentials) has been reached.
+	 * Locks the given account if the maximum number of login failures (bad
+	 * credentials) has been reached.
 	 * <p>
-	 * This feature can be disabled by setting {@code freezo.security.authentiation.maxBadCredentialsToLockAccount}
+	 * This feature can be disabled by setting
+	 * {@code freezo.security.authentiation.maxBadCredentialsToLockAccount}
 	 * system property to value lower than 1;
 	 * <p>
 	 * Note that account will be locked after the first failed login attempt is
-	 * {@code freezo.security.authentiation.maxBadCredentialsToLockAccount} is set to 1.
+	 * {@code freezo.security.authentiation.maxBadCredentialsToLockAccount} is
+	 * set to 1.
 	 *
-	 * @param account current account
+	 * @param account
+	 *            current account
 	 * @see UserDetails#isAccountNonLocked()
 	 */
 	private void checkIfAccountLocked(final Account account)
 	{
 		if (badCredentialsToLockAccount > 0 && account.getFailedAuthCounter() >= badCredentialsToLockAccount)
 		{
+			LOG.info("Locking ACCOUNT:[{}] due to {} invalid authentication attempts",
+					account.getUsername(), account.getFailedAuthCounter());
+
 			account.setLocked(true);
 		}
 	}
