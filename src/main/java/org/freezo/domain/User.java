@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -39,7 +40,7 @@ public class User implements UserDetails
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastModified;
 
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private final Account account;
 
 	@Version

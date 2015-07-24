@@ -8,11 +8,11 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -30,6 +30,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Entity
 @JsonIgnoreProperties({ "id", "version", "password", "user", "disabled", "accountNonLocked", "credentialsNonExpired",
 		"accountNonExpired" })
+@Embeddable
 public class Account implements UserDetails
 {
 	private static final long serialVersionUID = 572162725149530080L;
@@ -77,10 +78,10 @@ public class Account implements UserDetails
 	private Date credentialsExpirationDate;
 
 	@ElementCollection(fetch = FetchType.EAGER)
+	@Column(name = "role")
 	private final Set<String> authorities = new HashSet<>();
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@MapsId
 	private User user;
 
 	@Version
@@ -240,7 +241,6 @@ public class Account implements UserDetails
 	{
 		return authorities;
 	}
-
 
 	public void addAuthorities(final String... authorities)
 	{

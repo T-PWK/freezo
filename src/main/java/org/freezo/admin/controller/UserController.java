@@ -34,6 +34,10 @@ public class UserController
 			return repository.findByAccountLocked(true, pageable);
 		case NONLOCKED:
 			return repository.findByAccountLocked(false, pageable);
+		case EXPIRED:
+			return repository.findByAccountExpired(pageable);
+		case NONEXPIRED:
+			return repository.findByAccountNonExpired(pageable);
 		default:
 			return repository.findAll(pageable);
 		}
