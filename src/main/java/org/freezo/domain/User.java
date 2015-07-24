@@ -40,7 +40,7 @@ public class User implements UserDetails
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastModified;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy="user")
 	private final Account account;
 
 	@Version

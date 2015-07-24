@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -36,7 +37,6 @@ public class Account implements UserDetails
 	private static final long serialVersionUID = 572162725149530080L;
 
 	@Id
-	@GeneratedValue
 	private long id;
 
 	@Column(length = 50, unique = true, nullable = false)
@@ -82,6 +82,7 @@ public class Account implements UserDetails
 	private final Set<String> authorities = new HashSet<>();
 
 	@OneToOne(fetch = FetchType.LAZY)
+	@MapsId
 	private User user;
 
 	@Version
