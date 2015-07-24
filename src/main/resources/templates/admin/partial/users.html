@@ -7,65 +7,157 @@
 </div>
 <div class="ui hidden divider"></div>
 <div class="ui stackable grid">
-	<div class="sixteen wide column">
-		<div class="ui floating labeled icon dropdown button">
-			<i class="filter icon"></i>
-			<span class="text">Filter</span>
-			<div class="menu">
-				<div class="header">
-					<i class="tags icon"></i>Filter by type</div>
-				<div class="item" ng-click="filterBy('ALL')">All</div>
-				<div class="item" ng-click="filterBy('ENABLED')">
-					<i class="green checkmark icon"></i>Enabled</div>
-				<div class="item" ng-click="filterBy('DISABLED')">
-					<i class="red remove icon"></i>Disabled</div>
-				<div class="item" ng-click="filterBy('NONLOCKED')">
-					<i class="icon green unlock"></i>Non-Locked</div>
-				<div class="item" ng-click="filterBy('LOCKED')">
-					<i class="icon red lock"></i>Locked</div>
+	<div class="four wide column">
+		<div class="ui vertical menu">
+			<div class="item">
+				<div class="ui input">
+					<input type="text" placeholder="Filter users..." />
+				</div>
+			</div>
+			<div class="item">Home
+				<div class="menu">
+					<a class="active item">Search</a>
+					<a class="item">Add</a>
+					<a class="item">Remove</a>
+				</div>
+			</div>
+			<a class="item">
+    <i class="grid layout icon"></i> Browse
+  </a>
+			<a class="item">
+    Messages
+  </a>
+			<div class="ui dropdown item">Filter
+				<i class="dropdown icon"></i>
+				<div class="menu">
+						<div class="header">
+							<i class="tags icon"></i>Filter by user availability</div>
+						<div class="item" ng-click="filterBy('ALL')">All</div>
+						<div class="item" ng-click="filterBy('ENABLED')">
+							<i class="green checkmark icon"></i>Enabled</div>
+						<div class="item" ng-click="filterBy('DISABLED')">
+							<i class="red remove icon"></i>Disabled</div>
+						<div class="item" ng-click="filterBy('NONLOCKED')">
+							<i class="icon green unlock"></i>Non-Locked</div>
+						<div class="item" ng-click="filterBy('LOCKED')">
+							<i class="icon red lock"></i>Locked</div>
+						<div class="item" ng-click="filterBy('NONEXPIRED')">
+							<i class="icon green calendar"></i>Non-Expired</div>
+						<div class="item" ng-click="filterBy('EXPIRED')">
+							<i class="icon calendar red"></i>Expired</div>
+						<div class="header">
+							<i class="tags icon"></i>Filter by user credentials</div>
+						<div class="item" ng-click="filterBy('CREDENTIALS_NONEXPIRED')">
+							<i class="icon green calendar"></i>Non-Expired</div>
+						<div class="item" ng-click="filterBy('CREDENTIALS_EXPIRED')">
+							<i class="icon calendar red"></i>Expired</div>
+					</div>
 			</div>
 		</div>
-		<table class="ui very basic celled table sortable">
-			<thead>
-				<tr>
-					<th ng-click="sortBy('accountUsername')" ng-class="{sorted:sort=='accountUsername', ascending:asc, descending:!asc}">Username</th>
-					<th ng-click="sortBy('firstName')" ng-class="{sorted:sort=='firstName', ascending:asc, descending:!asc}">First name</th>
-					<th ng-click="sortBy('lastName')" ng-class="{sorted:sort=='lastName', ascending:asc, descending:!asc}">Last name</th>
-					<th ng-click="sortBy('email')" ng-class="{sorted:sort=='email', ascending:asc, descending:!asc}">E-mail address</th>
-					<th>Action</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="user in users">
-					<td>
-						<h4 class="ui image header">
-							<img ng-src="{{user.picture || '/images/profile-pic-300px.jpg'}}" class="ui mini rounded image" />
-							<div class="content">
-								<a href="" ng-click="info(user)">{{user.account.username}}</a>
-								<div class="sub header">
-									<i ng-if="user.account.enabled" class="green checkmark icon"></i>
-									<i ng-if="!user.account.enabled" class="red remove icon"></i>
-									<i ng-if="!user.account.locked" class="green unlock icon"></i>
-									<i ng-if="user.account.locked" class="red lock icon"></i>
-									<i ng-if="!user.account.expired" class="green calendar outline icon"></i>
-									<i ng-if="user.account.expired" class="red calendar icon"></i>
-									<i ng-if="!user.account.credentialsExpired" class="green calendar outline icon"></i>
-									<i ng-if="user.account.credentialsExpired" class="red calendar icon"></i>
+	</div>
+	<div class="twelve wide column">
+		<div class="ui secondary  menu">
+			<div class="item">
+				<div class="ui labeled icon dropdown button basic">
+					<i class="filter icon"></i>
+					<span class="text">Filter</span>
+					<div class="menu">
+						<div class="header">
+							<i class="tags icon"></i>Filter by user availability</div>
+						<div class="item" ng-click="filterBy('ALL')">All</div>
+						<div class="item" ng-click="filterBy('ENABLED')">
+							<i class="green checkmark icon"></i>Enabled</div>
+						<div class="item" ng-click="filterBy('DISABLED')">
+							<i class="red remove icon"></i>Disabled</div>
+						<div class="item" ng-click="filterBy('NONLOCKED')">
+							<i class="icon green unlock"></i>Non-Locked</div>
+						<div class="item" ng-click="filterBy('LOCKED')">
+							<i class="icon red lock"></i>Locked</div>
+						<div class="item" ng-click="filterBy('NONEXPIRED')">
+							<i class="icon green calendar"></i>Non-Expired</div>
+						<div class="item" ng-click="filterBy('EXPIRED')">
+							<i class="icon calendar red"></i>Expired</div>
+						<div class="header">
+							<i class="tags icon"></i>Filter by user credentials</div>
+						<div class="item" ng-click="filterBy('CREDENTIALS_NONEXPIRED')">
+							<i class="icon green calendar"></i>Non-Expired</div>
+						<div class="item" ng-click="filterBy('CREDENTIALS_EXPIRED')">
+							<i class="icon calendar red"></i>Expired</div>
+					</div>
+				</div>
+			</div>
+			<div class="item">
+				<div class="ui labeled icon dropdown button basic">
+					<i class="sort icon"></i>
+					<span class="text">Sort</span>
+					<div class="menu">
+						<div class="item" ng-click="sortBy('accountUsername')">Username</div>
+						<div class="item" ng-click="sortBy('firstName')">First Name</div>
+						<div class="item" ng-click="sortBy('lastName')">Last Name</div>
+						<div class="item" ng-click="sortBy('email')">E-mail Address</div>
+					</div>
+				</div>
+			</div>
+			<div class="right menu">
+				<div class="item">
+					<div class="ui icon input">
+						<input type="text" placeholder="Filter users..." />
+						<i class="search link icon"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="ui divider"></div>
+		<div class="ui very relaxed list divided fz-users">
+			<div class="item" ng-repeat="user in users">
+				<img class="ui avatar image" ng-src="{{user.picture || '/images/profile-pic-300px.jpg'}}" />
+				<div class="content">
+					<a class="header" ng-click="info(user)">{{user.firstName}} {{user.lastName}}</a>
+					<div class="description">
+						<div class="ui horizontal list">
+							<div class="item">
+								<i class="user icon"></i>
+								<div class="content">{{user.account.username}}</div>
+							</div>
+							<div class="item">
+								<i class="mail icon"></i>
+								<div class="content">{{user.email}}</div>
+							</div>
+							<div class="item" ng-if="user.website">
+								<i class="linkify icon"></i>
+								<div class="content">
+									<a ng-href="{{user.website}}" target="_blank">{{user.website}}</a>
 								</div>
 							</div>
-						</h4>
-					</td>
-					<td>{{user.firstName}}</td>
-					<td>{{user.lastName}}</td>
-					<td>{{user.email}}</td>
-					<td class="center aligned">
-						<button class="ui icon button tiny basic" ng-click="info(user)">
-							<i class="icon info"></i>
-						</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+							<div class="item" ng-if="user.account.authorities.length">
+								<i class="users icon"></i>
+								<div class="content">{{(user.account.authorities|roleName).join(',')}}</div>
+							</div>
+						</div>
+					</div>
+					<div class="description" ng-if="!user.account.enabled || user.account.locked || user.account.expired || user.account.credentialsExpired">
+						<div class="ui horizontal list">
+							<div class="item" ng-if="!user.account.enabled">
+								<i class="red remove icon"></i>
+								<div class="content">Account disabled</div>
+							</div>
+							<div class="item" ng-if="user.account.locked">
+								<i class="red lock icon"></i>
+								<div class="content">Account locked</div>
+							</div>
+							<div class="item" ng-if="user.account.expired">
+								<i class="red calendar icon"></i>
+								<div class="content">Account expired</div>
+							</div>
+							<div class="item" ng-if="user.account.credentialsExpired">
+								<i class="red calendar icon"></i>
+								<div class="content">Account credentials expired</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="ui icon info message" ng-if="details.totalElements==0">
 			<i class="users icon"></i>
 			<div class="content">
@@ -74,10 +166,8 @@
 			</div>
 		</div>
 		<div class="ui pagination menu floated right" ng-if="details.totalPages>1">
-			<a class="item" ng-click="page(1)">1</a>
-			<a class="item" ng-click="page(2)">2</a>
-			<a class="item" ng-click="page(3)">3</a>
-			<div class="disabled item">...</div>
+			<a class="item" ng-click="pageAt(1)">1</a>
+			<a class="item" ng-click="pageAt(page)" ng-repeat="page in pages">{{page}}</a>
 		</div>
 	</div>
 	<div class="ui modal">
