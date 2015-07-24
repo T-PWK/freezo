@@ -2,9 +2,9 @@ freezo:
   security:
     authentiation:
       account:
+        maxBadCredentials: 5
         updateOnSuccess: true
         updateOnFailure: true
-        maxFailuresToLock: -1
       password:
         strength: 10
 spring:
