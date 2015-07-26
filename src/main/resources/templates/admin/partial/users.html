@@ -1,165 +1,130 @@
-<div class="ui breadcrumb">
-	<a href="#/dashboard" class="section">Dashboard</a>
-	<i class="right angle icon divider"></i>
-	<div class="section">Administration</div>
-	<i class="right angle icon divider"></i>
-	<div class="active section">Users</div>
-</div>
-<div class="ui hidden divider"></div>
-<div class="ui stackable grid">
-	<div class="four wide column">
-		<div class="ui vertical menu">
-			<div class="item">
-				<div class="ui input">
-					<input type="text" placeholder="Filter users..." />
+<html xmlns:layout="http://www.thymeleaf.org/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+	<div class="ui breadcrumb">
+		<a href="#/dashboard" class="section">Dashboard</a>
+		<i class="right angle icon divider"></i>
+		<div class="section">Administration</div>
+		<i class="right angle icon divider"></i>
+		<div class="active section">Users</div>
+	</div>
+	<div class="ui hidden divider"></div>
+	<div class="ui stackable grid">
+		<div class="four wide column">
+			<div class="ui vertical menu">
+				<div class="item">
+					<div class="ui input">
+						<input type="text" placeholder="Filter users..." />
+					</div>
 				</div>
-			</div>
-			<a class="item" ng-click="reload()">Refresh users<i class="icon refresh"></i></a>
-			<a class="item">New<i class="icon add"></i></a>
-			<div class="item">Sort by
-				<i class="sort icon"></i>
-				<div class="menu">
-					<a class="item" ng-click="sortBy('account.username')" ng-class="{active:isSortActive('account.username')}">Username
+				<a class="item" ng-click="reload()">Refresh users<i class="icon refresh"></i></a>
+				<a class="item">New<i class="icon add"></i></a>
+				<div class="item">Sort by
+					<i class="sort icon"></i>
+					<div class="menu">
+						<a class="item" ng-click="sortBy('account.username')" ng-class="{active:isSortActive('account.username')}">Username
 						<i ng-if="isSortActive('account.username')" class="icon sort" ng-class="asc?'ascending':'descending'"></i></a>
-					<a class="item" ng-click="sortBy('email')" ng-class="{active:isSortActive('email')}">Email
+						<a class="item" ng-click="sortBy('email')" ng-class="{active:isSortActive('email')}">Email
 						<i ng-if="isSortActive('email')" class="icon sort" ng-class="asc?'ascending':'descending'"></i></a>
-					<a class="item" ng-click="sortBy('firstName')" ng-class="{active:isSortActive('firstName')}">First Name
+						<a class="item" ng-click="sortBy('firstName')" ng-class="{active:isSortActive('firstName')}">First Name
 						<i ng-if="isSortActive('firstName')" class="icon sort" ng-class="asc?'ascending':'descending'"></i></a>
-					<a class="item" ng-click="sortBy('lastName')" ng-class="{active:isSortActive('lastName')}">Last Name
+						<a class="item" ng-click="sortBy('lastName')" ng-class="{active:isSortActive('lastName')}">Last Name
 						<i ng-if="isSortActive('lastName')" class="icon sort" ng-class="asc?'ascending':'descending'"></i></a>
+					</div>
 				</div>
-			</div>
-			<div class="item">
-				<i class="filter icon"></i>Show
-				<div class="menu">
-					<a class="item" ng-click="filterBy('ALL')" ng-class="{active:!filter || filter=='ALL'}">All</a>
-					<a class="item" ng-click="filterBy('ENABLED')" ng-class="{active:filter=='ENABLED'}">
+				<div class="item">
+					<i class="filter icon"></i>Show
+					<div class="menu">
+						<a class="item" ng-click="filterBy('ALL')" ng-class="{active:!filter || filter=='ALL'}">All</a>
+						<a class="item" ng-click="filterBy('ENABLED')" ng-class="{active:filter=='ENABLED'}">
 						<i class="checkmark icon"></i>Enabled</a>
-					<a class="item" ng-click="filterBy('DISABLED')" ng-class="{active:filter=='DISABLED'}">
+						<a class="item" ng-click="filterBy('DISABLED')" ng-class="{active:filter=='DISABLED'}">
 						<i class="remove icon"></i>Disabled</a>
-					<a class="item" ng-click="filterBy('NONLOCKED')" ng-class="{active:filter=='NONLOCKED'}">
+						<a class="item" ng-click="filterBy('NONLOCKED')" ng-class="{active:filter=='NONLOCKED'}">
 						<i class="icon unlock"></i>Non-Locked</a>
-					<a class="item" ng-click="filterBy('LOCKED')" ng-class="{active:filter=='LOCKED'}">
+						<a class="item" ng-click="filterBy('LOCKED')" ng-class="{active:filter=='LOCKED'}">
 						<i class="icon lock"></i>Locked</a>
-					<a class="item" ng-click="filterBy('NONEXPIRED')" ng-class="{active:filter=='NONEXPIRED'}">
+						<a class="item" ng-click="filterBy('NONEXPIRED')" ng-class="{active:filter=='NONEXPIRED'}">
 						<i class="icon calendar"></i>Non-Expired</a>
-					<a class="item" ng-click="filterBy('EXPIRED')" ng-class="{active:filter=='EXPIRED'}">
+						<a class="item" ng-click="filterBy('EXPIRED')" ng-class="{active:filter=='EXPIRED'}">
 						<i class="icon calendar "></i>Expired</a>
-					<a class="item" ng-click="filterBy('CREDENTIALS_NONEXPIRED')" ng-class="{active:filter=='CREDENTIALS_NONEXPIRED'}">
+						<a class="item" ng-click="filterBy('CREDENTIALS_NONEXPIRED')" ng-class="{active:filter=='CREDENTIALS_NONEXPIRED'}">
 						<i class="icon calendar"></i>Credentials Non-Expired</a>
-					<a class="item" ng-click="filterBy('CREDENTIALS_EXPIRED')" ng-class="{active:filter=='CREDENTIALS_EXPIRED'}">
+						<a class="item" ng-click="filterBy('CREDENTIALS_EXPIRED')" ng-class="{active:filter=='CREDENTIALS_EXPIRED'}">
 						<i class="icon calendar"></i>Credentials Expired</a>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="ten wide column">
-		<p>Showing
-			<strong>{{details.numberOfElements}}</strong>out of
-			<strong>{{details.totalElements}}</strong>user(s)</p>
-		<div class="ui divider"></div>
-		<div class="ui very relaxed list divided fz-users">
-			<div class="item" ng-repeat="user in users">
-				<img class="ui avatar image" ng-src="{{user.picture || '/images/profile-pic-300px.jpg'}}" />
-				<div class="content">
-					<a class="header"><div class="ui dropdown">
-  <div class="text">{{user.firstName}} {{user.lastName}}</div>
-  <i class="dropdown icon"></i>
-  <div class="menu">
-    <div class="item">New</div>
-    <div class="item">
-      <span class="description">ctrl + o</span>
-      Open...
-    </div>
-    <div class="item">
-      <span class="description">ctrl + s</span>
-      Save as...
-    </div>
-    <div class="item">
-      <span class="description">ctrl + r</span>
-      Rename
-    </div>
-    <div class="item">Make a copy</div>
-    <div class="item">
-      <i class="folder icon"></i>
-      Move to folder
-    </div>
-    <div class="item">
-      <i class="trash icon"></i>
-      Move to trash
-    </div>
-    <div class="divider"></div>
-    <div class="item">Download As...</div>
-    <div class="item">
-      <i class="dropdown icon"></i>
-      Publish To Web
-      <div class="menu">
-        <div class="item">Google Docs</div>
-        <div class="item">Google Drive</div>
-        <div class="item">Dropbox</div>
-        <div class="item">Adobe Creative Cloud</div>
-        <div class="item">Private FTP</div>
-        <div class="item">Another Service...</div>
-      </div>
-    </div>
-    <div class="item">E-mail Collaborators</div>
-  </div>
-</div></a>
-					<div class="description">
-						<div class="ui horizontal list">
-							<div class="item">
-								<i class="user icon"></i>
-								<div class="content">{{user.account.username}}</div>
-							</div>
-							<div class="item">
-								<i class="mail icon"></i>
-								<div class="content">{{user.email}}</div>
-							</div>
-							<div class="item" ng-if="user.website">
-								<i class="linkify icon"></i>
-								<div class="content">
-									<a ng-href="{{user.website}}" target="_blank">{{user.website}}</a>
+		<div class="ten wide column">
+			<p th:utext="#{txt.showingNumberOfUsers}">Showing X users</p>
+			<div class="ui divider"></div>
+			<div class="ui very relaxed list divided fz-users">
+				<div class="item" ng-repeat="user in users">
+					<img class="ui avatar image" ng-src="{{user.picture || '/images/profile-pic-300px.jpg'}}" />
+					<div class="content">
+						<div class="header">
+							<div class="text">{{user.firstName}} {{user.lastName}}</div>
+						</div>
+						<div class="description">
+							<div class="ui list">
+								<div class="item">
+									<i class="user icon"></i>
+									<div class="content">{{user.account.username}}</div>
+								</div>
+								<div class="item">
+									<i class="mail icon"></i>
+									<div class="content">{{user.email}}</div>
+								</div>
+								<div class="item" ng-if="user.website">
+									<i class="linkify icon"></i>
+									<div class="content">
+										<a ng-href="{{user.website}}" target="_blank">{{user.website}}</a>
+									</div>
+								</div>
+								<div class="item" ng-if="user.account.authorities.length">
+									<i class="users icon"></i>
+									<div class="content">{{(user.account.authorities|roleNames).join(',')}}</div>
+								</div>
+								<div class="item" ng-if="!user.account.enabled">
+									<i class="red remove icon"></i>
+									<div class="content">Account disabled</div>
+								</div>
+								<div class="item" ng-if="!user.account.accountNonLocked">
+									<i class="red lock icon"></i>
+									<div class="content">Account locked</div>
+								</div>
+								<div class="item" ng-if="!user.account.accountNonExpired">
+									<i class="red calendar icon"></i>
+									<div class="content">Account expired</div>
+								</div>
+								<div class="item" ng-if="!user.account.credentialsNonExpired">
+									<i class="red calendar icon"></i>
+									<div class="content">Account credentials expired</div>
+								</div>
+								<div class="item">
+									<div class="ui horizontal bulleted link list">
+										<a class="item" ng-click="edit(user)"><i class="edit icon"></i>Edit</a>
+										<a class="item" ng-click="action('disable', user)" ng-if="user.account.enabled"><i class="remove icon"></i>Disable</a>
+										<a class="item" ng-click="action('enable', user)" ng-if="!user.account.enabled"><i class="checkmark icon"></i>Enable</a>
+										<a class="item" ng-click="action('lock', user)" ng-if="user.account.accountNonLocked"><i class="lock icon"></i>Lock</a>
+										<a class="item" ng-click="action('unlock', user)" ng-if="!user.account.accountNonLocked"><i class="unlock icon"></i>Unlock</a>
+									</div>
 								</div>
 							</div>
-							<div class="item" ng-if="user.account.authorities.length">
-								<i class="users icon"></i>
-								<div class="content">{{(user.account.authorities|roleNames).join(',')}}</div>
-							</div>
-						</div>
-					</div>
-					<div class="description" ng-if="!user.account.enabled || !user.account.accountNonLocked || !user.account.accountNonExpired || !user.account.credentialsNonExpired">
-						<div class="ui horizontal list">
-							<div class="item" ng-if="!user.account.enabled">
-								<i class="red remove icon"></i>
-								<div class="content">Account disabled</div>
-							</div>
-							<div class="item" ng-if="!user.account.accountNonLocked">
-								<i class="red lock icon"></i>
-								<div class="content">Account locked</div>
-							</div>
-							<div class="item" ng-if="!user.account.accountNonExpired">
-								<i class="red calendar icon"></i>
-								<div class="content">Account expired</div>
-							</div>
-							<div class="item" ng-if="!user.account.credentialsNonExpired">
-								<i class="red calendar icon"></i>
-								<div class="content">Account credentials expired</div>
-							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="ui icon info message" ng-if="details.totalElements==0">
-			<i class="users icon"></i>
-			<div class="content">
-				<div class="header">No user profiles found!</div>
-				<p>There is no user profiles meeting your search or filter criteria.</p>
+			<div class="ui icon info message" ng-if="details.totalElements==0">
+				<i class="users icon"></i>
+				<div class="content">
+					<div class="header">No user profiles found!</div>
+					<p>There is no user profiles meeting your search or filter criteria.</p>
+				</div>
 			</div>
-		</div>
-		<div class="ui pagination menu floated right" ng-if="details.totalPages>1">
-			<a class="item" ng-click="pageAt(1)" ng-class="{active:!pageNumber}">1</a>
-			<a class="item" ng-click="pageAt(page)" ng-repeat="page in pagination()" ng-class="{active:pageNumber==page-1}">{{page}}</a>
+			<div class="ui pagination menu floated right" ng-if="details.totalPages>1">
+				<a class="item" ng-click="pageAt(1)" ng-class="{active:!pageNumber}">1</a>
+				<a class="item" ng-click="pageAt(page)" ng-repeat="page in pagination()" ng-class="{active:pageNumber==page-1}">{{page}}</a>
+			</div>
 		</div>
 	</div>
 	<div class="ui modal create"></div>
@@ -184,4 +149,29 @@
 			</div>
 		</div>
 	</div>
-</div>
+	<div class="ui small basic modal confirm">
+		<div class="ui icon header" ng-switch="whatAction">
+			<span ng-switch-when="disable"><i class="remove icon"></i>Disable User Account</span>
+			<span ng-switch-when="enable"><i class="checkmark icon"></i>Enable User Account</span>
+			<span ng-switch-when="lock"><i class="lock icon"></i>Lock User Account</span>
+			<span ng-switch-when="unlock"><i class="unlock icon"></i>Unlock User Account</span>
+		</div>
+		<div class="content" ng-switch="whatAction">
+			<p ng-switch-when="disable">Are you sure you want do disable
+				<strong>{{user.account.username}}</strong> user account?</p>
+			<p ng-switch-when="enable">Are you sure you want do enable
+				<strong>{{user.account.username}}</strong> account?</p>
+			<p ng-switch-when="lock">Are you sure you want do lock
+				<strong>{{user.account.username}}</strong> account?</p>
+			<p ng-switch-when="unlock">Are you sure you want do unlock
+				<strong>{{user.account.username}}</strong> account?</p>
+		</div>
+		<div class="actions">
+			<div class="ui red basic inverted button cancel">
+				<i class="remove icon"></i><span th:text="#{label.no}" th:remove="tag">No</span></div>
+			<div class="ui green basic inverted button ok">
+				<i class="checkmark icon"></i><span th:text="#{label.yes}" th:remove="tag">Yes</span></div>
+		</div>
+	</div>
+
+</html>

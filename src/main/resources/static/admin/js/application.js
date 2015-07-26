@@ -25,8 +25,10 @@
 				.when('/admin/plugins', { templateUrl: '/admin/partial/plugins' })
 				.otherwise('/dashboard');
 		}])
-		.factory('User', ['$resource', function ($resource) {
-			return $resource('/api/v1/users');
+		.factory('User', ['$resource', 'CsrfToken', function ($resource, CsrfToken) {
+			return $resource('/api/v1/users/:userId/:action', { userId: '@id', action: '@action' }, {
+				update: { method: 'PUT', headers: { 'X-CSRF-TOKEN': CsrfToken } }
+			});
 		}])
 		.filter('roleName', function () {
 			return function (role) {
@@ -43,7 +45,7 @@
 		.controller('DashboardCtrl', ['$scope', function ($scope) {
 			$scope.data = 'Hi';
 		}])
-		.controller('UsersCtrl', ['$scope', 'User', function ($scope, User) {
+		.controller('UsersCtrl', ['$scope', '$timeout', 'User', function ($scope, $timeout, User) {
 			$('.main .dropdown').dropdown();
 
 			$scope.filter = null;
@@ -77,9 +79,24 @@
 				}, function (details) {
 					$scope.details = details;
 					$scope.users = details.content;
+					$timeout(function () {
+						$('.ui.dropdown').dropdown({ action: 'hide' });
+					});
 				});
 			};
-			$scope.info = function (user) {
+			$scope.action = function (whatAction, user) {
+				$scope.whatAction = whatAction;
+				$scope.user = user;
+				$('.ui.modal.confirm').modal({
+					closable: false,
+					onApprove: function () {
+						User.update({ id: user.id, action: whatAction }, function () {
+							$scope.reload();
+						});
+					}
+				}).modal('show');
+			}
+			$scope.edit = function (user) {
 				$scope.user = user;
 				$('.ui.modal.edit').modal('show');
 			};

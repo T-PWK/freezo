@@ -62,10 +62,11 @@
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular-route.min.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular-resource.min.js"></script>
 		<script src="/admin/js/application.js"></script>
-		<script type="text/javascript">
+		<script type="text/javascript" th:inline="javascript">
 			angular.element(document).ready(function(){
 				$('.logout.item').click(function(){ $('#logout').submit(); })
 				$('.ui.dropdown').dropdown({ action: 'hide'})
+				angular.module('tbs').constant('CsrfToken', [[${_csrf.token}]])
 				angular.bootstrap(document, ['tbs']);
 			})
 		</script>
