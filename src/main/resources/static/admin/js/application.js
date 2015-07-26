@@ -1,5 +1,5 @@
-/// <reference path="../../../../../../typings/jquery/jquery.d.ts"/>
 /// <reference path="../../../../../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../../../../../typings/jquery/jquery.d.ts"/>
 (function () {
 	function roleName(role) {
 		switch (role) {
@@ -64,6 +64,7 @@
 					$scope.sort = sort;
 					$scope.asc = true;
 				}
+				$scope.pageNumber = 0;
 			};
 			$scope.pageAt = function (page) {
 				$scope.pageNumber = page < 2 ? null : page - 1;
@@ -80,7 +81,7 @@
 			};
 			$scope.info = function (user) {
 				$scope.user = user;
-				$('.ui.modal').modal('show');
+				$('.ui.modal.edit').modal('show');
 			};
 			$scope.$on('$destroy', function () {
 				$('.ui.modal').remove();
