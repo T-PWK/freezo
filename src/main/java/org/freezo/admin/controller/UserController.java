@@ -38,6 +38,10 @@ public class UserController
 			return repository.findByAccountExpired(pageable);
 		case NONEXPIRED:
 			return repository.findByAccountNonExpired(pageable);
+		case CREDENTIALS_EXPIRED:
+			return repository.findByCredentialsExpired(pageable);
+		case CREDENTIALS_NONEXPIRED:
+			return repository.findByCredentialsNonExpired(pageable);
 		default:
 			return repository.findAll(pageable);
 		}
