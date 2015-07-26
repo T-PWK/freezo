@@ -11,7 +11,6 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
@@ -19,6 +18,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -29,8 +29,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
-@JsonIgnoreProperties({ "id", "version", "password", "user", "disabled", "accountNonLocked", "credentialsNonExpired",
-		"accountNonExpired" })
+@JsonIgnoreProperties({ "id", "version", "password", "user", "disabled", "locked" })
 @Embeddable
 public class Account implements UserDetails
 {
@@ -65,20 +64,15 @@ public class Account implements UserDetails
 	@Type(type = "yes_no")
 	private boolean locked;
 
-	@Type(type = "yes_no")
-	private boolean expired;
-
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date accountExpirationDate;
-
-	@Type(type = "yes_no")
-	private boolean credentialsExpired;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date credentialsExpirationDate;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "role")
+	@BatchSize(size = 50)
 	private final Set<String> authorities = new HashSet<>();
 
 	@OneToOne(fetch = FetchType.LAZY)
@@ -200,34 +194,33 @@ public class Account implements UserDetails
 	@Override
 	public boolean isAccountNonExpired()
 	{
-		return !expired && (accountExpirationDate == null || accountExpirationDate.after(new Date()));
+		return accountExpirationDate == null || accountExpirationDate.after(new Date());
 	}
 
-	public boolean isExpired()
+	public Date getAccountExpirationDate()
 	{
-		return expired;
+		return accountExpirationDate;
 	}
 
-	public void setExpired(final boolean expired)
+	public void setAccountExpirationDate(final Date accountExpirationDate)
 	{
-		this.expired = expired;
+		this.accountExpirationDate = accountExpirationDate;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired()
 	{
-		return !credentialsExpired
-				&& (credentialsExpirationDate == null || credentialsExpirationDate.after(new Date()));
+		return credentialsExpirationDate == null || credentialsExpirationDate.after(new Date());
 	}
 
-	public boolean isCredentialsExpired()
+	public Date getCredentialsExpirationDate()
 	{
-		return credentialsExpired;
+		return credentialsExpirationDate;
 	}
 
-	public void setCredentialsExpired(final boolean credentialsExpired)
+	public void setCredentialsExpirationDate(final Date credentialsExpirationDate)
 	{
-		this.credentialsExpired = credentialsExpired;
+		this.credentialsExpirationDate = credentialsExpirationDate;
 	}
 
 	@Override
@@ -266,25 +259,5 @@ public class Account implements UserDetails
 	public long getVersion()
 	{
 		return version;
-	}
-
-	public Date getAccountExpirationDate()
-	{
-		return accountExpirationDate;
-	}
-
-	public void setAccountExpirationDate(final Date accountExpirationDate)
-	{
-		this.accountExpirationDate = accountExpirationDate;
-	}
-
-	public Date getCredentialsExpirationDate()
-	{
-		return credentialsExpirationDate;
-	}
-
-	public void setCredentialsExpirationDate(final Date credentialsExpirationDate)
-	{
-		this.credentialsExpirationDate = credentialsExpirationDate;
 	}
 }
