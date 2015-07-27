@@ -8,7 +8,6 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -18,6 +17,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,7 +31,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @JsonIgnoreProperties({ "id", "version", "password", "user", "disabled", "locked" })
-@Embeddable
 public class Account implements UserDetails
 {
 	private static final long serialVersionUID = 572162725149530080L;
@@ -81,6 +81,13 @@ public class Account implements UserDetails
 
 	@Version
 	private long version;
+
+	@Override
+	public String toString()
+	{
+		final ToStringBuilder builder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
+		return builder.append("id", id).append("username", username).append("version", version).toString();
+	}
 
 	public long getId()
 	{
@@ -176,6 +183,7 @@ public class Account implements UserDetails
 	}
 
 	@Override
+	@JsonProperty("nonLocked")
 	public boolean isAccountNonLocked()
 	{
 		return !locked;
@@ -192,11 +200,13 @@ public class Account implements UserDetails
 	}
 
 	@Override
+	@JsonProperty("nonExpired")
 	public boolean isAccountNonExpired()
 	{
 		return accountExpirationDate == null || accountExpirationDate.after(new Date());
 	}
 
+	@JsonProperty("expirationDate")
 	public Date getAccountExpirationDate()
 	{
 		return accountExpirationDate;
