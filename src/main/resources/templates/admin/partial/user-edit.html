@@ -1,0 +1,12 @@
+<html xmlns:layout="http://www.thymeleaf.org/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" th:remove="tag">
+	<div class="ui breadcrumb">
+		<a href="#/dashboard" class="section">Dashboard</a>
+		<i class="right angle icon divider"></i>
+		<div class="section">Administration</div>
+		<i class="right angle icon divider"></i>
+		<a class="section" href="#/admin/users">Users</a>
+		<i class="right angle icon divider"></i>
+		<div class="active section">{{user.username}}</div>
+	</div>
+
+</html>

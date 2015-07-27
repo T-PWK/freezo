@@ -1,0 +1,86 @@
+<html xmlns:layout="http://www.thymeleaf.org/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" th:remove="tag">
+	<div class="ui breadcrumb">
+		<a href="#/dashboard" class="section">Dashboard</a>
+		<i class="right angle icon divider"></i>
+		<a class="section">Administration</a>
+		<i class="right angle icon divider"></i>
+		<a class="section" href="#/admin/users">Users</a>
+		<i class="right angle icon divider"></i>
+		<div class="active section">Create New</div>
+	</div>
+	<div class="ui divider hidden"></div>
+	<div class="ui grid">
+		<div class="computer only two wide column"></div>
+		<div class="sixteen wide mobile twelve wide computer column">
+			<form class="ui form" novalidate="" ng-class="{loading:saving}" name="uform">
+				<h4 class="ui dividing header">Login Information</h4>
+				<div class="fields">
+					<div class="six wide field required" ng-class="{error:uform.username.$invalid &amp;&amp; uform.username.$dirty}">
+						<label>Username</label>
+						<input type="text" name="username" placeholder="Username" ng-model="user.username" required="" ng-minlength="5"
+						ng-maxlength="50" />
+					</div>
+					<div class="ten wide field required">
+						<label>Password</label>
+						<div class="two fields">
+							<div class="field" ng-class="{error:uform.password.$invalid &amp;&amp; uform.password.$dirty}">
+								<input type="password" name="password" placeholder="Password" ng-model="user.password" required="" ng-minlength="5" ng-maxlength="100" />
+							</div>
+							<div class="field" ng-class="{error:uform.confirm.$invalid &amp;&amp; uform.confirm.$dirty}">
+								<input type="password" name="confirm" placeholder="Password Confirmation" ng-model="user.confirm" required="" compare-to="user.password" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<h4 class="ui dividing header">User Information</h4>
+				<div class="fields">
+					<div class="ten wide field required">
+						<label>Name</label>
+						<div class="two fields">
+							<div class="field">
+								<input type="text" name="firstName" placeholder="First Name" ng-model="user.firstName" required="" ng-minlength="2" />
+							</div>
+							<div class="field">
+								<input type="text" name="lastName" placeholder="Last Name" ng-model="user.lastName" />
+							</div>
+						</div>
+					</div>
+					<div class="six wide field">
+						<label>Email Address</label>
+						<input type="email" name="email" placeholder="Email" ng-model="user.email" />
+					</div>
+				</div>
+				<div class="two fields">
+					<div class="field">
+						<label>Location</label>
+						<input type="text" name="location" placeholder="Location" ng-model="user.location" />
+					</div>
+					<div class="field">
+						<label>Website</label>
+						<input type="url" name="website" placeholder="Website" ng-model="user.website" />
+					</div>
+				</div>
+				<div class="field">
+					<label>Bio</label>
+					<textarea rows="3" ng-model="user.bio"></textarea>
+				</div>
+				<h4 class="ui dividing header">Roles Information</h4>
+				<div class="field">
+					<label>Roles</label>
+					<select multiple="" class="ui dropdown" ng-model="user.roles">
+						<option value="">Select Roles</option>
+						<option value="ROLE_ADMIN">Administrator</option>
+						<option value="ROLE_API">API Consumer</option>
+						<option value="ROLE_USER">User</option>
+					</select>
+				</div>
+				<div class="ui right floated buttons">
+					<button class="ui negative button" ng-click="reset(uform)">Reset</button>
+					<div class="or"></div>
+					<button class="ui positive button" ng-disabled="uform.$invalid" ng-click="create(uform)">Create</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+</html>

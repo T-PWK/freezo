@@ -16,7 +16,7 @@
 					</div>
 				</div>
 				<a class="item" ng-click="reload()"><span th:text="#{label.refresh.users}" th:remove="tag"/><i class="icon refresh"></i></a>
-				<a class="item"><span th:text="#{label.new}" th:remove="tag"/><i class="icon add"></i></a>
+				<a class="item" href="#/admin/users/new"><span th:text="#{label.new}" th:remove="tag"/><i class="icon add"></i></a>
 				<div class="item">
 					<span th:text="#{label.sortby}" th:remove="tag" />
 					<i class="sort icon"></i>
@@ -32,7 +32,8 @@
 					</div>
 				</div>
 				<div class="item">
-					<i class="filter icon"></i><span th:text="#{label.show}" th:remove="tag"/>
+					<i class="filter icon"></i>
+					<span th:text="#{label.show}" th:remove="tag" />
 					<div class="menu">
 						<a class="item" ng-click="filterBy('all')" ng-class="filterCls('all')" th:text="#{label.all}">All</a>
 						<a class="item" ng-click="filterBy('enabled')" ng-class="filterCls('enabled')">
@@ -106,7 +107,7 @@
 								</div>
 								<div class="item">
 									<div class="ui horizontal bulleted link list">
-										<a class="item" ng-click="edit(user)"><i class="edit icon"></i><span th:text="#{label.edit}" th:remove="tag"/></a>
+										<a class="item" href="#/admin/users/{{user.id}}"><i class="edit icon"></i><span th:text="#{label.edit}" th:remove="tag"/></a>
 										<a class="item" ng-click="action('disable', user)" ng-if="user.account.enabled"><i class="remove icon"></i><span th:text="#{label.disable}" th:remove="tag"/></a>
 										<a class="item" ng-click="action('enable', user)" ng-if="!user.account.enabled"><i class="checkmark icon"></i><span th:text="#{label.enable}" th:remove="tag"/></a>
 										<a class="item" ng-click="action('lock', user)" ng-if="user.account.nonLocked"><i class="lock icon"></i><span th:text="#{label.lock}" th:remove="tag"/></a>
@@ -131,7 +132,77 @@
 			</div>
 		</div>
 	</div>
-	<div class="ui modal create"></div>
+	<div class="ui modal create" ng-controller="NewUserCtrl">
+		<i class="close icon"></i>
+		<div class="header">Create New User</div>
+		<div class="content">
+			<form class="ui form">
+				<h4 class="ui dividing header">Login Information</h4>
+				<div class="two fields">
+					<div class="six field wide">
+						<label>Username</label>
+						<input type="text" name="username" placeholder="Username" ng-model="user.username" />
+					</div>
+					<div class="ten field wide">
+						<label>Password</label>
+						<div class="two fields">
+							<div class="field">
+								<input type="password" name="password" placeholder="Password" ng-model="user.password" />
+							</div>
+							<div class="field">
+								<input type="password" name="passwordConfirm" placeholder="Password Confirmation" ng-model="user.passwordConfirm" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<h4 class="ui dividing header">User Information</h4>
+				<div class="field">
+					<label>Name</label>
+					<div class="two fields">
+						<div class="field">
+							<input type="text" name="firstName" placeholder="First Name" ng-model="user.firstName" />
+						</div>
+						<div class="field">
+							<input type="text" name="lastName" placeholder="Last Name" ng-model="user.lastName" />
+						</div>
+					</div>
+				</div>
+				<div class="field">
+					<label>Email Address</label>
+					<input type="email" name="email" placeholder="Email Address" ng-model="user.email" />
+				</div>
+				<div class="field">
+					<label>Location</label>
+					<input type="text" name="location" placeholder="Location" ng-model="user.location" />
+				</div>
+				<div class="field">
+					<label>Website</label>
+					<input type="url" name="website" placeholder="Website" ng-model="user.website" />
+				</div>
+				<div class="field">
+					<label>Bio</label>
+					<textarea rows="3" ng-model="user.bio"></textarea>
+				</div>
+				<h4 class="ui dividing header">Roles Information</h4>
+				<div class="field">
+					<label>Roles</label>
+					<select multiple="" class="ui dropdown">
+						<option value="">Select Roles</option>
+						<option value="ROLE_ADMIN">Administrator</option>
+						<option value="ROLE_API">API Consumer</option>
+						<option value="ROLE_USER">User</option>
+					</select>
+				</div>
+			</form>
+		</div>
+		<div class="actions">
+			<div class="ui buttons">
+				<button class="ui negative button" ng-click="cancel()">Cancel</button>
+				<div class="or"></div>
+				<button class="ui positive button" ng-click="save()">Save</button>
+			</div>
+		</div>
+	</div>
 	<div class="ui modal edit">
 		<i class="close icon"></i>
 		<div class="header">Profile Picture</div>
@@ -156,23 +227,27 @@
 	<div class="ui small basic modal confirm">
 		<div class="ui icon header" ng-switch="whatAction">
 			<span ng-switch-when="disable">
-				<i class="remove icon"></i>Disable User Account</span>
+				<i class="remove icon"></i>
+				<span th:text="#{label.disableAccount.head}" th:remove="tag">Disable User Account</span>
+			</span>
 			<span ng-switch-when="enable">
-				<i class="checkmark icon"></i>Enable User Account</span>
+				<i class="checkmark icon"></i>
+				<span th:text="#{label.enableAccount.head}" th:remove="tag">Enable User Account</span>
+			</span>
 			<span ng-switch-when="lock">
-				<i class="lock icon"></i>Lock User Account</span>
+				<i class="lock icon"></i>
+				<span th:text="#{label.lockAccount.head}" th:remove="tag">Lock User Account</span>
+			</span>
 			<span ng-switch-when="unlock">
-				<i class="unlock icon"></i>Unlock User Account</span>
+				<i class="unlock icon"></i>
+				<span th:text="#{label.unlockAccount.head}" th:remove="tag">Unlock User Account</span>
+			</span>
 		</div>
 		<div class="content" ng-switch="whatAction">
-			<p ng-switch-when="disable">Are you sure you want do disable
-				<strong>{{user.account.username}}</strong>user account?</p>
-			<p ng-switch-when="enable">Are you sure you want do enable
-				<strong>{{user.account.username}}</strong>account?</p>
-			<p ng-switch-when="lock">Are you sure you want do lock
-				<strong>{{user.account.username}}</strong>account?</p>
-			<p ng-switch-when="unlock">Are you sure you want do unlock
-				<strong>{{user.account.username}}</strong>account?</p>
+			<p ng-switch-when="disable" th:utext="#{label.disableAccount.msg}">Are you sure?</p>
+			<p ng-switch-when="enable" th:utext="#{label.enableAccount.msg}">Are you sure?</p>
+			<p ng-switch-when="lock" th:utext="#{label.lockAccount.msg}">Are you sure?</p>
+			<p ng-switch-when="unlock" th:utext="#{label.unlockAccount.msg}">Are you sure?</p>
 		</div>
 		<div class="actions">
 			<div class="ui red basic inverted button cancel">

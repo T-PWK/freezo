@@ -21,13 +21,32 @@
 				.when('/user/profile', { templateUrl: '/admin/partial/user-profile' })
 				.when('/user/settings', { templateUrl: '/admin/partial/user-settings' })
 				.when('/admin/users', { templateUrl: '/admin/partial/users', controller: 'UsersCtrl' })
+				.when('/admin/users/new', { templateUrl: '/admin/partial/user-new', controller: 'NewUserCtrl' })
+				.when('/admin/users/:id', { templateUrl: '/admin/partial/user-edit', controller: 'UsersCtrl' })
 				.when('/admin/themes', { templateUrl: '/admin/partial/themes' })
 				.when('/admin/plugins', { templateUrl: '/admin/partial/plugins' })
 				.otherwise('/dashboard');
 		}])
+		.directive('compareTo', function () {
+			return {
+				require: 'ngModel',
+				scope: {
+					otherModelValue: '=compareTo'
+				},
+				link: function (scope, element, attributes, ngModel) {
+					ngModel.$validators.compareTo = function (modelValue) {
+						return modelValue == scope.otherModelValue;
+					};
+					scope.$watch('otherModelValue', function () {
+						ngModel.$validate();
+					});
+				}
+			}
+		})
 		.factory('User', ['$resource', 'CsrfToken', function ($resource, CsrfToken) {
 			return $resource('/api/v1/users/:userId', { userId: '@id' },
 				{
+					save: { method: 'POST', headers: { 'X-CSRF-TOKEN': CsrfToken } },
 					update: { method: 'PUT', headers: { 'X-CSRF-TOKEN': CsrfToken } }
 				});
 		}])
@@ -44,6 +63,24 @@
 			}
 		})
 		.controller('DashboardCtrl', ['$scope', function ($scope) {
+		}])
+		.controller('NewUserCtrl', ['$scope', 'User', function ($scope, User) {
+			$('.ui.dropdown').dropdown();
+			$scope.reset = function (form) {
+				if (form) {
+					form.$setPristine();
+					form.$setUntouched();
+				}
+				$scope.user = {};
+			};
+			$scope.create = function (form) {
+				if (form.$valid) {
+					$scope.saving = true;
+					User.save($scope.user);
+				}
+			};
+		}])
+		.controller('EditUserCtrl', ['$scope', 'User', function ($scope, User) {
 		}])
 		.controller('UsersCtrl', ['$scope', '$timeout', 'User', function ($scope, $timeout, User) {
 			$('.main .dropdown').dropdown();
@@ -95,12 +132,6 @@
 					}).modal('show');
 				});
 			}
-			$scope.edit = function (user) {
-				$scope.user = user;
-				$timeout(function () {
-					$('.ui.modal.edit').modal('show');
-				});
-			};
 			$scope.$on('$destroy', function () {
 				$('.ui.modal').remove();
 			});
