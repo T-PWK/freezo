@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequestMapping("users")
 @Profile("admin")
@@ -33,8 +32,9 @@ public class CreateUserCtrl
 
 		user.getAccount().setUsername(usernaem);
 		user.getAccount().setPassword(encoder.encode(password));
-		user.setFirstName("First");
-		user.setLastName("Lastname");
+		user.getAccount().addAuthorities("ROLE_ADMIN");
+		user.setFirstName("Dave");
+		user.setLastName("Tester");
 
 		return repository.save(user);
 	}

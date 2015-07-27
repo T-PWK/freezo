@@ -1,6 +1,7 @@
 package org.freezo.admin.controller;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.freezo.admin.bind.CaseInsentiveEnumEditor;
 import org.freezo.domain.Account;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,6 +72,14 @@ public class UserController
 		default:
 			return repository.findAll(pageable);
 		}
+	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	private void createUser(@RequestBody @Valid final UserForm user, final BindingResult result)
+	{
+		System.out.println(result.hasErrors());
+		System.out.println(result.getAllErrors());
+		System.out.println(user);
 	}
 
 	@RequestMapping(value = "/{user_id}", method = RequestMethod.PUT)
