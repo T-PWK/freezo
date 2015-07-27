@@ -10,13 +10,15 @@
 		<div class="ui fixed secondary menu">
 			<div class="ui container">
 				<a class="active item" href="#/dashboard"><i class="icon dashboard"></i>Dashboard</a>
-				<div class="ui dropdown pointing item"><i class="database icon"></i>Content
+				<div class="ui dropdown pointing item">
+					<i class="database icon"></i>Content
 					<i class="dropdown icon"></i>
 					<div class="menu">
 						<a class="item" href="#/content/pages"><i class="file text icon"></i>Posts &amp; Pages</a>
 					</div>
 				</div>
-				<div class="ui dropdown pointing item"><i class="tasks icon"></i>Website Management
+				<div class="ui dropdown pointing item">
+					<i class="tasks icon"></i>Website Management
 					<i class="dropdown icon"></i>
 					<div class="menu">
 						<a class="item" href="#/mng/settings"><i class="cogs icon"></i>Basic</a>
@@ -25,7 +27,8 @@
 						<a class="item" href="#/mng/themes"><i class="desktop icon"></i>Themes</a>
 					</div>
 				</div>
-				<div class="ui dropdown pointing item" sec:authorize="hasRole('ROLE_ADMIN')"><i class="settings icon"></i>Administration
+				<div class="ui dropdown pointing item" sec:authorize="hasRole('ROLE_ADMIN')">
+					<i class="settings icon"></i>Administration
 					<i class="dropdown icon"></i>
 					<div class="menu">
 						<a class="item" href="#/admin/plugins"><i class="puzzle piece icon"></i>Plugins</a>
@@ -36,13 +39,15 @@
 				</div>
 				<div class="right menu">
 					<div class="ui dropdown pointing item">
-						<img src="/images/profile-pic-300px.jpg" class="ui image circular avatar" />
+						<img th:if="${#authentication.principal.picture}" th:src="${#authentication.principal.picture}" class="ui image circular avatar"/>
+						<span sec:authentication="principal.firstName" th:remove="tag" />
+						<span sec:authentication="principal.lastName" th:remove="tag" />
 						<i class="dropdown icon"></i>
 						<div class="menu">
-							<div class="item">Logged in as
-								<strong th:text="${#authentication.name}">admin</strong>
-							</div>
-							<div class="divider"></div>
+							<!--/ *<div class="item">Logged in as
+								<strong th:text="${#authentication.name}">admin...</strong>
+							</div> 
+							<div class="divider"></div> */-->
 							<a class="item" href="#/user/profile"><i class="user icon"></i>User Profile</a>
 							<a class="item" href="#/user/settings"><i class="options icon"></i>Settings</a>
 							<div class="divider"></div>

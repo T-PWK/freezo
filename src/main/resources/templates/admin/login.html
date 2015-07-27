@@ -13,9 +13,9 @@
 		<div class="ui middle aligned center aligned grid">
 			<div class="column">
 				<h2 class="ui inverted header">
-					<img src="/images/snowflake.svg" alt="Freezo" class="ui image logo" />
-					<div class="content">Freezo
-						<div class="sub header">Control Centre</div>
+					<img src="/images/snowflake.svg" th:alt="#{label.title}" class="ui image logo" />
+					<div class="content"><span th:text="#{label.title}" th:remove="tag">Title</span>
+						<div class="sub header" th:text="#{label.title.cc}">Control Centre</div>
 					</div>
 				</h2>
 				<form class="ui large form" method="post" th:action="@{/admin/login}">
@@ -23,16 +23,16 @@
 						<div class="field">
 							<div class="ui left icon input">
 								<i class="user icon"></i>
-								<input type="text" name="username" placeholder="Username" />
+								<input type="text" name="username" th:placeholder="#{label.username}" />
 							</div>
 						</div>
 						<div class="field">
 							<div class="ui left icon input">
 								<i class="lock icon"></i>
-								<input type="password" name="password" placeholder="Password" />
+								<input type="password" name="password" th:placeholder="#{label.password}" />
 							</div>
 						</div>
-						<button class="ui fluid blue large submit button">Login</button>
+						<button class="ui fluid blue large submit button" th:text="#{label.login}">Login</button>
 						<div class="ui divider"></div>
 						<a href="#" th:text="#{label.forgottenPassword}">Forgotten your username or password?</a>
 					</div>
@@ -76,8 +76,8 @@
 			<i class="close icon" />
 			<i class="user icon" />
 			<div class="content">
-				<h3 class="header" th:text="#{login.msg.logout.head}">Logout</h3>
-				<p th:text="#{login.msg.logout.txt}">You have been logged out</p>
+				<h3 class="header" th:text="#{label.logout.head}">Logout</h3>
+				<p th:text="#{label.logout.msg}">You have been logged out</p>
 			</div>
 		</div>
 	</th:block>
