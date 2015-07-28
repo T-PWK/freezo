@@ -12,6 +12,33 @@
 	<div class="ui grid">
 		<div class="computer only two wide column"></div>
 		<div class="sixteen wide mobile twelve wide computer column">
+			<div class="ui icon info message" ng-if="created">
+				<i class="user icon"></i>
+				<i class="close icon" ng-click="removeMessage()"></i>
+				<div class="content">
+					<div class="header">New user profile has been created!</div>
+					<div class="ui list">
+						<div class="item">
+							<i class="user icon"></i>
+							<div class="content">{{created.account.username}}</div>
+						</div>
+						<div class="item" ng-if="created.email">
+							<i class="mail icon"></i>
+							<div class="content">{{created.email}}</div>
+						</div>
+						<div class="item" ng-if="created.website">
+							<i class="linkify icon"></i>
+							<div class="content">
+								<a ng-href="{{created.website}}" target="_blank">{{created.website}}</a>
+							</div>
+						</div>
+						<div class="item" ng-if="created.account.authorities.length">
+							<i class="users icon"></i>
+							<div class="content">{{(created.account.authorities|roleNames).join(', ')}}</div>
+						</div>
+					</div>
+				</div>
+			</div>
 			<form class="ui form" novalidate="" ng-class="{loading:saving}" name="uform" ng-submit="submit(uform)">
 				<h4 class="ui dividing header">Login Information</h4>
 				<div class="fields">
@@ -79,7 +106,7 @@
 				<div class="ui right floated buttons">
 					<button class="ui negative button" ng-click="reset(uform)">Reset</button>
 					<div class="or"></div>
-					<button type="submit" class="ui positive button" ng-disabled="uform.$invalid">Create</button>
+					<button type="submit" class="ui positive button" ng-disabled="uform.$invalid || uform.$pending">Create</button>
 				</div>
 			</form>
 		</div>

@@ -91,9 +91,18 @@
 			$scope.submit = function (form) {
 				if (form && form.$valid) {
 					$scope.saving = true;
-					User.save($scope.user, function () { $scope.saving = false; });
+					User.save($scope.user, function (user) {
+						$scope.saving = false;
+						$scope.created = user;
+						$scope.user = {};
+						form.$setPristine();
+						form.$setUntouched();
+					});
 				}
-			}
+			};
+			$scope.removeMessage = function () {
+				delete $scope.created;
+			};
 		}])
 		.controller('EditUserCtrl', ['$scope', 'User', function ($scope, User) {
 		}])
