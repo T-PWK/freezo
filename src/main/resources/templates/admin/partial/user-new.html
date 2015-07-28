@@ -12,22 +12,24 @@
 	<div class="ui grid">
 		<div class="computer only two wide column"></div>
 		<div class="sixteen wide mobile twelve wide computer column">
-			<form class="ui form" novalidate="" ng-class="{loading:saving}" name="uform">
+			<form class="ui form" novalidate="" ng-class="{loading:saving}" name="uform" ng-submit="submit(uform)">
 				<h4 class="ui dividing header">Login Information</h4>
 				<div class="fields">
 					<div class="six wide field required" ng-class="{error:uform.username.$invalid &amp;&amp; uform.username.$dirty}">
 						<label>Username</label>
-						<input type="text" name="username" placeholder="Username" ng-model="user.username" required="" ng-minlength="5"
-						ng-maxlength="50" />
+						<input type="text" name="username" placeholder="Username" ng-model="user.username" required="" ng-minlength="3"
+						ng-maxlength="50" username-check="" ng-model-options="{updateOn:'default blur',debounce:{default:1000,blur:0}}" />
 					</div>
 					<div class="ten wide field required">
 						<label>Password</label>
 						<div class="two fields">
 							<div class="field" ng-class="{error:uform.password.$invalid &amp;&amp; uform.password.$dirty}">
-								<input type="password" name="password" placeholder="Password" ng-model="user.password" required="" ng-minlength="5" ng-maxlength="100" />
+								<input type="password" name="password" placeholder="Password" ng-model="user.password" required="" ng-minlength="5" ng-maxlength="100"
+								/>
 							</div>
 							<div class="field" ng-class="{error:uform.confirm.$invalid &amp;&amp; uform.confirm.$dirty}">
-								<input type="password" name="confirm" placeholder="Password Confirmation" ng-model="user.confirm" required="" compare-to="user.password" />
+								<input type="password" name="confirm" placeholder="Password Confirmation" ng-model="user.confirm" required="" compare-to="user.password"
+								/>
 							</div>
 						</div>
 					</div>
@@ -77,7 +79,7 @@
 				<div class="ui right floated buttons">
 					<button class="ui negative button" ng-click="reset(uform)">Reset</button>
 					<div class="or"></div>
-					<button class="ui positive button" ng-disabled="uform.$invalid" ng-click="create(uform)">Create</button>
+					<button type="submit" class="ui positive button" ng-disabled="uform.$invalid">Create</button>
 				</div>
 			</form>
 		</div>

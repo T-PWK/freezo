@@ -43,11 +43,26 @@
 				}
 			}
 		})
+		.directive('usernameCheck', ['$q', 'User', function ($q, User) {
+			return {
+				require: 'ngModel',
+				link: function (scope, element, attrs, ngModel) {
+					ngModel.$asyncValidators.username = function (modelVal, viewVal) {
+						var def = $q.defer();
+						User.findByUsername({ username: modelVal }, function () { def.reject() }, function (response) {
+							(response.status === 404) ? def.resolve() : def.reject();
+						});
+						return def.promise;
+					}
+				}
+			}
+		}])
 		.factory('User', ['$resource', 'CsrfToken', function ($resource, CsrfToken) {
-			return $resource('/api/v1/users/:userId', { userId: '@id' },
+			return $resource('/api/v1/users/:user_id/:action', { user_id: '@id', action: '@action' },
 				{
 					save: { method: 'POST', headers: { 'X-CSRF-TOKEN': CsrfToken } },
-					update: { method: 'PUT', headers: { 'X-CSRF-TOKEN': CsrfToken } }
+					modify: { method: 'PATCH', headers: { 'X-CSRF-TOKEN': CsrfToken } },
+					findByUsername: { method: 'GET', url: '/api/v1/users/username/:username' }
 				});
 		}])
 		.filter('roleName', function () {
@@ -73,12 +88,12 @@
 				}
 				$scope.user = {};
 			};
-			$scope.create = function (form) {
-				if (form.$valid) {
+			$scope.submit = function (form) {
+				if (form && form.$valid) {
 					$scope.saving = true;
-					User.save($scope.user);
+					User.save($scope.user, function () { $scope.saving = false; });
 				}
-			};
+			}
 		}])
 		.controller('EditUserCtrl', ['$scope', 'User', function ($scope, User) {
 		}])
@@ -120,14 +135,14 @@
 					});
 				});
 			};
-			$scope.action = function (whatAction, user) {
-				$scope.whatAction = whatAction;
+			$scope.modify = function (action, user) {
+				$scope.action = action;
 				$scope.user = user;
 				$timeout(function () {
 					$('.ui.modal.confirm').modal({
 						closable: false,
 						onApprove: function () {
-							User.update({ id: user.id, type: whatAction }, function () { $scope.reload(); });
+							User.modify({ id: user.id, action: action }, function () { $scope.reload(); });
 						}
 					}).modal('show');
 				});

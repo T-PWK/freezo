@@ -75,7 +75,7 @@
 									<i class="user icon"></i>
 									<div class="content">{{user.account.username}}</div>
 								</div>
-								<div class="item">
+								<div class="item" ng-if="user.email">
 									<i class="mail icon"></i>
 									<div class="content">{{user.email}}</div>
 								</div>
@@ -108,10 +108,11 @@
 								<div class="item">
 									<div class="ui horizontal bulleted link list">
 										<a class="item" href="#/admin/users/{{user.id}}"><i class="edit icon"></i><span th:text="#{label.edit}" th:remove="tag"/></a>
-										<a class="item" ng-click="action('disable', user)" ng-if="user.account.enabled"><i class="remove icon"></i><span th:text="#{label.disable}" th:remove="tag"/></a>
-										<a class="item" ng-click="action('enable', user)" ng-if="!user.account.enabled"><i class="checkmark icon"></i><span th:text="#{label.enable}" th:remove="tag"/></a>
-										<a class="item" ng-click="action('lock', user)" ng-if="user.account.nonLocked"><i class="lock icon"></i><span th:text="#{label.lock}" th:remove="tag"/></a>
-										<a class="item" ng-click="action('unlock', user)" ng-if="!user.account.nonLocked"><i class="unlock icon"></i><span th:text="#{label.unlock}" th:remove="tag"/></a>
+										<a class="item" ng-click="modify('disable', user)" ng-if="user.account.enabled"><i class="remove icon"></i><span th:text="#{label.disable}" th:remove="tag"/></a>
+										<a class="item" ng-click="modify('enable', user)" ng-if="!user.account.enabled"><i class="checkmark icon"></i><span th:text="#{label.enable}" th:remove="tag"/></a>
+										<a class="item" ng-click="modify('lock', user)" ng-if="user.account.nonLocked"><i class="lock icon"></i><span th:text="#{label.lock}" th:remove="tag"/></a>
+										<a class="item" ng-click="modify('unlock', user)" ng-if="!user.account.nonLocked"><i class="unlock icon"></i><span th:text="#{label.unlock}" th:remove="tag"/></a>
+										<a class="item" ng-click="modify('delete', user)"><i class="remove red icon"></i><span th:text="#{label.delete}" th:remove="tag"/></a>
 									</div>
 								</div>
 							</div>
@@ -225,7 +226,7 @@
 		</div>
 	</div>
 	<div class="ui small basic modal confirm">
-		<div class="ui icon header" ng-switch="whatAction">
+		<div class="ui icon header" ng-switch="action">
 			<span ng-switch-when="disable">
 				<i class="remove icon"></i>
 				<span th:text="#{label.disableAccount.head}" th:remove="tag">Disable User Account</span>
@@ -243,7 +244,7 @@
 				<span th:text="#{label.unlockAccount.head}" th:remove="tag">Unlock User Account</span>
 			</span>
 		</div>
-		<div class="content" ng-switch="whatAction">
+		<div class="content" ng-switch="action">
 			<p ng-switch-when="disable" th:utext="#{label.disableAccount.msg}">Are you sure?</p>
 			<p ng-switch-when="enable" th:utext="#{label.enableAccount.msg}">Are you sure?</p>
 			<p ng-switch-when="lock" th:utext="#{label.lockAccount.msg}">Are you sure?</p>
