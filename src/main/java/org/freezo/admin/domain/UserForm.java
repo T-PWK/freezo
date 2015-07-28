@@ -139,6 +139,11 @@ public class UserForm
 		this.website = website;
 	}
 
+	public String[] getRolesAsString()
+	{
+		return roles.stream().map(role -> role.name()).toArray(String[]::new);
+	}
+
 	public Set<Roles> getRoles()
 	{
 		return roles;

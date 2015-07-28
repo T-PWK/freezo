@@ -13,6 +13,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -40,7 +42,7 @@ public class User implements UserDetails
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastModified;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy="user")
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
 	private final Account account;
 
 	@Version
@@ -50,6 +52,13 @@ public class User implements UserDetails
 	{
 		account = new Account();
 		getAccount().setUser(this);
+	}
+
+	@Override
+	public String toString()
+	{
+		final ToStringBuilder builder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
+		return builder.append("id", id).append("username", account.getUsername()).toString();
 	}
 
 	public long getId()

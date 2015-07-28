@@ -4,10 +4,11 @@ import javax.validation.Valid;
 
 import org.freezo.admin.bind.CaseInsentiveEnumEditor;
 import org.freezo.admin.domain.UserForm;
-import org.freezo.domain.Account;
-import org.freezo.domain.AccountRepository;
+import org.freezo.admin.service.ModelMapper;
 import org.freezo.domain.User;
 import org.freezo.domain.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
@@ -33,11 +34,11 @@ import org.springframework.web.bind.annotation.RestController;
  * <li>GET /api/v1/users - fetches all users. Available query string parameters
  * <ul>
  * <li>filter: <strong>enabled</strong> - fetch enabled users</li>
- * <li>filter: disabled - fetch disabled users</li>
- * <li>filter: locked - fetch locked users</li>
- * <li>filter: nonlocked - fetch non-locked users</li>
- * <li>filter: expired - fetch expired users</li>
- * <li>filter: nonexpired - fetch non-expired users</li>
+ * <li>filter: <strong>disabled</strong> - fetch disabled users</li>
+ * <li>filter: <strong>locked</strong> - fetch locked users</li>
+ * <li>filter: <strong>nonlocked</strong> - fetch non-locked users</li>
+ * <li>filter: <strong>expired</strong> - fetch expired users</li>
+ * <li>filter: <strong>nonexpired</strong> - fetch non-expired users</li>
  * </ul>
  * </li>
  * <li>GET /api/v1/users/{user_id} - finds a user by an identifier</li>
@@ -54,11 +55,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Secured("ROLE_ADMIN")
 public class UsersController
 {
+	private static final Logger LOG = LoggerFactory.getLogger(UsersController.class);
+
 	@Autowired
 	private UserRepository repository;
 
 	@Autowired
-	private AccountRepository accounts;
+	private ModelMapper mapper;
 
 	@Autowired
 	private PasswordEncoder encoder;
@@ -66,7 +69,8 @@ public class UsersController
 	/**
 	 * Registers customer converters for incoming data
 	 *
-	 * @param binder web data binder
+	 * @param binder
+	 *            web data binder
 	 */
 	@InitBinder
 	public void init(final WebDataBinder binder)
@@ -112,26 +116,17 @@ public class UsersController
 
 	@RequestMapping(method = RequestMethod.POST)
 	@Transactional
-	public void createUser(@RequestBody @Valid final UserForm form, final BindingResult result)
+	public User createUser(@RequestBody @Valid final UserForm form, final BindingResult result)
 	{
 		verifyInput(form, result);
 
-		final User user = new User();
-		final Account account = user.getAccount();
+		final User user = mapper.from(form, User.class);
 
-		account.setUsername(form.getUsername());
-		account.setPassword(encoder.encode(form.getPassword()));
+		user.getAccount().setUsername(form.getUsername());
+		user.getAccount().setPassword(encoder.encode(form.getPassword()));
+		user.getAccount().addAuthorities(form.getRolesAsString());
 
-		user.setFirstName(form.getFirstName());
-		user.setLastName(form.getLastName());
-		user.setEmail(form.getEmail());
-		user.setLocation(form.getLocation());
-		user.setWebsite(form.getWebsite());
-		user.setBio(form.getBio());
-
-		account.addAuthorities(form.getRoles().stream().map(role -> role.name()).toArray(String[]::new));
-
-		repository.save(user);
+		return repository.save(user);
 	}
 
 	private void verifyInput(final UserForm form, final BindingResult result)
@@ -143,18 +138,21 @@ public class UsersController
 
 		if (repository.findByUsername(form.getUsername()).isPresent())
 		{
-			throw new InputValidationException(String.format("Username [%s] already exists", form.getUsername()));
+			throw new InputValidationException(
+					String.format("Username [%s] already exists", form.getUsername()));
 		}
 	}
 
 	@RequestMapping(value = "/{user_id}/{action}", method = RequestMethod.PATCH)
 	@Transactional
 	public void updateUserAvailability(@PathVariable("user_id") final Long id,
-			@PathVariable("action") final UpdateAction type, @AuthenticationPrincipal final User currentUser)
+			@PathVariable("action") final UpdateAction action, @AuthenticationPrincipal final User currentUser)
 	{
+		LOG.info("User update :: ACTION:[{}], TARGET:[id:{}], CURRENT:{}", action, id, currentUser);
+
 		final User user = lookupUser(id);
 
-		switch (type)
+		switch (action)
 		{
 		case LOCK:
 			lockUser(user);
@@ -174,11 +172,23 @@ public class UsersController
 		}
 	}
 
+	/**
+	 * Delete the given user profile
+	 *
+	 * @param user
+	 *            user profile to be deleted
+	 * @param currentUser
+	 *            currently logged in user
+	 * @throws ResourceConflictException
+	 *             if the user to be deleted is current user
+	 */
 	private void deleteUser(final User user, final User currentUser)
 	{
+
 		if (user.getId() == currentUser.getId())
 		{
-			throw new ResourceConflictException("User can't delete it's own account");
+			throw new ResourceConflictException(
+					"User can't delete it's own account");
 		}
 
 		repository.delete(user);
@@ -187,8 +197,10 @@ public class UsersController
 	/**
 	 * Enable the given user profile
 	 *
-	 * @param user user profile to be enabled
-	 * @throws ResourceConflictException if the given user profile is enabled already
+	 * @param user
+	 *            user profile to be enabled
+	 * @throws ResourceConflictException
+	 *             if the given user profile is enabled already
 	 */
 	private void enableUser(final User user)
 	{
@@ -203,8 +215,10 @@ public class UsersController
 	/**
 	 * Disable the given user profile
 	 *
-	 * @param user user profile to be disabled
-	 * @throws ResourceConflictException if the given user profile is disabled already
+	 * @param user
+	 *            user profile to be disabled
+	 * @throws ResourceConflictException
+	 *             if the given user profile is disabled already
 	 */
 	private void disableUser(final User user)
 	{
@@ -219,8 +233,10 @@ public class UsersController
 	/**
 	 * Unlock the given user profile
 	 *
-	 * @param user user profile to be unlocked
-	 * @throws ResourceConflictException if the given user profile is unlocked already
+	 * @param user
+	 *            user profile to be unlocked
+	 * @throws ResourceConflictException
+	 *             if the given user profile is unlocked already
 	 */
 	private void unlockUser(final User user)
 	{
@@ -235,8 +251,10 @@ public class UsersController
 	/**
 	 * Lock the given user profile
 	 *
-	 * @param user user profile to be locked
-	 * @throws ResourceConflictException if the given user profile is locked already
+	 * @param user
+	 *            user profile to be locked
+	 * @throws ResourceConflictException
+	 *             if the given user profile is locked already
 	 */
 	private void lockUser(final User user)
 	{
@@ -251,9 +269,11 @@ public class UsersController
 	/**
 	 * Looks up user profile by the given identifier.
 	 *
-	 * @param id user profile identifier
+	 * @param id
+	 *            user profile identifier
 	 * @return user profile entity
-	 * @throws ResourceNotFoundException if there is no user profile with the given identifier
+	 * @throws ResourceNotFoundException
+	 *             if there is no user profile with the given identifier
 	 */
 	private User lookupUser(final Long id)
 	{

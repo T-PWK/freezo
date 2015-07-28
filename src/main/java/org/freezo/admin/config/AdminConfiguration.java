@@ -2,6 +2,8 @@ package org.freezo.admin.config;
 
 import org.freezo.admin.service.AdminUserDetailsService;
 import org.freezo.admin.service.FailedAuthHandler;
+import org.freezo.admin.service.ModelMapper;
+import org.freezo.admin.service.ModelMapperImpl;
 import org.freezo.admin.service.SuccessfulAuthHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +23,7 @@ import org.springframework.security.config.annotation.authentication.configurers
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,10 +32,18 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @EnableWebSecurity
+@EnableWebMvcSecurity
 @Configuration
 @Profile("admin")
 public class AdminConfiguration
 {
+	@Bean
+	@ConditionalOnMissingBean
+	public ModelMapper modelMapper()
+	{
+		return new ModelMapperImpl();
+	}
+
 	@Bean
 	@ConditionalOnProperty(prefix = "freezo.security.authentication.account", name = "updateOnSuccess", havingValue = "true", matchIfMissing = true)
 	public ApplicationListener<AuthenticationSuccessEvent> successfulAuthHandler()
