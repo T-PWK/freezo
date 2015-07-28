@@ -24,6 +24,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -62,6 +63,7 @@ public class AdminConfiguration
 	}
 
 	@Configuration
+	@Profile("admin")
 	protected static class ViewsConfiguration extends WebMvcConfigurerAdapter
 	{
 		@Override
@@ -69,6 +71,12 @@ public class AdminConfiguration
 		{
 			registry.addViewController("/admin/login").setViewName("admin/login");
 			registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+		}
+
+		@Override
+		public void configurePathMatch(final PathMatchConfigurer configurer)
+		{
+			configurer.setUseRegisteredSuffixPatternMatch(true);
 		}
 	}
 
@@ -87,6 +95,7 @@ public class AdminConfiguration
 	}
 
 	@Configuration
+	@Profile("admin")
 	@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER - 1)
 	public static class ApiSecurityConfig extends WebSecurityConfigurerAdapter
 	{
