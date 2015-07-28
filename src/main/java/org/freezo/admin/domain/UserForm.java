@@ -1,10 +1,11 @@
-package org.freezo.admin.controller;
+package org.freezo.admin.domain;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
@@ -12,7 +13,7 @@ import org.hibernate.validator.constraints.Length;
 public class UserForm
 {
 	@NotNull
-	@Length(max = 50, min = 5)
+	@Length(max = 50, min = 3)
 	private String username;
 
 	@NotNull
@@ -24,28 +25,38 @@ public class UserForm
 	private String confirm;
 
 	@NotNull
-	@Length(min = 2, max = 50)
+	@Length(min = 2, max = 255)
 	private String firstName;
 
+	@Length(max = 255)
 	private String lastName;
 
 	@Email
+	@Length(max = 255)
 	private String email;
 
+	@Length(max = 255)
 	private String location;
+
+	@Length(max = 255)
 	private String website;
 
-	private final Set<String> roles = new HashSet<String>();
+	@Length(max = 255)
+	private String bio;
 
+	private final Set<Roles> roles = new HashSet<Roles>();
 
 	@Override
 	public String toString()
 	{
 		final ToStringBuilder builder = new ToStringBuilder(this);
-		builder.append("username", username).append("password", password).append("confirm", confirm)
+		final int passwordLength = StringUtils.length(password);
+
+		return builder.append("username", username)
+				.append("password", String.format("* (%d characters long)", passwordLength))
 				.append("firstName", firstName).append("lastName", lastName).append("email", email)
-				.append("location", location).append("website", website).append("roles", roles);
-		return builder.toString();
+				.append("location", location).append("website", website).append("bio", bio)
+				.append("roles", roles).toString();
 	}
 
 	public String getUsername()
@@ -128,15 +139,25 @@ public class UserForm
 		this.website = website;
 	}
 
-	public Set<String> getRoles()
+	public Set<Roles> getRoles()
 	{
 		return roles;
 	}
 
-	public void setRoles(final Set<String> roles)
+	public void setRoles(final Set<Roles> roles)
 	{
 		this.roles.clear();
 		this.roles.addAll(roles);
+	}
+
+	public String getBio()
+	{
+		return bio;
+	}
+
+	public void setBio(final String bio)
+	{
+		this.bio = bio;
 	}
 
 }

@@ -1,4 +1,4 @@
-package org.freezo.admin;
+package org.freezo.admin.domain;
 
 public enum Roles
 {
