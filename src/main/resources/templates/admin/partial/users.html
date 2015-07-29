@@ -29,6 +29,8 @@
 						<i ng-if="isSortBy('firstName')" class="icon sort" ng-class="asc?'ascending':'descending'"></i></a>
 						<a class="item" ng-click="sortBy('lastName')" ng-class="{active:isSortBy('lastName')}"><span th:text="#{label.lastName}" th:remove="tag"/>
 						<i ng-if="isSortBy('lastName')" class="icon sort" ng-class="asc?'ascending':'descending'"></i></a>
+						<a class="item" ng-click="sortBy('createdAt')" ng-class="{active:isSortBy('createdAt')}"><span th:text="#{label.creationDate}" th:remove="tag"/>
+						<i ng-if="isSortBy('createdAt')" class="icon sort" ng-class="asc?'ascending':'descending'"></i></a>
 					</div>
 				</div>
 				<div class="item">
