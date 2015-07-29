@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -13,7 +14,8 @@ import org.hibernate.validator.constraints.Length;
 public class UserForm
 {
 	@NotNull
-	@Length(max = 50, min = 3)
+	@Length(min = 3, max = 50)
+	@Pattern(regexp = "[a-z0-9]+(\\.[a-z0-9]+)*")
 	private String username;
 
 	@NotNull
