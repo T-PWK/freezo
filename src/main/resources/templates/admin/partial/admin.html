@@ -1,0 +1,37 @@
+<html xmlns:layout="http://www.thymeleaf.org/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" th:remove="tag">
+	<div class="ui breadcrumb">
+		<a href="#/dashboard" class="section">Dashboard</a>
+		<i class="right angle icon divider"></i>
+		<div class="section active">Administration</div>
+	</div>
+	<div class="ui hidden divider"></div>
+	<div class="ui stackable grid">
+		<div class="four wide column"></div>
+		<div class="ten wide column">
+			<div class="ui three column grid">
+				<div class="column center aligned">
+					<div class="ui statistic">
+						<div class="value">
+							<i class="small users icon"></i> {{stats.users}}</div>
+						<div class="label">Users</div>
+					</div>
+				</div>
+				<div class="column center aligned">
+					<div class="ui statistic">
+						<div class="value">
+							<i class="small globe icon"></i> {{stats.websites}}</div>
+						<div class="label">Websites</div>
+					</div>
+				</div>
+				<div class="column center aligned">
+					<div class="ui statistic">
+						<div class="value">
+							<i class="small file outline icon"></i> {{stats.pages|number}}</div>
+						<div class="label">Pages</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</html>
