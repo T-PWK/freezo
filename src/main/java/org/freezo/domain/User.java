@@ -40,7 +40,10 @@ public class User implements UserDetails
 	private String bio;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date lastModified;
+	private Date modifiedAt;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private final Date createdAt = new Date();
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
 	private final Account account;
@@ -181,6 +184,21 @@ public class User implements UserDetails
 	public boolean isEnabled()
 	{
 		return getAccount().isEnabled();
+	}
+
+	public Date getModifiedAt()
+	{
+		return modifiedAt;
+	}
+
+	public void setModifiedAt(Date modifiedAt)
+	{
+		this.modifiedAt = modifiedAt;
+	}
+
+	public Date getCreatedAt()
+	{
+		return createdAt;
 	}
 
 }
