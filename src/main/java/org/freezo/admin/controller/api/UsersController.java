@@ -1,8 +1,11 @@
-package org.freezo.admin.controller;
+package org.freezo.admin.controller.api;
 
 import javax.validation.Valid;
 
 import org.freezo.admin.bind.CaseInsentiveEnumEditor;
+import org.freezo.admin.controller.InputValidationException;
+import org.freezo.admin.controller.ResourceConflictException;
+import org.freezo.admin.controller.ResourceNotFoundException;
 import org.freezo.admin.domain.UserForm;
 import org.freezo.admin.service.ModelMapper;
 import org.freezo.domain.User;
@@ -42,7 +45,8 @@ import org.springframework.web.bind.annotation.RestController;
  * </ul>
  * </li>
  * <li>GET /api/v1/users/{user_id} - finds a user by an identifier</li>
- * <li>GET /api/v1/users/username/{user_id} - finds a user by a username</li>
+ * <li>GET /api/v1/users/available/{username} - checks if the given username is
+ * available (200 Available, 404 Not available)</li>
  * <li>POST /api/v1/users - creates user</li>
  * </ul>
  *
@@ -79,11 +83,14 @@ public class UsersController
 		binder.registerCustomEditor(UpdateAction.class, new CaseInsentiveEnumEditor<>(UpdateAction.class));
 	}
 
-	@RequestMapping("/username/{username}")
+	@RequestMapping("/available/{username}")
 	@Transactional(readOnly = true)
-	public User findByIdentifier(@PathVariable final String username)
+	public void findByIdentifier(@PathVariable final String username)
 	{
-		return repository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException());
+		if (repository.findByUsername(username).isPresent())
+		{
+			throw new ResourceNotFoundException(String.format("Username %s not available", username));
+		}
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -118,7 +125,9 @@ public class UsersController
 	@Transactional
 	public User createUser(@RequestBody @Valid final UserForm form, final BindingResult result)
 	{
-		verifyInput(form, result);
+		LOG.debug("User creation :: {} (has errors: {})", form, result.hasErrors());
+
+		verifyUserForm(form, result);
 
 		final User user = mapper.from(form, User.class);
 
@@ -129,7 +138,7 @@ public class UsersController
 		return repository.save(user);
 	}
 
-	private void verifyInput(final UserForm form, final BindingResult result)
+	private void verifyUserForm(final UserForm form, final BindingResult result)
 	{
 		if (result.hasErrors())
 		{
@@ -148,7 +157,7 @@ public class UsersController
 	public void updateUserAvailability(@PathVariable("user_id") final Long id,
 			@PathVariable("action") final UpdateAction action, @AuthenticationPrincipal final User currentUser)
 	{
-		LOG.info("User update :: ACTION:[{}], TARGET:[id:{}], CURRENT:{}", action, id, currentUser);
+		LOG.debug("User update :: ACTION:[{}], TARGET:[id:{}], CURRENT:{}", action, id, currentUser);
 
 		final User user = lookupUser(id);
 
