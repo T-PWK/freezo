@@ -45,9 +45,10 @@ import org.springframework.web.bind.annotation.RestController;
  * </ul>
  * </li>
  * <li>GET /api/v1/users/{user_id} - finds a user by an identifier</li>
- * <li>GET /api/v1/users/available/{username} - checks if the given username is
- * available (200 Available, 404 Not available)</li>
+ * <li>GET /api/v1/users/available/{username} - checks if the given username is available (200 Available, 404 Not
+ * available)</li>
  * <li>POST /api/v1/users - creates user</li>
+ * <li>PATCH /api/v1/users/{user_id}/{action} - updates user</li>
  * </ul>
  *
  * @author tomasz.pawlak
@@ -73,8 +74,7 @@ public class UsersController
 	/**
 	 * Registers customer converters for incoming data
 	 *
-	 * @param binder
-	 *            web data binder
+	 * @param binder web data binder
 	 */
 	@InitBinder
 	public void init(final WebDataBinder binder)
@@ -175,29 +175,26 @@ public class UsersController
 		case ENABLE:
 			enableUser(user);
 			break;
-		case DELETE:
-			deleteUser(user, currentUser);
-			break;
 		}
 	}
 
 	/**
-	 * Delete the given user profile
+	 * Delete the user account by the given identifier
 	 *
-	 * @param user
-	 *            user profile to be deleted
-	 * @param currentUser
-	 *            currently logged in user
-	 * @throws ResourceConflictException
-	 *             if the user to be deleted is current user
+	 * @param id identifier of a user to be deleted
+	 * @param currentUser currently logged in user
+	 * @throws ResourceNotFoundException if there is no user profile with the given identifier
 	 */
-	private void deleteUser(final User user, final User currentUser)
+	@RequestMapping(value = "/{user_id}", method = RequestMethod.DELETE)
+	@Transactional
+	public void deleteUser(@PathVariable("user_id") final Long id, @AuthenticationPrincipal final User currentUser)
 	{
+		LOG.debug("Deleting user :: ID:[{}], CURRENT:{}", id, currentUser);
 
+		final User user = lookupUser(id);
 		if (user.getId() == currentUser.getId())
 		{
-			throw new ResourceConflictException(
-					"User can't delete it's own account");
+			throw new ResourceConflictException("User can't delete it's own user account");
 		}
 
 		repository.delete(user);
@@ -206,10 +203,8 @@ public class UsersController
 	/**
 	 * Enable the given user profile
 	 *
-	 * @param user
-	 *            user profile to be enabled
-	 * @throws ResourceConflictException
-	 *             if the given user profile is enabled already
+	 * @param user user profile to be enabled
+	 * @throws ResourceConflictException if the given user profile is enabled already
 	 */
 	private void enableUser(final User user)
 	{
@@ -224,10 +219,8 @@ public class UsersController
 	/**
 	 * Disable the given user profile
 	 *
-	 * @param user
-	 *            user profile to be disabled
-	 * @throws ResourceConflictException
-	 *             if the given user profile is disabled already
+	 * @param user user profile to be disabled
+	 * @throws ResourceConflictException if the given user profile is disabled already
 	 */
 	private void disableUser(final User user)
 	{
@@ -242,10 +235,8 @@ public class UsersController
 	/**
 	 * Unlock the given user profile
 	 *
-	 * @param user
-	 *            user profile to be unlocked
-	 * @throws ResourceConflictException
-	 *             if the given user profile is unlocked already
+	 * @param user user profile to be unlocked
+	 * @throws ResourceConflictException if the given user profile is unlocked already
 	 */
 	private void unlockUser(final User user)
 	{
@@ -260,10 +251,8 @@ public class UsersController
 	/**
 	 * Lock the given user profile
 	 *
-	 * @param user
-	 *            user profile to be locked
-	 * @throws ResourceConflictException
-	 *             if the given user profile is locked already
+	 * @param user user profile to be locked
+	 * @throws ResourceConflictException if the given user profile is locked already
 	 */
 	private void lockUser(final User user)
 	{
@@ -278,11 +267,9 @@ public class UsersController
 	/**
 	 * Looks up user profile by the given identifier.
 	 *
-	 * @param id
-	 *            user profile identifier
+	 * @param id user profile identifier
 	 * @return user profile entity
-	 * @throws ResourceNotFoundException
-	 *             if there is no user profile with the given identifier
+	 * @throws ResourceNotFoundException if there is no user profile with the given identifier
 	 */
 	private User lookupUser(final Long id)
 	{
@@ -298,8 +285,7 @@ public class UsersController
 		LOCK,
 		UNLOCK,
 		DISABLE,
-		ENABLE,
-		DELETE
+		ENABLE
 	}
 
 	public static enum UserFilterByType
