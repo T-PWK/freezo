@@ -59,6 +59,7 @@
 		.factory('User', ['$resource', 'CsrfToken', function ($resource, CsrfToken) {
 			return $resource('/api/v1/users/:user_id/:action', { user_id: '@id', action: '@action' },
 				{
+					'delete': { method: 'DELETE', headers: { 'X-CSRF-TOKEN': CsrfToken } },
 					save: { method: 'POST', headers: { 'X-CSRF-TOKEN': CsrfToken } },
 					modify: { method: 'PATCH', headers: { 'X-CSRF-TOKEN': CsrfToken } },
 					checkIfAvailable: { method: 'GET', url: '/api/v1/users/available/:username' }
@@ -97,7 +98,7 @@
 				if (form && form.$valid) {
 					$scope.saving = true;
 					User.save($scope.user, function (user) {
-						$timeout(function () { $('.ui.modal').modal('show'); })
+						$timeout(function () { $('.ui.modal.notification').modal('show'); })
 						$scope.saving = false;
 						$scope.created = user;
 						$scope.user = {};
@@ -106,9 +107,9 @@
 					});
 				}
 			};
-			$scope.removeMessage = function () {
-				delete $scope.created;
-			};
+			$scope.$on('$destroy', function () {
+				$('.ui.modal.notification').remove();
+			});
 		}])
 		.controller('EditUserCtrl', ['$scope', 'User', function ($scope, User) {
 		}])
@@ -151,17 +152,15 @@
 				});
 			};
 			$scope.modify = function (action, user) {
-				$scope.action = action;
-				$scope.user = user;
-				$timeout(function () {
-					$('.ui.modal.confirm').modal({
-						closable: false,
-						onApprove: function () {
-							User.modify({ id: user.id, action: action }, function () { $scope.reload(); });
-						}
-					}).modal('show');
-				});
-			}
+				actionWithApproval(action, user, function () {
+					User.modify({ id: user.id, action: action }, $scope.reload);
+				})
+			};
+			$scope.delete = function (user) {
+				actionWithApproval('delete', user, function () {
+					User.delete(null, { id: user.id }, $scope.reload);
+				})
+			};
 			$scope.$on('$destroy', function () {
 				$('.ui.modal').remove();
 			});
@@ -182,5 +181,17 @@
 				return pages;
 			};
 			$scope.$watchGroup(['filter', 'sort', 'asc', 'pageNumber'], $scope.reload);
+
+			function actionWithApproval(action, user, onApprove) {
+				$scope.action = action;
+				$scope.user = user;
+
+				$timeout(function () {
+					$('.ui.modal.confirm').modal({
+						closable: false,
+						onApprove: onApprove
+					}).modal('show');
+				});
+			}
 		}])
 } ());

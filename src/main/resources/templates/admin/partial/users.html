@@ -114,7 +114,7 @@
 										<a class="item" ng-click="modify('enable', user)" ng-if="!user.account.enabled"><i class="checkmark icon"></i><span th:text="#{label.enable}" th:remove="tag"/></a>
 										<a class="item" ng-click="modify('lock', user)" ng-if="user.account.nonLocked"><i class="lock icon"></i><span th:text="#{label.lock}" th:remove="tag"/></a>
 										<a class="item" ng-click="modify('unlock', user)" ng-if="!user.account.nonLocked"><i class="unlock icon"></i><span th:text="#{label.unlock}" th:remove="tag"/></a>
-										<a class="item" ng-click="modify('delete', user)"><i class="remove red icon"></i><span th:text="#{label.delete}" th:remove="tag"/></a>
+										<a class="item" ng-click="delete(user)"><i class="remove red icon"></i><span th:text="#{label.delete}" th:remove="tag"/></a>
 									</div>
 								</div>
 							</div>
