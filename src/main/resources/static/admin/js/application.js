@@ -14,12 +14,13 @@
 		}
 	}
 
-	angular.module('tbs', ['ngRoute', 'ngResource'])
+	angular.module('tbs', ['ngRoute', 'ngResource', 'ngMessages'])
 		.config(['$routeProvider', function ($routeProvider) {
 			$routeProvider
 				.when('/dashboard', { templateUrl: '/admin/partial/dashboard' })
 				.when('/user/profile', { templateUrl: '/admin/partial/user-profile' })
 				.when('/user/settings', { templateUrl: '/admin/partial/user-settings' })
+				.when('/admin', { templateUrl: '/admin/partial/admin', controller: 'AdminCtrl' })
 				.when('/admin/users', { templateUrl: '/admin/partial/users', controller: 'UsersCtrl' })
 				.when('/admin/users/new', { templateUrl: '/admin/partial/user-new', controller: 'NewUserCtrl' })
 				.when('/admin/users/:id', { templateUrl: '/admin/partial/user-edit', controller: 'UsersCtrl' })
@@ -47,11 +48,9 @@
 			return {
 				require: 'ngModel',
 				link: function (scope, element, attrs, ngModel) {
-					ngModel.$asyncValidators.username = function (modelVal, viewVal) {
+					ngModel.$asyncValidators.available = function (modelVal, viewVal) {
 						var def = $q.defer();
-						User.findByUsername({ username: modelVal }, function () { def.reject() }, function (response) {
-							(response.status === 404) ? def.resolve() : def.reject();
-						});
+						User.checkIfAvailable({ username: modelVal }, function () { def.resolve(); }, function () { def.reject(); });
 						return def.promise;
 					}
 				}
@@ -62,7 +61,7 @@
 				{
 					save: { method: 'POST', headers: { 'X-CSRF-TOKEN': CsrfToken } },
 					modify: { method: 'PATCH', headers: { 'X-CSRF-TOKEN': CsrfToken } },
-					findByUsername: { method: 'GET', url: '/api/v1/users/username/:username' }
+					checkIfAvailable: { method: 'GET', url: '/api/v1/users/available/:username' }
 				});
 		}])
 		.filter('roleName', function () {
@@ -77,9 +76,15 @@
 				return roles;
 			}
 		})
+		.controller('AdminCtrl', ['$scope', '$http', function ($scope, $http) {
+			$scope.stats = {};
+			$http.get('/api/v1/admin/statistics').success(function (data) {
+				angular.copy(data, $scope.stats);
+			});
+		}])
 		.controller('DashboardCtrl', ['$scope', function ($scope) {
 		}])
-		.controller('NewUserCtrl', ['$scope', 'User', function ($scope, User) {
+		.controller('NewUserCtrl', ['$scope', '$timeout', 'User', function ($scope, $timeout, User) {
 			$('.ui.dropdown').dropdown();
 			$scope.reset = function (form) {
 				if (form) {
@@ -92,6 +97,7 @@
 				if (form && form.$valid) {
 					$scope.saving = true;
 					User.save($scope.user, function (user) {
+						$timeout(function () { $('.ui.modal').modal('show'); })
 						$scope.saving = false;
 						$scope.created = user;
 						$scope.user = {};

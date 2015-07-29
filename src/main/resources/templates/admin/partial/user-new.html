@@ -2,7 +2,7 @@
 	<div class="ui breadcrumb">
 		<a href="#/dashboard" class="section">Dashboard</a>
 		<i class="right angle icon divider"></i>
-		<a class="section">Administration</a>
+		<a class="section" href="#/admin">Administration</a>
 		<i class="right angle icon divider"></i>
 		<a class="section" href="#/admin/users">Users</a>
 		<i class="right angle icon divider"></i>
@@ -12,51 +12,38 @@
 	<div class="ui grid">
 		<div class="computer only two wide column"></div>
 		<div class="sixteen wide mobile twelve wide computer column">
-			<div class="ui icon info message" ng-if="created">
-				<i class="user icon"></i>
-				<i class="close icon" ng-click="removeMessage()"></i>
-				<div class="content">
-					<div class="header">New user profile has been created!</div>
-					<div class="ui list">
-						<div class="item">
-							<i class="user icon"></i>
-							<div class="content">{{created.account.username}}</div>
-						</div>
-						<div class="item" ng-if="created.email">
-							<i class="mail icon"></i>
-							<div class="content">{{created.email}}</div>
-						</div>
-						<div class="item" ng-if="created.website">
-							<i class="linkify icon"></i>
-							<div class="content">
-								<a ng-href="{{created.website}}" target="_blank">{{created.website}}</a>
-							</div>
-						</div>
-						<div class="item" ng-if="created.account.authorities.length">
-							<i class="users icon"></i>
-							<div class="content">{{(created.account.authorities|roleNames).join(', ')}}</div>
-						</div>
-					</div>
-				</div>
-			</div>
 			<form class="ui form" novalidate="" ng-class="{loading:saving}" name="uform" ng-submit="submit(uform)">
 				<h4 class="ui dividing header">Login Information</h4>
 				<div class="fields">
 					<div class="six wide field required" ng-class="{error:uform.username.$invalid &amp;&amp; uform.username.$dirty}">
 						<label>Username</label>
-						<input type="text" name="username" placeholder="Username" ng-model="user.username" required="" ng-minlength="3"
-						ng-maxlength="50" username-check="" ng-model-options="{updateOn:'default blur',debounce:{default:1000,blur:0}}" />
+						<div class="ui icon input loading">
+							<input type="text" name="username" placeholder="Username" ng-model="user.username" required="" ng-minlength="3" ng-maxlength="50"
+							pattern="[a-z0-9]+(\.[a-z0-9]+)*" username-check="" ng-model-options="{updateOn:'default blur',debounce:{default:1000,blur:0}}"
+							/>
+							<i class="user icon" ng-show="uform.$pending"></i>
+						</div>
+						<div class="ui red pointing label" ng-if="uform.username.$invalid &amp;&amp; uform.username.$dirty" ng-messages="uform.username.$error">
+							<span ng-message="available">Username already exists</span>
+							<span ng-message="required, minlength, maxlength">Username must be between 3 and 50 characters long</span>
+						</div>
 					</div>
 					<div class="ten wide field required">
 						<label>Password</label>
 						<div class="two fields">
 							<div class="field" ng-class="{error:uform.password.$invalid &amp;&amp; uform.password.$dirty}">
 								<input type="password" name="password" placeholder="Password" ng-model="user.password" required="" ng-minlength="5" ng-maxlength="100"
-								/>
+								ng-model-options="{updateOn:'default blur',debounce:{default:1000,blur:0}}" />
+								<div class="ui red pointing label" ng-if="uform.password.$invalid &amp;&amp; uform.password.$dirty" ng-messages="uform.password.$error">
+									<span ng-message="required, minlength, maxlength">Password must be between 5 and 100 characters long</span>
+								</div>
 							</div>
 							<div class="field" ng-class="{error:uform.confirm.$invalid &amp;&amp; uform.confirm.$dirty}">
 								<input type="password" name="confirm" placeholder="Password Confirmation" ng-model="user.confirm" required="" compare-to="user.password"
-								/>
+								ng-model-options="{updateOn:'default blur',debounce:{default:1000,blur:0}}" />
+								<div class="ui red pointing label" ng-if="uform.confirm.$invalid &amp;&amp; uform.confirm.$dirty" ng-messages="uform.confirm.$error">
+									<span ng-message="compareTo">Password confirmation does not match password</span>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -66,8 +53,12 @@
 					<div class="ten wide field required">
 						<label>Name</label>
 						<div class="two fields">
-							<div class="field">
-								<input type="text" name="firstName" placeholder="First Name" ng-model="user.firstName" required="" ng-minlength="2" />
+							<div class="field" ng-class="{error:uform.firstName.$invalid &amp;&amp; uform.firstName.$dirty}">
+								<input type="text" name="firstName" placeholder="First Name" ng-model="user.firstName" required="" ng-minlength="2" ng-maxlength="50"
+								ng-model-options="{updateOn:'default blur',debounce:{default:1000,blur:0}}" />
+								<div class="ui red pointing label" ng-if="uform.firstName.$invalid &amp;&amp; uform.firstName.$dirty" ng-messages="uform.firstName.$error">
+									<span ng-message="required, minlength, maxlength">First name must be between 2 and 50 characters long</span>
+								</div>
 							</div>
 							<div class="field">
 								<input type="text" name="lastName" placeholder="Last Name" ng-model="user.lastName" />
@@ -109,6 +100,36 @@
 					<button type="submit" class="ui positive button" ng-disabled="uform.$invalid || uform.$pending">Create</button>
 				</div>
 			</form>
+		</div>
+	</div>
+	<div class="ui small basic modal confirm">
+		<i class="close icon"></i>
+		<div class="ui icon header">
+			<span>
+				<i class="user icon"></i>
+				<span th:remove="tag">User successfully created</span>
+			</span>
+		</div>
+		<div class="content">
+			<p>User <strong>{{created.account.username}}</strong> has been successfuly created</p>
+			<div class="ui list">
+				<div class="item">
+					<i class="user icon"></i>
+					<div class="content">{{created.account.username}}</div>
+				</div>
+				<div class="item" ng-if="created.email">
+					<i class="mail icon"></i>
+					<div class="content">{{created.email}}</div>
+				</div>
+				<div class="item" ng-if="created.website">
+					<i class="linkify icon"></i>
+					<div class="content">{{created.website}}</div>
+				</div>
+				<div class="item" ng-if="created.account.authorities.length">
+					<i class="users icon"></i>
+					<div class="content">{{(created.account.authorities|roleNames).join(', ')}}</div>
+				</div>
+			</div>
 		</div>
 	</div>
 
