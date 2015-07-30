@@ -34,21 +34,21 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Users API:
  * <ul>
- * <li>GET /api/v1/users - fetches all users. Available query string parameters
+ * <li>{@code GET /api/v1/users} - fetches all users. Available query string parameters
  * <ul>
- * <li>filter: <strong>enabled</strong> - fetch enabled users</li>
- * <li>filter: <strong>disabled</strong> - fetch disabled users</li>
- * <li>filter: <strong>locked</strong> - fetch locked users</li>
- * <li>filter: <strong>nonlocked</strong> - fetch non-locked users</li>
- * <li>filter: <strong>expired</strong> - fetch expired users</li>
- * <li>filter: <strong>nonexpired</strong> - fetch non-expired users</li>
+ * <li>{@code filter}: <strong>enabled</strong> - fetch enabled users</li>
+ * <li>{@code filter}: <strong>disabled</strong> - fetch disabled users</li>
+ * <li>{@code filter}: <strong>locked</strong> - fetch locked users</li>
+ * <li>{@code filter}: <strong>nonlocked</strong> - fetch non-locked users</li>
+ * <li>{@code filter}: <strong>expired</strong> - fetch expired users</li>
+ * <li>{@code filter}: <strong>nonexpired</strong> - fetch non-expired users</li>
  * </ul>
  * </li>
- * <li>GET /api/v1/users/{user_id} - finds a user by an identifier</li>
- * <li>GET /api/v1/users/available/{username} - checks if the given username is available (200 Available, 404 Not
+ * <li>{@code GET /api/v1/users/{user_id}} - finds a user by an identifier</li>
+ * <li>{@code GET /api/v1/users/available/{username}} - checks if the given username is available (200 Available, 404 Not
  * available)</li>
- * <li>POST /api/v1/users - creates user</li>
- * <li>PATCH /api/v1/users/{user_id}/{action} - updates user</li>
+ * <li>{@code POST /api/v1/users} - creates user</li>
+ * <li>{@code PATCH /api/v1/users/{user_id}/{action}} - updates user</li>
  * </ul>
  *
  * @author tomasz.pawlak
