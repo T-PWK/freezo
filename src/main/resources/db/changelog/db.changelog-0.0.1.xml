@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+	<property name="clob.type" value="longtext" dbms="mysql" />
+	<property name="clob.type" value="longtext" dbms="postgresql" />
+
+	<changeSet id="0.0.1" author="freezo">
+		<comment>Initial setup</comment>
+
+		<createTable tableName="${table.name.user}">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="first_name" type="varchar(50)" />
+			<column name="last_name" type="varchar(100)" />
+			<column name="email" type="varchar(255)" />
+			<column name="location" type="varchar(255)" />
+			<column name="website" type="varchar(255)" />
+			<column name="picture" type="varchar(255)" />
+			<column name="bio" type="varchar(255)" />
+			<column name="created_at" type="datetime" />
+			<column name="modified_at" type="datetime" />
+			<column name="version" type="bigint">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createTable tableName="${table.name.account}">
+			<column name="user_id" type="bigint" autoIncrement="true">
+				<constraints nullable="false" primaryKey="true"
+					referencedTableName="${table.name.user}" referencedColumnNames="id"
+					foreignKeyName="FK__${table.name.account}__${table.name.user}" />
+			</column>
+			<column name="username" type="varchar(50)">
+				<constraints nullable="false" unique="true"
+					uniqueConstraintName="UK__${table.name.account}__username" />
+			</column>
+			<column name="password" type="varchar(60)" />
+			<column name="failed_auth_counter" type="int" />
+			<column name="last_success_auth" type="datetime" />
+			<column name="last_success_auth_ip" type="varchar(45)" />
+			<column name="last_failed_auth_ip" type="varchar(45)" />
+			<column name="last_failed_auth" type="datetime" />
+			<column name="account_expiration_date" type="datetime" />
+			<column name="credentials_expiration_date" type="datetime" />
+			<column name="locked" type="char(1)" defaultValue="N">
+				<constraints nullable="false" />
+			</column>
+			<column name="disabled" type="char(1)" defaultValue="N">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="version" type="bigint">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createTable tableName="${table.name.account_auth}">
+			<column name="account_user_id" type="bigint">
+				<constraints nullable="false" unique="false"
+					referencedTableName="${table.name.account}" referencedColumnNames="user_id"
+					foreignKeyName="FK__${table.name.account_auth}__${table.name.account}" />
+			</column>
+			<column name="role" type="varchar(100)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+</databaseChangeLog>
