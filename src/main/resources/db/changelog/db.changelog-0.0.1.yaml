@@ -1,0 +1,155 @@
+databaseChangeLog:
+  - property:
+      name: clob.type
+      value: longtext
+      dbms: mysql
+  - property:
+      name: clob.type
+      value: text
+      dbms: postgresql
+      
+  - changeSet:
+      id: 0.0.1
+      author: freezo
+      comment: Initial setup
+      changes:
+        - createTable:
+            tableName: ${table.name.user}
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar(50)
+              - column:
+                  name: last_name
+                  type: varchar(100)
+              - column:
+                  name: email
+                  type: varchar(255)
+              - column:
+                  name: location
+                  type: varchar(255)
+              - column:
+                  name: website
+                  type: varchar(255)
+              - column:
+                  name: picture
+                  type: varchar(255)
+              - column:
+                  name: bio
+                  type: varchar(255)
+              - column:
+                  name: created_at
+                  type: datetime
+              - column:
+                  name: modified_at
+                  type: datetime
+              - column:
+                  name: version
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: ${table.name.account}
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(60)
+              - column:
+                  name: account_expiration_date
+                  type: datetime
+              - column:
+                  name: credentials_expiration_date
+                  type: datetime
+              - column:
+                  name: failed_auth_counter
+                  type: int
+              - column:
+                  name: last_failed_auth
+                  type: datetime
+              - column:
+                  name: last_success_auth
+                  type: datetime
+              - column:
+                  name: last_failed_auth_ip
+                  type: varchar(45)
+              - column:
+                  name: last_success_auth_ip
+                  type: varchar(45)
+              - column:
+                  name: locked
+                  type: char(1)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: disabled
+                  type: char(1)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: version
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: ${table.name.account_auth}
+            columns:
+              - column:
+                  name: account_user_id
+                  type: bigint
+                  constraints:
+                    unique: false
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            constraintName: FK__${table.name.account}__${table.name.user}
+            baseTableName: ${table.name.account}
+            baseColumnNames: user_id
+            referencedTableName: ${table.name.user}
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            constraintName: FK__${table.name.account_auth}__${table.name.account}
+            baseTableName: ${table.name.account_auth}
+            baseColumnNames: account_user_id
+            referencedTableName: ${table.name.account}
+            referencedColumnNames: user_id
+
+        - addUniqueConstraint:
+            columnNames: username
+            constraintName: UK__${table.name.account}__username
+            tableName: ${table.name.account}
+
+        - addDefaultValue:
+            tableName: ${table.name.account}
+            columnName: locked
+            defaultValue: N
+
+        - addDefaultValue:
+            tableName: ${table.name.account}
+            columnName: disabled
+            defaultValue: N
