@@ -15,7 +15,7 @@ public class UserForm
 {
 	@NotNull
 	@Length(min = 3, max = 50)
-	@Pattern(regexp = "[a-z0-9]+(\\.[a-z0-9]+)*")
+	@Pattern(regexp = "[a-z][a-z0-9]+(\\.[a-z0-9]+)*")
 	private String username;
 
 	@NotNull
@@ -27,10 +27,10 @@ public class UserForm
 	private String confirm;
 
 	@NotNull
-	@Length(min = 2, max = 255)
+	@Length(min = 2, max = 50)
 	private String firstName;
 
-	@Length(max = 255)
+	@Length(max = 100)
 	private String lastName;
 
 	@Email

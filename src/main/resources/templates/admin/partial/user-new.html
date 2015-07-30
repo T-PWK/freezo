@@ -19,7 +19,7 @@
 						<label>Username</label>
 						<div class="ui icon input loading">
 							<input type="text" name="username" placeholder="Username" ng-model="user.username" required="" ng-minlength="3" ng-maxlength="50"
-							pattern="[a-z0-9]+(\.[a-z0-9]+)*" username-check="" ng-model-options="{updateOn:'default blur',debounce:{default:1000,blur:0}}"
+							pattern="[a-z][a-z0-9]+(\.[a-z0-9]+)*" username-check="" ng-model-options="{updateOn:'default blur',debounce:{default:1000,blur:0}}"
 							/>
 							<i class="user icon" ng-show="uform.$pending"></i>
 						</div>
@@ -61,7 +61,7 @@
 								</div>
 							</div>
 							<div class="field">
-								<input type="text" name="lastName" placeholder="Last Name" ng-model="user.lastName" />
+								<input type="text" name="lastName" placeholder="Last Name" ng-model="user.lastName" ng-maxlength="100" />
 							</div>
 						</div>
 					</div>
