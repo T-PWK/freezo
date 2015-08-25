@@ -2,10 +2,10 @@ package org.freezo.admin.controller.api;
 
 import javax.validation.Valid;
 
+import org.freezo.ResourceNotFoundException;
 import org.freezo.admin.bind.CaseInsentiveEnumEditor;
 import org.freezo.admin.controller.InputValidationException;
 import org.freezo.admin.controller.ResourceConflictException;
-import org.freezo.admin.controller.ResourceNotFoundException;
 import org.freezo.admin.domain.UserForm;
 import org.freezo.admin.service.ModelMapper;
 import org.freezo.domain.User;
