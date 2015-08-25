@@ -1,4 +1,4 @@
-package org.freezo.web.view;
+package org.freezo.website.service;
 
 import java.util.Locale;
 

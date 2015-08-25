@@ -37,7 +37,7 @@ public class Website
 	@Override
 	public String toString()
 	{
-		return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
+		return new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE)
 				.append("id", id).append("name", name).append("hosts", hosts).toString();
 	}
 

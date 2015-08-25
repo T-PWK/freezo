@@ -1,4 +1,4 @@
-package org.freezo.web;
+package org.freezo.website;
 
 public final class Constants
 {

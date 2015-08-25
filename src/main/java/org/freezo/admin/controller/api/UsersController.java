@@ -2,7 +2,6 @@ package org.freezo.admin.controller.api;
 
 import javax.validation.Valid;
 
-import org.freezo.ResourceNotFoundException;
 import org.freezo.admin.bind.CaseInsentiveEnumEditor;
 import org.freezo.admin.controller.InputValidationException;
 import org.freezo.admin.controller.ResourceConflictException;
@@ -10,6 +9,7 @@ import org.freezo.admin.domain.UserForm;
 import org.freezo.admin.service.ModelMapper;
 import org.freezo.domain.User;
 import org.freezo.domain.UserRepository;
+import org.freezo.web.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,14 +1,14 @@
-package org.freezo.web.service;
+package org.freezo.website.service;
 
 import java.net.URL;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.freezo.ResourceNotFoundException;
 import org.freezo.domain.Website;
 import org.freezo.domain.WebsiteRepository;
-import org.freezo.web.Constants;
+import org.freezo.web.ResourceNotFoundException;
+import org.freezo.website.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class WebsiteListener extends HandlerInterceptorAdapter
 
 		request.setAttribute(Constants.WEBSITE_ATTRIBUTE_NAME, website);
 
-		LOG.info("Website [{}] detected for URL:[{}] : {}", website, url);
+		LOG.info("Website: {} detected for URL:[{}]", website, url);
 
 		return true;
 	}

@@ -1,4 +1,4 @@
-package org.freezo.web.service;
+package org.freezo.website.service;
 
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromRequest;
 

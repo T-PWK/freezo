@@ -1,8 +1,8 @@
-package org.freezo.web.config;
+package org.freezo.website.config;
 
-import org.freezo.web.service.RedirectsInterceptor;
-import org.freezo.web.service.WebsiteListener;
-import org.freezo.web.view.WebsiteViewResolver;
+import org.freezo.website.service.RedirectsInterceptor;
+import org.freezo.website.service.WebsiteListener;
+import org.freezo.website.service.WebsiteViewResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

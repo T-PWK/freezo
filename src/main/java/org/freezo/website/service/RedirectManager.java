@@ -1,4 +1,4 @@
-package org.freezo.web.service;
+package org.freezo.website.service;
 
 import java.util.Optional;
 
