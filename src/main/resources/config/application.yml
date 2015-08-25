@@ -1,4 +1,7 @@
 freezo:
+  web:
+    listing:
+      posts: 7
   security:
     authentiation:
       account:
