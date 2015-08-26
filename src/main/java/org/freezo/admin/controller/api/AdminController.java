@@ -1,6 +1,8 @@
 package org.freezo.admin.controller.api;
 
+import org.freezo.domain.PostReporitory;
 import org.freezo.domain.UserRepository;
+import org.freezo.domain.WebsiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.access.annotation.Secured;
@@ -16,13 +18,19 @@ public class AdminController
 	@Autowired
 	private UserRepository users;
 
+	@Autowired
+	private WebsiteRepository websites;
+
+	@Autowired
+	private PostReporitory posts;
+
 	@RequestMapping("statistics")
 	public Statistics statistics()
 	{
 		final Statistics stats = new Statistics();
 		stats.setUsers(users.count());
-		stats.setWebsites(6);
-		stats.setPages(2364);
+		stats.setWebsites(websites.count());
+		stats.setPages(posts.count());
 
 		return stats;
 	}
