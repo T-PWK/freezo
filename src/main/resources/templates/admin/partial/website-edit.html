@@ -1,0 +1,100 @@
+<html xmlns:layout="http://www.thymeleaf.org/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" th:remove="tag">
+<div class="ui breadcrumb">
+	<a href="#/dashboard" class="section">Dashboard</a>
+	<i class="right angle icon divider"></i>
+	<a class="section" href="#/admin">Administration</a>
+	<i class="right angle icon divider"></i>
+	<a class="section" href="#/admin/websites">Websites</a>
+	<i class="right angle icon divider"></i>
+	<div class="section active">{{website.name}}</div>
+</div>
+<div class="ui divider hidden"></div>
+<div class="ui stackable grid">
+	<div class="center aligned three wide column">
+		<div class="ui divider hidden"></div>
+		<i class="massive icons">
+			<i class="disabled globe icon"></i>
+			<i class="corner check green icon" ng-show="website.enabled"></i>
+			<i class="corner remove red icon" ng-hide="website.enabled"></i>
+		</i>
+	</div>
+	<div class="nine wide column">
+		<h4 class="ui horizontal divider header "><i class="info circle icon"></i> Details</h4>
+		<form class="ui form">
+			<div class="field">
+				<label>Name</label>
+				<input type="text" name="name" placeholder="Name" ng-model="website.name" ng-readonly="view" />
+			</div>
+			<div class="field">
+				<label>Description</label>
+				<textarea ng-model="website.description" rows="3"></textarea>
+			</div>
+			<div class="field">
+				<label>Hosts</label>
+				<div class="ui right labeled left icon input">
+					<i class="globe icon"></i>
+					<input type="text" name="host" placeholder="Host e.g. www.mysite.com" ng-model="hosts" ng-list="," />
+					<a class="ui tag label" ng-click="addHosts(hosts);hosts=[]">Add Hosts</a>
+				</div>
+			</div>
+			<div class="ui icon message">
+				<i class="globe icon"></i>
+				<div class="content">
+					<div class="header">Website Hosts ({{website.hosts.length}})</div>
+					<div class="ui list">
+						<div class="item" ng-repeat="host in website.hosts">
+							<i class="trash red icon link" ng-click="removeHost($index)"></i>
+							<div class="content">{{host}}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<div class="ui checkbox">
+					<input type="checkbox" name="enabled" ng-model="website.enabled" />
+					<label>Enable Website</label>
+				</div>
+			</div>
+			<div class="ui submit button" ng-click="save()">Save</div>
+		</form>
+	</div>
+	<div class="center aligned four wide column">
+		<h4 class="ui horizontal divider header "><i class="bar chart icon"></i></h4>
+		<div class="ui small statistic">
+			<div class="value">
+				<i class="file text outline icon"></i> 0
+			</div>
+			<div class="label">
+				Posts
+			</div>
+		</div>
+		<div class="ui divider hidden"></div>
+		<div class="ui small statistic">
+			<div class="value">
+				<i class="users icon"></i> 0
+			</div>
+			<div class="label">
+				Users
+			</div>
+		</div>
+		<div class="ui divider hidden"></div>
+		<div class="ui statistic">
+			<div class="text value">{{website.updatedAt|date:'shortDate'}}
+				<br/>{{website.updatedAt|date:'shortTime'}}</div>
+			<div class="label">
+				Last Updated
+			</div>
+		</div>
+		<div class="ui divider hidden"></div>
+		<div class="ui statistic">
+			<div class="text value">{{website.createdAt|date:'shortDate'}}
+				<br/>{{website.createdAt|date:'shortTime'}}</div>
+			<div class="label">
+				Created
+			</div>
+		</div>
+	</div>
+</div>
+
+
+</html>

@@ -24,6 +24,8 @@
 				.when('/admin/users', { templateUrl: '/admin/partial/users', controller: 'UsersCtrl' })
 				.when('/admin/users/new', { templateUrl: '/admin/partial/user-new', controller: 'NewUserCtrl' })
 				.when('/admin/users/:id', { templateUrl: '/admin/partial/user-edit', controller: 'UsersCtrl' })
+				.when('/admin/websites', { templateUrl: '/admin/partial/websites', controller: 'WebsitesCtrl' })
+				.when('/admin/websites/:id', { templateUrl: '/admin/partial/website-edit', controller: 'EditWebsiteCtrl' })
 				.when('/admin/themes', { templateUrl: '/admin/partial/themes' })
 				.when('/admin/plugins', { templateUrl: '/admin/partial/plugins' })
 				.otherwise('/dashboard');
@@ -65,6 +67,11 @@
 					checkIfAvailable: { method: 'GET', url: '/api/v1/users/available/:username' }
 				});
 		}])
+		.factory('Website', ['$resource', 'CsrfToken', function ($resource, CsrfToken) {
+			return $resource('/api/v1/websites/:website_id', { website_id: '@id' }, {
+				save: { method: 'POST', headers: { 'X-CSRF-TOKEN': CsrfToken } }
+			});
+		}])
 		.filter('roleName', function () {
 			return function (role) {
 				return roleName(role);
@@ -77,6 +84,40 @@
 				return roles;
 			}
 		})
+		.controller('EditWebsiteCtrl', ['$scope', '$routeParams', 'Website', function ($scope, $routeParams, Website) {
+			$scope.loading = true;
+			$scope.view = true;
+			$scope.website = Website.get(null, { id: $routeParams.id });
+
+			$scope.removeHost = function (index) {
+				$scope.website.hosts.splice(index, 1);
+			};
+			$scope.addHosts = function (hosts) {
+				angular.forEach(hosts, function (host) {
+					if (this.indexOf(host) < 0) {
+						this.push(host);
+					}
+				}, $scope.website.hosts)
+			};
+			$scope.save = function () {
+				$scope.website.$save();
+			}
+		}])
+		.controller('WebsitesCtrl', ['$scope', 'Website', function ($scope, Website) {
+			$scope.loading = true;
+			$scope.request = { page: 0 };
+
+			$scope.$watch('request.page', function () {
+				$scope.loading = true;
+				Website.get($scope.request, function (data) {
+					$scope.loading = false;
+					$scope.websites = data;
+				})
+			})
+
+			$scope.next = function () { $scope.request.page += 1 };
+			$scope.prev = function () { $scope.request.page -= 1; };
+		}])
 		.controller('AdminCtrl', ['$scope', '$http', function ($scope, $http) {
 			$scope.stats = {};
 			$http.get('/api/v1/admin/statistics').success(function (data) {

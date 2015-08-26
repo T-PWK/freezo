@@ -1,0 +1,60 @@
+<html xmlns:layout="http://www.thymeleaf.org/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" th:remove="tag">
+<div class="ui breadcrumb">
+	<a href="#/dashboard" class="section">Dashboard</a>
+	<i class="right angle icon divider"></i>
+	<a class="section" href="#/admin">Administration</a>
+	<i class="right angle icon divider"></i>
+	<div class="section active">Websites</div>
+</div>
+<div class="ui divider hidden"></div>
+<div class="ui stackable grid">
+	<div class="sixteen wide column">
+		<table class="ui stripped green table">
+			<thead>
+				<tr>
+					<th class="one wide">ID</th>
+					<th class="three wide">Name</th>
+					<th class="five wide">Description</th>
+					<th class="four wide">Hosts</th>
+					<th class="three wide">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="website in websites.content" ng-class="{warning:!website.enabled}">
+					<td><i class="attention icon" ng-if="!website.enabled"></i> {{website.id}}</td>
+					<td>{{website.name}}</td>
+					<td>{{website.description}}</td>
+					<td>
+						<div class="ui list">
+							<div class="item" ng-repeat="host in website.hosts">
+								<i class="globe icon"></i>
+								<div class="content">{{host}}</div>
+							</div>
+						</div>
+					</td>
+					<td>
+						<div class="ui horizontal bulleted link list">
+							<a class="item" href="#/admin/websites/{{website.id}}"><i class="edit icon"></i>Edit</a>
+							<a class="item" ng-click="modify('disable', user)" ng-hide="website.enabled"><i class="check green icon"></i>Enable</a>
+							<a class="item" ng-click="disable(website)" ng-show="website.enabled"><i class="remove red icon"></i>Disable</a>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<th colspan="5">
+						<div class="ui three column grid">
+							<div class="column"><a href="" ng-click="prev()" ng-hide="!websites || websites.first"><i class="icon angle double left"></i> Previous</a></div>
+							<div class="column center aligned"><span ng-hide="!websites || loading">Page {{websites.number+1}} of {{websites.totalPages}}</span> <span ng-show="loading"><i class="spinner loading icon"></i>Loading ...</span></div>
+							<div class="column right aligned"><a href="" ng-click="next()" ng-hide="!websites || websites.last">Next <i class="icon angle double right"></i></a></div>
+						</div>
+
+					</th>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+</div>
+
+</html>
