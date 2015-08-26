@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.freezo.domain.Redirect;
 import org.freezo.domain.Website;
+import org.freezo.website.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class RedirectsInterceptor extends HandlerInterceptorAdapter
 			return true;
 		}
 
-		LOG.info("Redirect found: {}", redirect.get());
+		LOG.debug("Redirect: {} found", redirect.get());
 
 		switch (redirect.get().getType())
 		{
@@ -82,7 +83,8 @@ public class RedirectsInterceptor extends HandlerInterceptorAdapter
 	 */
 	private Optional<Redirect> findRedirectForRequest(final HttpServletRequest request)
 	{
-		return manager.findRedirect((Website) request.getAttribute("FREEZO_WEBSITE"), request.getRequestURI());
+		return manager.findRedirect(
+				(Website) request.getAttribute(Constants.WEBSITE_ATTRIBUTE_NAME), request.getRequestURI());
 	}
 
 }

@@ -36,7 +36,7 @@ public class WebsiteListener extends HandlerInterceptorAdapter
 
 		request.setAttribute(Constants.WEBSITE_ATTRIBUTE_NAME, website);
 
-		LOG.info("Website: {} detected for URL:[{}]", website, url);
+		LOG.debug("Website: {} detected for URL:[{}]", website, url);
 
 		return true;
 	}
