@@ -39,7 +39,7 @@ public class Redirect
 	@Override
 	public String toString()
 	{
-		final ToStringBuilder builder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
+		final ToStringBuilder builder = new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE);
 		return builder.append("id", id).append("type", type)
 				.append("from", fromUrl).append("to", toUrl)
 				.append("start", startAt).append("end", endAt).toString();
