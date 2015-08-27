@@ -42,13 +42,18 @@ public class WebsitesController
 
 	@RequestMapping(value = "{id}", method = RequestMethod.POST)
 	public Website update(@RequestBody final Website website, @PathVariable("id") final long id)
-			throws InterruptedException
 	{
-		LOG.info("Update of website ... : {}", website);
+		LOG.debug("Updating website:[{}] with content: {}", id, website);
 
 		website.setUpdatedAt(new Date());
-
 		return repository.save(website);
 	}
 
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+	public void delete(@PathVariable("id") final long id)
+	{
+		LOG.debug("Deleting website:[{}]", id);
+
+		repository.delete(id);
+	}
 }

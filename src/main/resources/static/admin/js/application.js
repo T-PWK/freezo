@@ -69,7 +69,8 @@
 		}])
 		.factory('Website', ['$resource', 'CsrfToken', function ($resource, CsrfToken) {
 			return $resource('/api/v1/websites/:website_id', { website_id: '@id' }, {
-				save: { method: 'POST', headers: { 'X-CSRF-TOKEN': CsrfToken } }
+				save: { method: 'POST', headers: { 'X-CSRF-TOKEN': CsrfToken } },
+				'delete': { method: 'DELETE', headers: { 'X-CSRF-TOKEN': CsrfToken } }
 			});
 		}])
 		.filter('roleName', function () {
@@ -84,25 +85,53 @@
 				return roles;
 			}
 		})
-		.controller('EditWebsiteCtrl', ['$scope', '$routeParams', 'Website', function ($scope, $routeParams, Website) {
-			$scope.loading = true;
-			$scope.view = true;
-			$scope.website = Website.get(null, { id: $routeParams.id });
+		.controller('EditWebsiteCtrl', ['$scope', '$routeParams', '$location', 'Website',
+			function ($scope, $routeParams, $location, Website) {
+				angular.extend($scope, { viewMode: true, loading: true, original: {} });
+				Website.get(null, { id: $routeParams.id }, load);
 
-			$scope.removeHost = function (index) {
-				$scope.website.hosts.splice(index, 1);
-			};
-			$scope.addHosts = function (hosts) {
-				angular.forEach(hosts, function (host) {
-					if (this.indexOf(host) < 0) {
-						this.push(host);
+				$scope.$watch('viewMode', function (newVal, oldVal) {
+					if (newVal) {
+						angular.copy($scope.original, $scope.website);
 					}
-				}, $scope.website.hosts)
-			};
-			$scope.save = function () {
-				$scope.website.$save();
-			}
-		}])
+				});
+
+				$scope.removeHost = function (index) {
+					$scope.website.hosts.splice(index, 1);
+				};
+				$scope.addHosts = function (hosts) {
+					angular.forEach(hosts, function (host) {
+						if (this.indexOf(host) < 0) {
+							this.push(host);
+						}
+					}, $scope.website.hosts)
+				};
+				$scope.remove = function () {
+					$('.ui.modal.confirm').modal({
+						onApprove: function () {
+							$scope.website.$delete(function () {
+								$location.path('/admin/websites');
+							});
+						}
+					}).modal('show');
+				};
+				$scope.save = function () {
+					$scope.loading = true;
+					$scope.website.$save(load);
+				}
+				$scope.setViewMode = function (mode) {
+					$scope.viewMode = !!mode;
+				};
+				$scope.$on('$destroy', function () {
+					$('.ui.modal.confirm').remove();
+				});
+				function load(website) {
+					$scope.loading = false;
+					$scope.viewMode = true;
+					$scope.website = website;
+					angular.copy(website, $scope.original);
+				}
+			}])
 		.controller('WebsitesCtrl', ['$scope', 'Website', function ($scope, Website) {
 			$scope.loading = true;
 			$scope.request = { page: 0 };
