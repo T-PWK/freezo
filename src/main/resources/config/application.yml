@@ -1,4 +1,8 @@
 freezo:
+  admin:
+    urls:
+      app: /admin
+      api: /api/v1
   web:
     listing:
       posts: 7
