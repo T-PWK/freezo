@@ -6,7 +6,7 @@
 	<i class="right angle icon divider"></i>
 	<a class="section" href="#/admin/websites">Websites</a>
 	<i class="right angle icon divider"></i>
-	<div class="section active">{{website.name}}</div>
+	<div class="section active">{{original.name}}</div>
 </div>
 <div class="ui divider hidden"></div>
 <div class="ui stackable grid">
@@ -14,8 +14,9 @@
 		<div class="ui divider hidden"></div>
 		<i class="massive icons">
 			<i class="disabled globe icon"></i>
-		<i class="corner check green icon" ng-show="original.enabled"></i>
-		<i class="corner remove red icon" ng-hide="original.enabled"></i>
+		<i class="corner check green icon" ng-show="original.status=='ENABLED'"></i>
+		<i class="corner remove orange icon" ng-show="original.status=='DISABLED'"></i>
+		<i class="corner trash red icon" ng-show="original.status=='PENDING_REMOVE'"></i>
 		</i>
 	</div>
 	<div class="nine wide column">
@@ -40,7 +41,7 @@
 			<div class="ui icon message">
 				<i class="globe icon"></i>
 				<div class="content">
-					<div class="header">Website Hosts ({{website.hosts.length}})</div>
+					<div class="header">Website hosts ({{website.hosts.length}})</div>
 					<div class="ui list">
 						<div class="item" ng-repeat="host in website.hosts">
 							<i class="remove red icon link" ng-click="removeHost($index)" ng-hide="viewMode"></i>
@@ -50,16 +51,16 @@
 					</div>
 				</div>
 			</div>
-			<div class="field">
-				<div class="ui checkbox">
-					<input type="checkbox" name="enabled" ng-model="website.enabled" ng-disabled="viewMode" />
-					<label>Enable Website</label>
-				</div>
+			<button class="ui button" ng-show="viewMode" ng-click="setViewMode(false)" ng-if="website.status!='PENDING_REMOVE'">Edit</button>
+			<div class="ui buttons" ng-show="!viewMode">
+				<button class="ui button" ng-click="setViewMode(true)">Cancel</button>
+				<div class="or"></div>
+				<button class="ui positive button" ng-click="save()">Save</button>
 			</div>
-			<div class="ui negative button" ng-show="!viewMode" ng-click="setViewMode(true)">Cancel</div>
-			<div class="ui button" ng-show="viewMode" ng-click="setViewMode(false)">Edit</div>
-			<div class="ui positive button" ng-show="!viewMode" ng-click="save()">Save</div>
-			<div class="ui negative button right floated" ng-click="remove()"><i class="remove icon"></i> Delete</div>
+			<button ng-if="website.status!='PENDING_REMOVE'" class="ui negative button right floated" ng-click="remove()"><i class="trash outline icon"></i>Delete website</button>
+			<button ng-if="website.status=='PENDING_REMOVE'" class="ui positive button right floated" ng-click="restore()"><i class="check icon"></i>Restore website</button>
+			<button ng-if="website.status=='DISABLED'" class="ui positive button right floated" ng-click="enable()"><i class="check icon"></i>Enable website</button>
+			<button ng-if="website.status=='ENABLED'" class="ui orange button right floated" ng-click="disable()"><i class="remove icon"></i>Disable website</button>
 		</form>
 	</div>
 	<div class="center aligned four wide column">
@@ -97,15 +98,52 @@
 </div>
 <div class="ui small basic modal confirm">
 	<div class="ui icon header" ng-switch="action">
-		<i class="remove icon"></i> Delete Websiet
+		<i class="globe icon"></i> Delete websiet "{{website.name}}"
 	</div>
 	<div class="content">
-		<p>Delete the website "<strong>{{website.name}}</strong>"?</p>
+		<p>When you click <strong>Delete website</strong>:</p>
+		<ul>
+			<li>All trafic to the website will be halted.</li>
+			<li>Any project owner may undo the deletion at any time within 7 days.</li>
+		</ul>
+		<div class="ui divider hidden"></div>
+		<p>After the 7-day waiting period:</p>
+		<ul>
+			<li>The website will be deleted, including all pages, redirects and other website related information.</li>
+			<li>You <em>will not</em> be able to restore the website.</li>
+		</ul>
+		<div class="ui divider hidden"></div>
+		<form class="ui inverted form" novalidate="" ng-class="{loading:loading}">
+			<div class="field">
+				<label>To delete website "{{website.name}}", type your website ID: {{website.id}}</label>
+				<input type="text" name="name" placeholder="Website ID" ng-model="websiteId" />
+			</div>
+		</form>
 	</div>
 	<div class="actions">
-		<div class="ui red basic inverted button ok">
-			<i class="checkmark icon"></i> Delete
+		<button class="ui red basic inverted button ok" ng-disabled="websiteId!=website.id">
+			<i class="checkmark icon"></i> Delete website
+		</button>
+		<div class="ui basic inverted button cancel">
+			<i class="remove icon"></i> Cancel
 		</div>
+	</div>
+</div>
+<div class="ui small basic modal disable">
+	<div class="ui icon header" ng-switch="action">
+		<i class="globe icon"></i> Disable websiet "{{website.name}}"
+	</div>
+	<div class="content">
+		<p>When you click <strong>Disable website</strong>:</p>
+		<ul>
+			<li>All trafic to the website will be halted.</li>
+			<li>Any project owner may enable the website at any time.</li>
+		</ul>
+	</div>
+	<div class="actions">
+		<button class="ui red basic inverted button ok">
+			<i class="checkmark icon"></i> Disable website
+		</button>
 		<div class="ui basic inverted button cancel">
 			<i class="remove icon"></i> Cancel
 		</div>

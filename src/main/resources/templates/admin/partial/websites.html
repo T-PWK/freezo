@@ -12,18 +12,22 @@
 		<table class="ui stripped green table">
 			<thead>
 				<tr>
-					<th class="one wide">ID</th>
-					<th class="four wide">Name</th>
+					<th class="two wide">Website ID</th>
+					<th class="four wide">Website Name</th>
 					<th class="five wide">Description</th>
 					<th class="four wide">Hosts</th>
-					<th class="two wide center aligned">Actions</th>
+					<th class="one wide center aligned"></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="website in websites.content" ng-class="{warning:!website.enabled}">
-					<td>{{website.id}}</td>
+				<tr ng-repeat="website in websites.content" ng-class="{error:website.status=='PENDING_REMOVE',warning:website.status=='DISABLED'}" class="top aligned">
+					<td>#{{website.id}}</td>
 					<td>{{website.name}}</td>
-					<td>{{website.description}}</td>
+					<td>
+						<p ng-if="website.status=='ENABLED'">{{website.description}}</p>
+						<span class="ui yellow label" ng-if="website.status=='DISABLED'"><i class="icon warning"></i>Website disabled</span>
+						<span class="ui red label" ng-if="website.status=='PENDING_REMOVE'"><i class="icon warning"></i>Website deletion at {{(website.deleteRequestedAt+604800000)|date:'medium'}}</span>
+					</td>
 					<td>
 						<div class="ui list">
 							<div class="item" ng-repeat="host in website.hosts">
@@ -34,7 +38,7 @@
 					</td>
 					<td class="center aligned">
 						<div class="ui horizontal bulleted link list">
-							<a class="item" href="#/admin/websites/{{website.id}}"><i class="edit icon"></i>Edit</a>
+							<a class="item" href="#/admin/websites/{{website.id}}"><i class="edit icon"></i></a>
 						</div>
 					</td>
 				</tr>

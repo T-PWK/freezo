@@ -68,9 +68,12 @@
 				});
 		}])
 		.factory('Website', ['$resource', 'CsrfToken', function ($resource, CsrfToken) {
-			return $resource('/api/v1/websites/:website_id', { website_id: '@id' }, {
+			return $resource('/api/v1/websites/:website_id/:action', { website_id: '@id' }, {
 				save: { method: 'POST', headers: { 'X-CSRF-TOKEN': CsrfToken } },
-				'delete': { method: 'DELETE', headers: { 'X-CSRF-TOKEN': CsrfToken } }
+				'delete': { method: 'DELETE', headers: { 'X-CSRF-TOKEN': CsrfToken } },
+				disable: { method: 'PATCH', params: { action: 'disable' }, headers: { 'X-CSRF-TOKEN': CsrfToken } },
+				enable: { method: 'PATCH', params: { action: 'enable' }, headers: { 'X-CSRF-TOKEN': CsrfToken } },
+				restore: { method: 'PATCH', params: { action: 'restore' }, headers: { 'X-CSRF-TOKEN': CsrfToken } }
 			});
 		}])
 		.filter('roleName', function () {
@@ -115,6 +118,21 @@
 						}
 					}).modal('show');
 				};
+				$scope.disable = function () {
+					$('.ui.modal.disable').modal({
+						onApprove: function () {
+							$scope.website.$disable(load);
+						}
+					}).modal('show');
+				};
+				$scope.enable = function () {
+					$scope.loading = true;
+					$scope.website.$enable(load);
+				};
+				$scope.restore = function () {
+					$scope.loading = true;
+					$scope.website.$restore(load);
+				};
 				$scope.save = function () {
 					$scope.loading = true;
 					$scope.website.$save(load);
@@ -123,7 +141,7 @@
 					$scope.viewMode = !!mode;
 				};
 				$scope.$on('$destroy', function () {
-					$('.ui.modal.confirm').remove();
+					$('.ui.modal').remove();
 				});
 				function load(website) {
 					$scope.loading = false;
