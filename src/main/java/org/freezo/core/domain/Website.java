@@ -1,4 +1,4 @@
-package org.freezo.domain;
+package org.freezo.core.domain;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -14,7 +14,8 @@ import javax.persistence.Version;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.hibernate.annotations.Type;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Website
@@ -25,15 +26,16 @@ public class Website
 
 	private String name;
 	private String description;
-
-	@Type(type = "yes_no")
-	private boolean enabled;
+	private Status status = Status.ENABLED;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdAt;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updatedAt;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date deleteRequestedAt;
 
 	@ElementCollection
 	private final Set<String> hosts = new HashSet<>();
@@ -91,12 +93,12 @@ public class Website
 
 	public boolean isEnabled()
 	{
-		return enabled;
+		return getStatus() == Status.ENABLED;
 	}
 
-	public void setEnabled(final boolean enabled)
+	public boolean isToDelete()
 	{
-		this.enabled = enabled;
+		return getStatus() == Status.PENDING_REMOVE;
 	}
 
 	public Date getUpdatedAt()
@@ -117,6 +119,33 @@ public class Website
 	public void setCreatedAt(final Date createdAt)
 	{
 		this.createdAt = createdAt;
+	}
+
+	public Date getDeleteRequestedAt()
+	{
+		return deleteRequestedAt;
+	}
+
+	public void setDeleteRequestedAt(final Date deleteRequestedAt)
+	{
+		this.deleteRequestedAt = deleteRequestedAt;
+	}
+
+	public Status getStatus()
+	{
+		return status;
+	}
+
+	public void setStatus(final Status status)
+	{
+		this.status = status;
+	}
+
+	public static enum Status
+	{
+		ENABLED,
+		DISABLED,
+		PENDING_REMOVE
 	}
 
 }

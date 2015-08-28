@@ -2,8 +2,8 @@ package org.freezo.admin.service;
 
 import java.util.Date;
 
-import org.freezo.domain.Account;
-import org.freezo.domain.AccountRepository;
+import org.freezo.core.domain.Account;
+import org.freezo.core.domain.AccountRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -10,4 +10,10 @@ public class ModelMapperImpl implements ModelMapper
 		return mapper.map(source, destinationType);
 	}
 
+	@Override
+	public void update(final Object source, final Object destination)
+	{
+		mapper.map(source, destination);
+	}
+
 }

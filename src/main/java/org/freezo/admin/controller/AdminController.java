@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("admin")
+@RequestMapping("${freezo.admin.urls.app}")
 @Profile("admin")
 public class AdminController
 {

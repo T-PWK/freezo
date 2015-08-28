@@ -1,4 +1,4 @@
-package org.freezo.domain;
+package org.freezo.core.domain;
 
 import java.util.Date;
 

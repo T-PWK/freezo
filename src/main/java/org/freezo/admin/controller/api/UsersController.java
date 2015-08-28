@@ -7,9 +7,9 @@ import org.freezo.admin.controller.InputValidationException;
 import org.freezo.admin.controller.ResourceConflictException;
 import org.freezo.admin.domain.UserForm;
 import org.freezo.admin.service.ModelMapper;
-import org.freezo.domain.User;
-import org.freezo.domain.UserRepository;
-import org.freezo.web.ResourceNotFoundException;
+import org.freezo.core.domain.User;
+import org.freezo.core.domain.UserRepository;
+import org.freezo.core.web.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +56,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Profile("admin")
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("${freezo.admin.urls.api}/users")
 @Secured("ROLE_ADMIN")
 public class UsersController
 {

@@ -7,8 +7,8 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.freezo.domain.Redirect;
-import org.freezo.domain.Website;
+import org.freezo.core.domain.Redirect;
+import org.freezo.core.domain.Website;
 import org.freezo.website.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
