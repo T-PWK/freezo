@@ -31,7 +31,7 @@ public class WebsiteListener extends HandlerInterceptorAdapter
 	{
 		final String url = request.getRequestURL().toString();
 		final String host = new URL(url).getHost();
-		final Website website = repository.findByHostsIn(host).orElseThrow(
+		final Website website = repository.findByHostsAndStatus(host, Website.Status.ENABLED).orElseThrow(
 				() -> new ResourceNotFoundException(String.format("No website found for host name: %s", host)));
 
 		request.setAttribute(Constants.WEBSITE_ATTRIBUTE_NAME, website);

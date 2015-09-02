@@ -1,6 +1,7 @@
 package org.freezo.core.domain;
 
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -8,5 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface WebsiteRepository extends PagingAndSortingRepository<Website, Long>
 {
-	Optional<Website> findByHostsIn(String host);
+	Optional<Website> findByHostsAndStatus(String host, Website.Status status);
+
+	Set<Website> findByHostsIn(Set<String> hosts);
 }
