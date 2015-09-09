@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -18,9 +19,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.annotations.BatchSize;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @JsonIgnoreProperties({ "version" })
@@ -43,7 +42,7 @@ public class Website
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date deleteRequestedAt;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "website")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "website", cascade = CascadeType.ALL, orphanRemoval = true)
 	@BatchSize(size = 10)
 	private final Set<Host> hosts = new HashSet<Host>();
 
@@ -87,38 +86,16 @@ public class Website
 		this.description = description;
 	}
 
-	@JsonIgnore
-	public Set<Host> getHosts()
-	{
-		return hosts;
-	}
-
-	public void setHosts(final Set<Host> hosts)
-	{
-		this.hosts.clear();
-		this.hosts.addAll(hosts);
-	}
-
-	@JsonProperty("hosts")
-	public Set<String> getHostsAsString()
+	public Set<String> getHosts()
 	{
 		return this.hosts.stream().map(Host::getName).collect(Collectors.toSet());
 	}
 
-	public void setHostsAsStrings(final Set<String> hosts)
+	public void setHosts(final Set<String> hosts)
 	{
-		this.hosts.clear();
+		this.hosts.removeIf(host -> !hosts.contains(host.getName()));
 		this.hosts.addAll(hosts.stream().map(Host::new).collect(Collectors.toSet()));
-	}
-
-	public boolean isEnabled()
-	{
-		return getStatus() == Status.ENABLED;
-	}
-
-	public boolean isToDelete()
-	{
-		return getStatus() == Status.PENDING_REMOVE;
+		this.hosts.forEach(host -> host.setWebsite(this));
 	}
 
 	public Date getUpdatedAt()

@@ -1,5 +1,7 @@
 package org.freezo.admin.controller.api;
 
+import java.util.Set;
+
 import org.freezo.core.domain.Host;
 import org.freezo.core.domain.HostsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Profile("admin")
@@ -24,5 +27,11 @@ public class HostsController
 	public Page<Host> hosts(final Pageable pageable)
 	{
 		return repository.findAll(pageable);
+	}
+
+	@RequestMapping(method = RequestMethod.GET, params = { "hosts" })
+	public Set<Host> findByName(@RequestParam("hosts") final Set<String> hosts)
+	{
+		return repository.findByNameIn(hosts);
 	}
 }

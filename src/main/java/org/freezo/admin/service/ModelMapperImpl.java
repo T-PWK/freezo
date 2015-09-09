@@ -15,5 +15,4 @@ public class ModelMapperImpl implements ModelMapper
 	{
 		mapper.map(source, destination);
 	}
-
 }
