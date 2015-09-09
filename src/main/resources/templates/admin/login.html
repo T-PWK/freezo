@@ -1,52 +1,78 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.thymeleaf.org/thymeleaf/layout" layout:decorator="admin/layout">
-	<style type="text/css" layout:fragment="head">
-		body { background-color: #DADADA; background-image: radial-gradient(circle at 50% 50% , #0F4A85 0%, #4E8EF7 100%); }
-    	body > .grid { height: 100%; }
-    	.image { margin-top: -100px; }
-    	.column { max-width: 450px; }
-		.ui.message.negative,.ui.message.warning { text-align: left; }
-		.logo { opacity: 0.8; }
-		.ui.segment a { font-size: 1rem; }
+<th:block layout:fragment="head">
+	<style type="text/css">
+		body {
+			background-color: #DADADA;
+			background-image: radial-gradient(circle at 50% 50%, #0F4A85 0%, #4E8EF7 100%);
+		}
+		
+		body > .grid {
+			height: 100%;
+		}
+		
+		.image {
+			margin-top: -100px;
+		}
+		
+		.column {
+			max-width: 450px;
+		}
+		
+		.ui.message.negative,
+		.ui.message.warning {
+			text-align: left;
+		}
+		
+		.logo {
+			opacity: 0.8;
+		}
+		
+		.ui.segment a {
+			font-size: 1rem;
+		}
 	</style>
-	<th:block layout:fragment="content">
-		<div class="ui middle aligned center aligned grid">
-			<div class="column">
-				<h2 class="ui inverted header">
+	<script src='https://www.google.com/recaptcha/api.js'></script>
+</th:block>
+<th:block layout:fragment="content">
+	<div class="ui middle aligned center aligned grid">
+		<div class="column">
+			<h2 class="ui inverted header">
 					<img src="/images/snowflake.svg" th:alt="#{label.title}" class="ui image logo" />
 					<div class="content"><span th:text="#{label.title}" th:remove="tag">Title</span>
 						<div class="sub header" th:text="#{label.title.cc}">Control Centre</div>
 					</div>
 				</h2>
-				<form class="ui large form" method="post" th:action="@{/admin/login}">
-					<div class="ui stacked segment">
-						<div class="field">
-							<div class="ui left icon input">
-								<i class="user icon"></i>
-								<input type="text" name="username" th:placeholder="#{label.username}" />
-							</div>
+			<form class="ui large form" method="post" th:action="@{/admin/login}">
+				<div class="ui stacked segment">
+					<div class="field">
+						<div class="ui left icon fluid input">
+							<i class="user icon"></i>
+							<input type="text" name="username" th:placeholder="#{label.username}" />
 						</div>
-						<div class="field">
-							<div class="ui left icon input">
-								<i class="lock icon"></i>
-								<input type="password" name="password" th:placeholder="#{label.password}" />
-							</div>
-						</div>
-						<button class="ui fluid blue large submit button" th:text="#{label.login}">Login</button>
-						<div class="ui divider"></div>
-						<a href="#" th:text="#{label.forgottenPassword}">Forgotten your username or password?</a>
 					</div>
-					<div class="ui error message"></div>
-					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-				</form>
-				<th:block th:include="this :: logout-message" />
-				<th:block th:include="this :: error-message" />
-			</div>
+					<div class="field">
+						<div class="ui left icon fluid input">
+							<i class="lock icon"></i>
+							<input type="password" name="password" th:placeholder="#{label.password}" />
+						</div>
+					</div>
+					<button class="ui fluid blue large submit button" th:text="#{label.login}">Login</button>
+					<div class="ui divider"></div>
+					<a href="#" th:text="#{label.forgottenPassword}">Forgotten your username or password?</a>
+					<div class="ui divider"></div>
+					<div class="g-recaptcha" data-sitekey="6LeUNgwTAAAAABu7l-IviK9D-gANertNmvpNgckj"></div>
+				</div>
+				<div class="ui error message"></div>
+			</form>
+			<th:block th:include="this :: logout-message" />
+			<th:block th:include="this :: error-message" />
 		</div>
-	</th:block>
-	<th:block layout:fragment="body-bottom">
-		<script type="text/javascript" th:inline="javascript">
-			$(document).ready(function() {
+	</div>
+</th:block>
+<th:block layout:fragment="body-bottom">
+	<script type="text/javascript" th:inline="javascript">
+		$(document).ready(function() {
 				$("input[name='username']").focus();
 				$('.message .close').on('click', function(){ $(this).closest('.message').transition('fade'); });
 				setTimeout(function(){ $('.ui.message.negative:visible,.ui.message.warning:visible').closest('.message').transition('fade'); }, 5000);
@@ -69,27 +95,27 @@
 					}
 				});
 			});
-		</script>
-	</th:block>
-	<th:block th:fragment="logout-message">
-		<div class="ui warning icon message" th:if="${param.logout}">
-			<i class="close icon" />
-			<i class="user icon" />
-			<div class="content">
-				<h3 class="header" th:text="#{label.logout.head}">Logout</h3>
-				<p th:text="#{label.logout.msg}">You have been logged out</p>
-			</div>
+	</script>
+</th:block>
+<th:block th:fragment="logout-message">
+	<div class="ui warning icon message" th:if="${param.logout}">
+		<i class="close icon" />
+		<i class="user icon" />
+		<div class="content">
+			<h3 class="header" th:text="#{label.logout.head}">Logout</h3>
+			<p th:text="#{label.logout.msg}">You have been logged out</p>
 		</div>
-	</th:block>
-	<th:block th:fragment="error-message">
-		<div class="ui negative icon message" th:if="${param.error}">
-			<i class="close icon" />
-			<i class="user icon" />
-			<div class="content">
-				<h3 class="header" th:text="#{label.loginFailure}">Login Failure</h3>
-				<p th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">Invalid user name or password</p>
-			</div>
+	</div>
+</th:block>
+<th:block th:fragment="error-message">
+	<div class="ui negative icon message" th:if="${param.error}">
+		<i class="close icon" />
+		<i class="user icon" />
+		<div class="content">
+			<h3 class="header" th:text="#{label.loginFailure}">Login Failure</h3>
+			<p th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">Invalid user name or password</p>
 		</div>
-	</th:block>
+	</div>
+</th:block>
 
 </html>

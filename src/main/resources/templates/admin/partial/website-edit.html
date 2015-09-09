@@ -13,26 +13,40 @@
 	<div class="center aligned three wide column">
 		<div class="ui divider hidden"></div>
 		<i class="massive icons">
-			<i class="disabled globe icon"></i>
-		<i class="corner check green icon" ng-show="original.status=='ENABLED'"></i>
-		<i class="corner remove orange icon" ng-show="original.status=='DISABLED'"></i>
-		<i class="corner trash red icon" ng-show="original.status=='PENDING_REMOVE'"></i>
+			<i class="disabled globe icon"></i><i class="corner check green icon" ng-show="original.status=='ENABLED'"></i><i class="corner remove orange icon"
+		ng-show="original.status=='DISABLED'"></i><i class="corner trash red icon" ng-show="original.status=='PENDING_REMOVE'"></i>
 		</i>
+		<div class="ui divider hidden"></div>
+		<div class="ui small statistic" ng-class="{green:website.status=='ENABLED',red:website.status=='PENDING_REMOVE',orange:website.status=='DISABLED'}">
+			<div class="label">Status</div>
+			<div class="value text" ng-switch="website.status">
+				<span ng-switch-when="ENABLED">Enabled</span>
+				<span ng-switch-when="DISABLED">Disabled</span>
+				<span ng-switch-when="PENDING_REMOVE">Pending removal<br/>
+						<br/>{{website.deleteRequestedAt+604800000|date:'longDate'}}
+						<br/>{{website.deleteRequestedAt+604800000|date:'mediumTime'}}</span>
+			</div>
+		</div>
 	</div>
-	<div class="nine wide column">
+	<div class="ten wide column">
 		<h4 class="ui horizontal divider header "><i class="info circle icon"></i> Details</h4>
-		<form class="ui form" novalidate="" ng-class="{loading:loading}">
-			<div class="field">
+		<form class="ui form" novalidate="" ng-class="{loading:loading}" name="form">
+			<div class="field required" ng-class="{error:form.name.$invalid &amp;&amp; form.name.$dirty}">
 				<label>Name</label>
-				<input type="text" name="name" placeholder="Name" ng-model="website.name" ng-readonly="viewMode" />
+				<input type="text" name="name" placeholder="Name" ng-model="website.name" ng-disabled="viewMode" maxlength="100" ng-maxlength="100"
+				required="" ng-model-options="{updateOn:'default blur',debounce:{default:1000,blur:0}}" />
+				<div class="ui red pointing label" ng-if="form.name.$invalid &amp;&amp; form.name.$dirty" ng-messages="form.name.$error">
+					<span ng-message="required">Website name is required</span>
+					<span ng-message="maxlength">Website name must be up to 100 characters long</span>
+				</div>
 			</div>
 			<div class="field">
 				<label>Description</label>
-				<textarea ng-model="website.description" rows="3" ng-readonly="viewMode"></textarea>
+				<textarea ng-model="website.description" rows="3" ng-disabled="viewMode" maxlength="255"></textarea>
 			</div>
 			<div class="field" ng-hide="viewMode">
 				<label>Hosts</label>
-				<div class="ui right labeled left icon input">
+				<div class="ui right labeled left icon fluid input">
 					<i class="globe icon"></i>
 					<input type="text" name="host" placeholder="Host e.g. www.mysite.com" ng-model="hosts" ng-list="," />
 					<a class="ui tag label" ng-click="addHosts(hosts);hosts=[]">Add Hosts</a>
@@ -55,7 +69,7 @@
 			<div class="ui buttons" ng-show="!viewMode">
 				<button class="ui button" ng-click="setViewMode(true)">Cancel</button>
 				<div class="or"></div>
-				<button class="ui positive button" ng-click="save()">Save</button>
+				<button class="ui positive button" ng-click="save()" ng-disabled="form.$invalid || form.$pending">Save</button>
 			</div>
 			<button ng-if="website.status!='PENDING_REMOVE'" class="ui negative button right floated" ng-click="remove()"><i class="trash outline icon"></i>Delete website</button>
 			<button ng-if="website.status=='PENDING_REMOVE'" class="ui positive button right floated" ng-click="restore()"><i class="check icon"></i>Restore website</button>
@@ -63,36 +77,35 @@
 			<button ng-if="website.status=='ENABLED'" class="ui orange button right floated" ng-click="disable()"><i class="remove icon"></i>Disable website</button>
 		</form>
 	</div>
-	<div class="center aligned four wide column">
+	<div class="three wide column">
 		<h4 class="ui horizontal divider header "><i class="bar chart icon"></i></h4>
-		<div class="ui small statistic">
-			<div class="value">
-				<i class="file text outline icon"></i> 0
+		<div class="ui one small statistics">
+			<div class="statistic">
+				<div class="value">
+					<i class="file text outline icon"></i> 0
+				</div>
+				<div class="label">
+					Posts
+				</div>
 			</div>
-			<div class="label">
-				Posts
+			<div class="small statistic">
+				<div class="value">
+					<i class="users icon"></i> 0
+				</div>
+				<div class="label">
+					Users
+				</div>
 			</div>
-		</div>
-		<div class="ui divider hidden"></div>
-		<div class="ui small statistic">
-			<div class="value">
-				<i class="users icon"></i> 0
+			<div class="statistic" ng-if="website.updatedAt">
+				<div class="text value">{{website.updatedAt|date:'longDate'}}
+					<br/>{{website.updatedAt|date:'mediumTime'}}</div>
+				<div class="label">Last Updated</div>
 			</div>
-			<div class="label">
-				Users
+			<div class="statistic" ng-if="website.createdAt">
+				<div class="text value">{{website.createdAt|date:'longDate'}}
+					<br/>{{website.createdAt|date:'shortTime'}}</div>
+				<div class="label">Created</div>
 			</div>
-		</div>
-		<div class="ui divider hidden"></div>
-		<div class="ui statistic">
-			<div class="text value">{{website.updatedAt|date:'shortDate'}}
-				<br/>{{website.updatedAt|date:'shortTime'}}</div>
-			<div class="label">Last Updated</div>
-		</div>
-		<div class="ui divider hidden"></div>
-		<div class="ui statistic">
-			<div class="text value">{{website.createdAt|date:'shortDate'}}
-				<br/>{{website.createdAt|date:'shortTime'}}</div>
-			<div class="label">Created</div>
 		</div>
 	</div>
 </div>

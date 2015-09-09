@@ -1,251 +1,255 @@
 <html xmlns:layout="http://www.thymeleaf.org/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" th:remove="tag">
-	<div class="ui breadcrumb">
-		<a href="#/dashboard" class="section">Dashboard</a>
-		<i class="right angle icon divider"></i>
-		<a href="#/admin" class="section">Administration</a>
-		<i class="right angle icon divider"></i>
-		<div class="active section">Users</div>
-	</div>
-	<div class="ui hidden divider"></div>
-	<div class="ui stackable grid">
-		<div class="six wide tablet four wide computer column">
-			<div class="ui vertical menu">
-				<div class="item">
-					<div class="ui input">
-						<input type="text" placeholder="Filter users..." />
-					</div>
+<div class="ui breadcrumb">
+	<a href="#/dashboard" class="section">Dashboard</a>
+	<i class="right angle icon divider"></i>
+	<a href="#/admin" class="section">Administration</a>
+	<i class="right angle icon divider"></i>
+	<div class="active section">Users</div>
+</div>
+<div class="ui hidden divider"></div>
+<div class="ui stackable grid">
+	<div class="six wide tablet four wide computer column">
+		<div class="ui vertical menu">
+			<div class="item">
+				<div class="ui input">
+					<input type="text" placeholder="Filter users..." />
 				</div>
-				<a class="item" ng-click="reload()"><span th:text="#{label.refresh.users}" th:remove="tag"/><i class="icon refresh"></i></a>
-				<a class="item" href="#/admin/users/new"><span th:text="#{label.newUser}" th:remove="tag"/><i class="icon add"></i></a>
-				<div class="item">
-					<span th:text="#{label.sortby}" th:remove="tag" />
-					<i class="sort icon"></i>
-					<div class="menu">
-						<a class="item" ng-click="sortBy('account.username')" ng-class="{active:isSortBy('account.username')}"><span th:text="#{label.username}" th:remove="tag"/>
+			</div>
+			<a class="item" ng-click="reload()"><span th:text="#{label.refresh.users}" th:remove="tag" /><i class="icon refresh"></i></a>
+			<a class="item" href="#/admin/users/new"><span th:text="#{label.newUser}" th:remove="tag" /><i class="icon add"></i></a>
+			<div class="item">
+				<span th:text="#{label.sortby}" th:remove="tag" />
+				<i class="sort icon"></i>
+				<div class="menu">
+					<a class="item" ng-click="sortBy('account.username')" ng-class="{active:isSortBy('account.username')}"><span th:text="#{label.username}" th:remove="tag" />
 						<i ng-if="isSortBy('account.username')" class="icon sort" ng-class="asc?'ascending':'descending'"></i></a>
-						<a class="item" ng-click="sortBy('email')" ng-class="{active:isSortBy('email')}"><span th:text="#{label.email}" th:remove="tag"/>
+					<a class="item" ng-click="sortBy('email')" ng-class="{active:isSortBy('email')}"><span th:text="#{label.email}" th:remove="tag" />
 						<i ng-if="isSortBy('email')" class="icon sort" ng-class="asc?'ascending':'descending'"></i></a>
-						<a class="item" ng-click="sortBy('firstName')" ng-class="{active:isSortBy('firstName')}"><span th:text="#{label.firstName}" th:remove="tag"/>
+					<a class="item" ng-click="sortBy('firstName')" ng-class="{active:isSortBy('firstName')}"><span th:text="#{label.firstName}" th:remove="tag" />
 						<i ng-if="isSortBy('firstName')" class="icon sort" ng-class="asc?'ascending':'descending'"></i></a>
-						<a class="item" ng-click="sortBy('lastName')" ng-class="{active:isSortBy('lastName')}"><span th:text="#{label.lastName}" th:remove="tag"/>
+					<a class="item" ng-click="sortBy('lastName')" ng-class="{active:isSortBy('lastName')}"><span th:text="#{label.lastName}" th:remove="tag" />
 						<i ng-if="isSortBy('lastName')" class="icon sort" ng-class="asc?'ascending':'descending'"></i></a>
-						<a class="item" ng-click="sortBy('createdAt')" ng-class="{active:isSortBy('createdAt')}"><span th:text="#{label.creationDate}" th:remove="tag"/>
+					<a class="item" ng-click="sortBy('createdAt')" ng-class="{active:isSortBy('createdAt')}"><span th:text="#{label.creationDate}" th:remove="tag" />
 						<i ng-if="isSortBy('createdAt')" class="icon sort" ng-class="asc?'ascending':'descending'"></i></a>
-					</div>
-				</div>
-				<div class="item">
-					<i class="filter icon"></i>
-					<span th:text="#{label.show}" th:remove="tag" />
-					<div class="menu">
-						<a class="item" ng-click="filterBy('all')" ng-class="filterCls('all')" th:text="#{label.all}">All</a>
-						<a class="item" ng-click="filterBy('enabled')" ng-class="filterCls('enabled')">
-						<i class="checkmark icon"></i><span th:text="#{label.enabled}" th:remove="tag"/></a>
-						<a class="item" ng-click="filterBy('disabled')" ng-class="filterCls('disabled')">
-						<i class="remove icon"></i><span th:text="#{label.disabled}" th:remove="tag"/></a>
-						<a class="item" ng-click="filterBy('nonlocked')" ng-class="filterCls('nonlocked')">
-						<i class="icon unlock"></i><span th:text="#{label.nonLocked}" th:remove="tag"/></a>
-						<a class="item" ng-click="filterBy('locked')" ng-class="filterCls('locked')">
-						<i class="icon lock"></i><span th:text="#{label.locked}" th:remove="tag"/></a>
-						<a class="item" ng-click="filterBy('nonexpired')" ng-class="filterCls('nonexpired')">
-						<i class="icon calendar"></i><span th:text="#{label.nonExpired}" th:remove="tag"/></a>
-						<a class="item" ng-click="filterBy('expired')" ng-class="filterCls('expired')">
-						<i class="icon calendar "></i><span th:text="#{label.expired}" th:remove="tag"/></a>
-						<a class="item" ng-click="filterBy('credentials_nonexpired')" ng-class="filterCls('credentials_nonexpired')">
-						<i class="icon calendar"></i><span th:text="#{label.credNonExpired}" th:remove="tag"/></a>
-						<a class="item" ng-click="filterBy('credentials_expired')" ng-class="filterCls('credentials_expired')">
-						<i class="icon calendar"></i><span th:text="#{label.credExpired}" th:remove="tag"/></a>
-					</div>
 				</div>
 			</div>
-		</div>
-		<div class="ten wide tablet ten wide computer column">
-			<div class="ui dimmer inverted" ng-class="{active:!details.$resolved}">
-				<div class="ui medium text loader" th:text="#{label.loading}">Loading</div>
-			</div>
-			<p th:utext="#{txt.showingNumberOfUsers}">Showing X users</p>
-			<div class="ui divider"></div>
-			<div class="ui very relaxed list divided fz-users">
-				<div class="item" ng-repeat="user in users">
-					<img class="ui tiny circular image" ng-src="{{user.picture || '/images/profile-pic-300px.jpg'}}" />
-					<div class="content">
-						<div class="header">
-							<div class="text">{{user.firstName}} {{user.lastName}}</div>
-						</div>
-						<div class="description">
-							<div class="ui list">
-								<div class="item">
-									<i class="user icon"></i>
-									<div class="content">{{user.account.username}}</div>
-								</div>
-								<div class="item" ng-if="user.email">
-									<i class="mail icon"></i>
-									<div class="content">{{user.email}}</div>
-								</div>
-								<div class="item" ng-if="user.website">
-									<i class="linkify icon"></i>
-									<div class="content">
-										<a ng-href="{{user.website}}" target="_blank">{{user.website}}</a>
-									</div>
-								</div>
-								<div class="item" ng-if="user.account.authorities.length">
-									<i class="users icon"></i>
-									<div class="content">{{(user.account.authorities|roleNames).join(', ')}}</div>
-								</div>
-								<div class="item" ng-if="!user.account.enabled">
-									<i class="red remove icon"></i>
-									<div class="content" th:text="#{label.accountDisabled}">Account disabled</div>
-								</div>
-								<div class="item" ng-if="!user.account.nonLocked">
-									<i class="red lock icon"></i>
-									<div class="content" th:text="#{label.accountLocked}">Account locked</div>
-								</div>
-								<div class="item" ng-if="!user.account.nonExpired">
-									<i class="red calendar icon"></i>
-									<div class="content" th:text="#{label.accountExpired}">Account expired</div>
-								</div>
-								<div class="item" ng-if="!user.account.credentialsNonExpired">
-									<i class="red calendar icon"></i>
-									<div class="content" th:text="#{label.accountCredExpired}">Account credentials expired</div>
-								</div>
-								<div class="item">
-									<div class="ui horizontal bulleted link list">
-										<a class="item" href="#/admin/users/{{user.id}}"><i class="edit icon"></i><span th:text="#{label.edit}" th:remove="tag"/></a>
-										<a class="item" ng-click="modify('disable', user)" ng-if="user.account.enabled"><i class="remove icon"></i><span th:text="#{label.disable}" th:remove="tag"/></a>
-										<a class="item" ng-click="modify('enable', user)" ng-if="!user.account.enabled"><i class="checkmark icon"></i><span th:text="#{label.enable}" th:remove="tag"/></a>
-										<a class="item" ng-click="modify('lock', user)" ng-if="user.account.nonLocked"><i class="lock icon"></i><span th:text="#{label.lock}" th:remove="tag"/></a>
-										<a class="item" ng-click="modify('unlock', user)" ng-if="!user.account.nonLocked"><i class="unlock icon"></i><span th:text="#{label.unlock}" th:remove="tag"/></a>
-										<a class="item" ng-click="delete(user)"><i class="remove red icon"></i><span th:text="#{label.delete}" th:remove="tag"/></a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+			<div class="item">
+				<i class="filter icon"></i>
+				<span th:text="#{label.show}" th:remove="tag" />
+				<div class="menu">
+					<a class="item" ng-click="filterBy('all')" ng-class="filterCls('all')" th:text="#{label.all}">All</a>
+					<a class="item" ng-click="filterBy('enabled')" ng-class="filterCls('enabled')">
+						<i class="checkmark icon"></i><span th:text="#{label.enabled}" th:remove="tag" /></a>
+					<a class="item" ng-click="filterBy('disabled')" ng-class="filterCls('disabled')">
+						<i class="remove icon"></i><span th:text="#{label.disabled}" th:remove="tag" /></a>
+					<a class="item" ng-click="filterBy('nonlocked')" ng-class="filterCls('nonlocked')">
+						<i class="icon unlock"></i><span th:text="#{label.nonLocked}" th:remove="tag" /></a>
+					<a class="item" ng-click="filterBy('locked')" ng-class="filterCls('locked')">
+						<i class="icon lock"></i><span th:text="#{label.locked}" th:remove="tag" /></a>
+					<a class="item" ng-click="filterBy('nonexpired')" ng-class="filterCls('nonexpired')">
+						<i class="icon calendar"></i><span th:text="#{label.nonExpired}" th:remove="tag" /></a>
+					<a class="item" ng-click="filterBy('expired')" ng-class="filterCls('expired')">
+						<i class="icon calendar "></i><span th:text="#{label.expired}" th:remove="tag" /></a>
+					<a class="item" ng-click="filterBy('credentials_nonexpired')" ng-class="filterCls('credentials_nonexpired')">
+						<i class="icon calendar"></i><span th:text="#{label.credNonExpired}" th:remove="tag" /></a>
+					<a class="item" ng-click="filterBy('credentials_expired')" ng-class="filterCls('credentials_expired')">
+						<i class="icon calendar"></i><span th:text="#{label.credExpired}" th:remove="tag" /></a>
 				</div>
-			</div>
-			<div class="ui icon info message" ng-if="details.totalElements==0">
-				<i class="users icon"></i>
-				<div class="content">
-					<div class="header">No user profiles found!</div>
-					<p>There is no user profiles meeting your search or filter criteria.</p>
-				</div>
-			</div>
-			<div class="ui pagination menu floated right" ng-if="details.totalPages>1">
-				<a class="item" ng-click="pageAt(1)" ng-class="{active:!pageNumber}">1</a>
-				<a class="item" ng-click="pageAt(page)" ng-repeat="page in pagination()" ng-class="{active:pageNumber==page-1}">{{page}}</a>
 			</div>
 		</div>
 	</div>
-	<div class="ui modal create" ng-controller="NewUserCtrl">
-		<i class="close icon"></i>
-		<div class="header">Create New User</div>
-		<div class="content">
-			<form class="ui form">
-				<h4 class="ui dividing header">Login Information</h4>
-				<div class="two fields">
-					<div class="six field wide">
-						<label>Username</label>
-						<input type="text" name="username" placeholder="Username" ng-model="user.username" />
+	<div class="ten wide tablet ten wide computer column">
+		<div class="ui dimmer inverted" ng-class="{active:!details.$resolved}">
+			<div class="ui medium text loader" th:text="#{label.loading}">Loading</div>
+		</div>
+		<div class="ui two column grid">
+			<div class="column" ng-show="details.totalElements>0">Showing {{details.number*details.size+1}}-{{details.number*details.size+details.numberOfElements}} out of {{details.totalElements}} user(s)</div>
+			<div class="column right floated">
+				<div class="ui right floated horizontal list">
+					<a class="item" ng-class="{disabled:details.first}" href="" ng-click="pageAt(details.number)"><i class="icon angle double left"></i>Previous</a>
+					<a class="item" ng-class="{disabled:details.last}" href=""  ng-click="pageAt(details.number+2)">Next<i class="icon angle double right"></i></a>
+				</div>
+			</div>
+		</div>
+		<div class="ui divider"></div>
+		<div class="ui very relaxed list divided fz-users">
+			<div class="item" ng-repeat="user in users">
+				<img class="ui tiny bordered circular image" ng-src="{{user.picture || '/images/profile-pic-300px.jpg'}}" />
+				<div class="content">
+					<div class="header">
+						<div class="text">{{user.firstName}} {{user.lastName}}</div>
 					</div>
-					<div class="ten field wide">
-						<label>Password</label>
-						<div class="two fields">
-							<div class="field">
-								<input type="password" name="password" placeholder="Password" ng-model="user.password" />
+					<div class="description">
+						<div class="ui list">
+							<div class="item">
+								<i class="user icon"></i>
+								<div class="content">{{user.account.username}}</div>
 							</div>
-							<div class="field">
-								<input type="password" name="passwordConfirm" placeholder="Password Confirmation" ng-model="user.passwordConfirm" />
+							<div class="item" ng-if="user.email">
+								<i class="mail icon"></i>
+								<div class="content">{{user.email}}</div>
+							</div>
+							<div class="item" ng-if="user.website">
+								<i class="linkify icon"></i>
+								<div class="content">
+									<a ng-href="{{user.website}}" target="_blank">{{user.website}}</a>
+								</div>
+							</div>
+							<div class="item" ng-if="user.account.authorities.length">
+								<i class="users icon"></i>
+								<div class="content">{{(user.account.authorities|roleNames).join(', ')}}</div>
+							</div>
+							<div class="item" ng-if="!user.account.enabled">
+								<i class="red remove icon"></i>
+								<div class="content" th:text="#{label.accountDisabled}">Account disabled</div>
+							</div>
+							<div class="item" ng-if="!user.account.nonLocked">
+								<i class="red lock icon"></i>
+								<div class="content" th:text="#{label.accountLocked}">Account locked</div>
+							</div>
+							<div class="item" ng-if="!user.account.nonExpired">
+								<i class="red calendar icon"></i>
+								<div class="content" th:text="#{label.accountExpired}">Account expired</div>
+							</div>
+							<div class="item" ng-if="!user.account.credentialsNonExpired">
+								<i class="red calendar icon"></i>
+								<div class="content" th:text="#{label.accountCredExpired}">Account credentials expired</div>
+							</div>
+							<div class="item">
+								<div class="ui horizontal bulleted link list">
+									<a class="item" href="#/admin/users/{{user.id}}"><i class="edit icon"></i><span th:text="#{label.edit}" th:remove="tag"/></a>
+									<a class="item" ng-click="modify('disable', user)" ng-if="user.account.enabled"><i class="remove icon"></i><span th:text="#{label.disable}" th:remove="tag"/></a>
+									<a class="item" ng-click="modify('enable', user)" ng-if="!user.account.enabled"><i class="checkmark icon"></i><span th:text="#{label.enable}" th:remove="tag"/></a>
+									<a class="item" ng-click="modify('lock', user)" ng-if="user.account.nonLocked"><i class="lock icon"></i><span th:text="#{label.lock}" th:remove="tag"/></a>
+									<a class="item" ng-click="modify('unlock', user)" ng-if="!user.account.nonLocked"><i class="unlock icon"></i><span th:text="#{label.unlock}" th:remove="tag"/></a>
+									<a class="item" ng-click="delete(user)"><i class="remove red icon"></i><span th:text="#{label.delete}" th:remove="tag"/></a>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<h4 class="ui dividing header">User Information</h4>
-				<div class="field">
-					<label>Name</label>
+			</div>
+		</div>
+		<div class="ui icon info message" ng-if="details.totalElements==0">
+			<i class="users icon"></i>
+			<div class="content">
+				<div class="header">No user profiles found!</div>
+				<p>There is no user profiles meeting your search or filter criteria.</p>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="ui modal create" ng-controller="NewUserCtrl">
+	<i class="close icon"></i>
+	<div class="header">Create New User</div>
+	<div class="content">
+		<form class="ui form">
+			<h4 class="ui dividing header">Login Information</h4>
+			<div class="two fields">
+				<div class="six field wide">
+					<label>Username</label>
+					<input type="text" name="username" placeholder="Username" ng-model="user.username" />
+				</div>
+				<div class="ten field wide">
+					<label>Password</label>
 					<div class="two fields">
 						<div class="field">
-							<input type="text" name="firstName" placeholder="First Name" ng-model="user.firstName" />
+							<input type="password" name="password" placeholder="Password" ng-model="user.password" />
 						</div>
 						<div class="field">
-							<input type="text" name="lastName" placeholder="Last Name" ng-model="user.lastName" />
+							<input type="password" name="passwordConfirm" placeholder="Password Confirmation" ng-model="user.passwordConfirm" />
 						</div>
 					</div>
 				</div>
-				<div class="field">
-					<label>Email Address</label>
-					<input type="email" name="email" placeholder="Email Address" ng-model="user.email" />
-				</div>
-				<div class="field">
-					<label>Location</label>
-					<input type="text" name="location" placeholder="Location" ng-model="user.location" />
-				</div>
-				<div class="field">
-					<label>Website</label>
-					<input type="url" name="website" placeholder="Website" ng-model="user.website" />
-				</div>
-				<div class="field">
-					<label>Bio</label>
-					<textarea rows="3" ng-model="user.bio"></textarea>
-				</div>
-				<h4 class="ui dividing header">Roles Information</h4>
-				<div class="field">
-					<label>Roles</label>
-					<select multiple="" class="ui dropdown">
-						<option value="">Select Roles</option>
-						<option value="ROLE_ADMIN">Administrator</option>
-						<option value="ROLE_API">API Consumer</option>
-						<option value="ROLE_USER">User</option>
-					</select>
-				</div>
-			</form>
-		</div>
-		<div class="actions">
-			<div class="ui buttons">
-				<button class="ui negative button" ng-click="cancel()">Cancel</button>
-				<div class="or"></div>
-				<button class="ui positive button" ng-click="save()">Save</button>
 			</div>
+			<h4 class="ui dividing header">User Information</h4>
+			<div class="field">
+				<label>Name</label>
+				<div class="two fields">
+					<div class="field">
+						<input type="text" name="firstName" placeholder="First Name" ng-model="user.firstName" />
+					</div>
+					<div class="field">
+						<input type="text" name="lastName" placeholder="Last Name" ng-model="user.lastName" />
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<label>Email Address</label>
+				<input type="email" name="email" placeholder="Email Address" ng-model="user.email" />
+			</div>
+			<div class="field">
+				<label>Location</label>
+				<input type="text" name="location" placeholder="Location" ng-model="user.location" />
+			</div>
+			<div class="field">
+				<label>Website</label>
+				<input type="url" name="website" placeholder="Website" ng-model="user.website" />
+			</div>
+			<div class="field">
+				<label>Bio</label>
+				<textarea rows="3" ng-model="user.bio"></textarea>
+			</div>
+			<h4 class="ui dividing header">Roles Information</h4>
+			<div class="field">
+				<label>Roles</label>
+				<select multiple="" class="ui dropdown">
+					<option value="">Select Roles</option>
+					<option value="ROLE_ADMIN">Administrator</option>
+					<option value="ROLE_API">API Consumer</option>
+					<option value="ROLE_USER">User</option>
+				</select>
+			</div>
+		</form>
+	</div>
+	<div class="actions">
+		<div class="ui buttons">
+			<button class="ui negative button" ng-click="cancel()">Cancel</button>
+			<div class="or"></div>
+			<button class="ui positive button" ng-click="save()">Save</button>
 		</div>
 	</div>
-	<div class="ui small basic modal confirm">
-		<div class="ui icon header" ng-switch="action">
-			<span ng-switch-when="disable">
+</div>
+<div class="ui small basic modal confirm">
+	<div class="ui icon header" ng-switch="action">
+		<span ng-switch-when="disable">
 				<i class="remove icon"></i>
 				<span th:text="#{label.disableAccount.head}" th:remove="tag">Disable User Account</span>
-			</span>
-			<span ng-switch-when="enable">
+		</span>
+		<span ng-switch-when="enable">
 				<i class="checkmark icon"></i>
 				<span th:text="#{label.enableAccount.head}" th:remove="tag">Enable User Account</span>
-			</span>
-			<span ng-switch-when="lock">
+		</span>
+		<span ng-switch-when="lock">
 				<i class="lock icon"></i>
 				<span th:text="#{label.lockAccount.head}" th:remove="tag">Lock User Account</span>
-			</span>
-			<span ng-switch-when="unlock">
+		</span>
+		<span ng-switch-when="unlock">
 				<i class="unlock icon"></i>
 				<span th:text="#{label.unlockAccount.head}" th:remove="tag">Unlock User Account</span>
-			</span>
-			<span ng-switch-when="delete">
+		</span>
+		<span ng-switch-when="delete">
 				<i class="remove icon"></i>
 				<span th:text="#{label.deleteAccount.head}" th:remove="tag">Delete User Account</span>
-			</span>
+		</span>
+	</div>
+	<div class="content" ng-switch="action">
+		<p ng-switch-when="disable" th:utext="#{label.disableAccount.msg}">Are you sure?</p>
+		<p ng-switch-when="enable" th:utext="#{label.enableAccount.msg}">Are you sure?</p>
+		<p ng-switch-when="lock" th:utext="#{label.lockAccount.msg}">Are you sure?</p>
+		<p ng-switch-when="unlock" th:utext="#{label.unlockAccount.msg}">Are you sure?</p>
+		<p ng-switch-when="delete" th:utext="#{label.deleteAccount.msg}">Are you sure?</p>
+	</div>
+	<div class="actions">
+		<div class="ui red basic inverted button cancel">
+			<i class="remove icon"></i>
+			<span th:text="#{label.no}" th:remove="tag">No</span>
 		</div>
-		<div class="content" ng-switch="action">
-			<p ng-switch-when="disable" th:utext="#{label.disableAccount.msg}">Are you sure?</p>
-			<p ng-switch-when="enable" th:utext="#{label.enableAccount.msg}">Are you sure?</p>
-			<p ng-switch-when="lock" th:utext="#{label.lockAccount.msg}">Are you sure?</p>
-			<p ng-switch-when="unlock" th:utext="#{label.unlockAccount.msg}">Are you sure?</p>
-			<p ng-switch-when="delete" th:utext="#{label.deleteAccount.msg}">Are you sure?</p>
-		</div>
-		<div class="actions">
-			<div class="ui red basic inverted button cancel">
-				<i class="remove icon"></i>
-				<span th:text="#{label.no}" th:remove="tag">No</span>
-			</div>
-			<div class="ui green basic inverted button ok">
-				<i class="checkmark icon"></i>
-				<span th:text="#{label.yes}" th:remove="tag">Yes</span>
-			</div>
+		<div class="ui green basic inverted button ok">
+			<i class="checkmark icon"></i>
+			<span th:text="#{label.yes}" th:remove="tag">Yes</span>
 		</div>
 	</div>
+</div>
 
 </html>
