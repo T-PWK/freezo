@@ -1,28 +1,63 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
+	<artifactId>freezo-main</artifactId>
+	<packaging>${packaging.type}</packaging>
+
 	<parent>
 		<groupId>org.freezo</groupId>
 		<artifactId>freezo</artifactId>
 		<version>0.0.2-SNAPSHOT</version>
+		
 	</parent>
-	<artifactId>freezo-main</artifactId>
-	
-	<dependencies>
-		<dependency>
-			<groupId>org.freezo</groupId>
-			<artifactId>freezo-admin</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.freezo</groupId>
-			<artifactId>freezo-website</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
-		</dependency>
 
-	</dependencies>
+	<profiles>
+		<profile>
+			<id>jar</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<packaging.type>jar</packaging.type>
+			</properties>
+		</profile>
+		<profile>
+			<id>war</id>
+			<properties>
+				<packaging.type>war</packaging.type>
+			</properties>
+		</profile>
+		<profile>
+			<id>admin</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.freezo</groupId>
+					<artifactId>freezo-admin</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>website</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.freezo</groupId>
+					<artifactId>freezo-website</artifactId>
+					<version>${project.version}</version>		
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+
 	<build>
-	<finalName>freezo-${project.version}</finalName>
+		<finalName>freezo-${project.version}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -30,4 +65,5 @@
 			</plugin>
 		</plugins>
 	</build>
+
 </project>
