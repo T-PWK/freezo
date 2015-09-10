@@ -29,8 +29,7 @@
 				.when('/admin/themes', { templateUrl: '/admin/partial/themes' })
 				.when('/admin/plugins', { templateUrl: '/admin/partial/plugins' })
 				.otherwise('/dashboard');
-				
-				console.log("helllo ddfd")
+			$httpProvider.defaults.headers.common = { 'X-CSRF-TOKEN': CsrfToken }
 		}])
 		.directive('compareTo', function () {
 			return {
@@ -60,22 +59,25 @@
 				}
 			}
 		}])
-		.factory('User', ['$resource', 'CsrfToken', function ($resource, CsrfToken) {
+		.factory('httpForbiddenInterceptor', function () {
+			return {
+				'responseError': function(rejection) {
+					return null;
+				}
+			};
+		})
+		.factory('User', ['$resource', function ($resource) {
 			return $resource('/api/v1/users/:user_id/:action', { user_id: '@id', action: '@action' },
 				{
-					'delete': { method: 'DELETE', headers: { 'X-CSRF-TOKEN': CsrfToken } },
-					save: { method: 'POST', headers: { 'X-CSRF-TOKEN': CsrfToken } },
-					modify: { method: 'PATCH', headers: { 'X-CSRF-TOKEN': CsrfToken } },
+					modify: { method: 'PATCH' },
 					checkIfAvailable: { method: 'GET', url: '/api/v1/users/available/:username' }
 				});
 		}])
-		.factory('Website', ['$resource', 'CsrfToken', function ($resource, CsrfToken) {
+		.factory('Website', ['$resource', function ($resource) {
 			return $resource('/api/v1/websites/:website_id/:action', { website_id: '@id' }, {
-				save: { method: 'POST', headers: { 'X-CSRF-TOKEN': CsrfToken } },
-				'delete': { method: 'DELETE', headers: { 'X-CSRF-TOKEN': CsrfToken } },
-				disable: { method: 'PATCH', params: { action: 'disable' }, headers: { 'X-CSRF-TOKEN': CsrfToken } },
-				enable: { method: 'PATCH', params: { action: 'enable' }, headers: { 'X-CSRF-TOKEN': CsrfToken } },
-				restore: { method: 'PATCH', params: { action: 'restore' }, headers: { 'X-CSRF-TOKEN': CsrfToken } }
+				disable: { method: 'PATCH', params: { action: 'disable' } },
+				enable: { method: 'PATCH', params: { action: 'enable' } },
+				restore: { method: 'PATCH', params: { action: 'restore' } }
 			});
 		}])
 		.filter('roleName', function () {
@@ -153,9 +155,6 @@
 				}
 			}])
 		.controller('WebsitesCtrl', ['$scope', 'Website', function ($scope, Website) {
-			
-			console.log('infoarm masldfk lkasdjf ')
-			
 			$scope.loading = true;
 			$scope.request = { page: 0 };
 

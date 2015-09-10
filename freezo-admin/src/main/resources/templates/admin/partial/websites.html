@@ -11,75 +11,27 @@
 	<div class="column"></div>
 	<div class="fourteen wide column">
 		<div class="ui basic segment" ng-class="{loading:loading}">
-			<div class="ui two column grid">
-				<div class="column">Showing 1-2 or 2 websites</div>
+			<div class="ui horizontal list">
+				<div class="item" ng-show="websites.totalElements>0">Showing {{websites.number*websites.size+1}}-{{websites.number*websites.size+websites.numberOfElements}} out of {{websites.totalElements}} website(s)</div>
+				<a class="item" ng-class="{disabled:websites.first}" href="" ng-click="pageAt(websites.number)"><i class="icon angle double left"></i>Previous</a>
+				<a class="item" ng-class="{disabled:websites.last}" href="" ng-click="pageAt(websites.number+2)">Next<i class="icon angle double right"></i></a>
 			</div>
 			<div class="ui divider"></div>
 			<div class="ui very relaxed list divided">
 				<div class="item" ng-repeat="website in websites.content">
-					<i class="globe huge disabled icon link" ng-class="{ENABLED:'green',DISABLED:'orange',PENDING_REMOVE:'red'}[website.status]"></i>
+					<i class="globe huge disabled icon" ng-class="{ENABLED:'green',DISABLED:'orange',PENDING_REMOVE:'red'}[website.status]"></i>
 					<div class="content">
-						<div class="header">{{website.name}}</div>
+						<div class="header"><a ng-href="#/admin/websites/{{website.id}}">{{website.name}}</a></div>
 						<div class="description">{{website.description}}</div>
 						<div class="description"></div>
-						
 						<div class="ui list">
-							<div class="item"><span class="ui red label" ng-if="website.status=='PENDING_REMOVE'">Website deletion at {{(website.deleteRequestedAt+604800000)|date:'medium'}}</span></div>
-							<div class="item" ng-if="website.status=='PENDING_REMOVE'"><i class="icon calendar"></i>Website deletion at {{website.deleteRequestedAt+604800000|date:'medium'}}</div>
+							<div class="item"><span class="ui red label" ng-if="website.status=='PENDING_REMOVE'"><i class="icon calendar"></i> Website deletion at {{(website.deleteRequestedAt+604800000)|date:'medium'}}</span></div>
+							<div class="item" ng-if="website.status=='DISABLED'"><span class="ui orange label">Website disabled</span></div>
 							<div class="item" ng-if="website.status=='ENABLED'" ng-repeat="host in website.hosts"><i class="icon globe"></i>{{host}}</div>
-						</div>
-						<div class="ui list">
-							
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-
-
-
-		<div class="ui basic segment" ng-class="{loading:loading}">
-			<table class="ui striped very basic table">
-				<thead>
-					<tr>
-						<th class="five wide">Name</th>
-						<th class="seven wide">Description</th>
-						<th class="four wide">Hosts</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="website in websites.content" ng-class="{error:website.status=='PENDING_REMOVE',warning:website.status=='DISABLED'}"
-					class="top aligned">
-						<td>
-							<div class="ui list">
-								<a class="item" ng-href="#/admin/websites/{{website.id}}">
-									<i class="edit icon"></i>
-									<div class="content">
-										<div class="header">{{website.name}}</div>
-									</div>
-								</a>
-							</div>
-						</td>
-						<td>
-							<p ng-if="website.status=='ENABLED'">{{website.description}}</p>
-							<span class="ui yellow label" ng-if="website.status=='DISABLED'"><i class="icon warning"></i>Website disabled</span>
-							<span class="ui red label" ng-if="website.status=='PENDING_REMOVE'"><i class="icon warning"></i>Website deletion at {{(website.deleteRequestedAt+604800000)|date:'medium'}}</span>
-						</td>
-					</tr>
-				</tbody>
-				<tfoot>
-					<tr>
-						<th colspan="5">
-							<div class="ui three column grid">
-								<div class="column"><a href="" ng-click="prev()" ng-hide="!websites || websites.first"><i class="icon angle double left"></i> Previous</a></div>
-								<div class="column center aligned"><span ng-hide="!websites || loading">Page {{websites.number+1}} of {{websites.totalPages}}</span> <span ng-show="loading"><i class="spinner loading icon"></i>Loading ...</span></div>
-								<div class="column right aligned"><a href="" ng-click="next()" ng-hide="!websites || websites.last">Next <i class="icon angle double right"></i></a></div>
-							</div>
-
-						</th>
-					</tr>
-				</tfoot>
-			</table>
 		</div>
 	</div>
 </div>
