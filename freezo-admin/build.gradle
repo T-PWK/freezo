@@ -12,9 +12,6 @@ buildscript {
 
 apply plugin: 'spring-boot'
 
-bootRun {
-    addResources = true
-}
 bootRepackage.enabled = false
 
 dependencies {
