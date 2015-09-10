@@ -15,9 +15,8 @@ apply plugin: 'spring-boot'
 bootRun {
 	classpath = files(project(":freezo-admin").sourceSets.main.resources.srcDirs) + classpath;
 }
-bootRepackage {
-    mainClassName = 'org.freezo.Application'
-}
+
+mainClassName = 'org.freezo.Application'
 
 dependencies {
     compile project(":freezo-website")

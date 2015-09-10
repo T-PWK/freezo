@@ -1,1 +1,1 @@
-include 'freezo-core', 'freezo-main', 'freezo-website', 'freezo-admin'
+include 'freezo-admin', 'freezo-core', 'freezo-main', 'freezo-website' 
