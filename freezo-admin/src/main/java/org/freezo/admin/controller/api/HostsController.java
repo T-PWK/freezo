@@ -2,8 +2,8 @@ package org.freezo.admin.controller.api;
 
 import java.util.Set;
 
-import org.freezo.core.domain.Host;
-import org.freezo.core.domain.HostsRepository;
+import org.freezo.domain.Host;
+import org.freezo.domain.HostsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;

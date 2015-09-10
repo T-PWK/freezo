@@ -2,8 +2,8 @@ package org.freezo.admin.controller;
 
 import java.util.UUID;
 
-import org.freezo.core.domain.User;
-import org.freezo.core.domain.UserRepository;
+import org.freezo.domain.User;
+import org.freezo.domain.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;

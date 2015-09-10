@@ -1,0 +1,21 @@
+description = 'website'
+
+buildscript {
+	repositories {
+		mavenLocal()
+		mavenCentral()
+	}
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$project.ext.springBootVersion")
+    }
+}
+
+apply plugin: 'spring-boot'
+
+bootRepackage.enabled = false
+
+dependencies {
+    compile project(":freezo-core")
+    compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity3'
+}

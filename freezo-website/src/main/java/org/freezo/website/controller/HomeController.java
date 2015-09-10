@@ -2,8 +2,8 @@ package org.freezo.website.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.freezo.core.domain.PostReporitory;
-import org.freezo.core.domain.Website;
+import org.freezo.domain.PostReporitory;
+import org.freezo.domain.Website;
 import org.freezo.website.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,4 +1,4 @@
-package org.freezo.core.domain;
+package org.freezo.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

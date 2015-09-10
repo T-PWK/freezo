@@ -1,8 +1,8 @@
 package org.freezo.admin.controller.api;
 
-import org.freezo.core.domain.PostReporitory;
-import org.freezo.core.domain.UserRepository;
-import org.freezo.core.domain.WebsiteRepository;
+import org.freezo.domain.PostReporitory;
+import org.freezo.domain.UserRepository;
+import org.freezo.domain.WebsiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.access.annotation.Secured;

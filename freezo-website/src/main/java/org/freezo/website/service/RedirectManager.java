@@ -2,8 +2,8 @@ package org.freezo.website.service;
 
 import java.util.Optional;
 
-import org.freezo.core.domain.Redirect;
-import org.freezo.core.domain.Website;
+import org.freezo.domain.Redirect;
+import org.freezo.domain.Website;
 
 public interface RedirectManager
 {

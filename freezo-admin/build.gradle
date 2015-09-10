@@ -1,0 +1,25 @@
+description = 'admin'
+
+buildscript {
+	repositories {
+		mavenLocal()
+		mavenCentral()
+	}
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$project.ext.springBootVersion")
+    }
+}
+
+apply plugin: 'spring-boot'
+
+bootRun {
+    addResources = true
+}
+bootRepackage.enabled = false
+
+dependencies {
+    compile project(":freezo-core")
+    compile 'org.modelmapper:modelmapper:0.7.4'
+    compile 'org.webjars:Semantic-UI:2.1.2'
+    compile 'org.webjars:jquery:2.1.4'
+}

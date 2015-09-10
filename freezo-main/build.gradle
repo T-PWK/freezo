@@ -1,0 +1,28 @@
+description = 'main'
+
+buildscript {
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		jcenter()
+	}
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$project.ext.springBootVersion")
+        classpath 'org.springframework:springloaded:1.2.0.RELEASE'
+    }
+}
+
+apply plugin: 'spring-boot'
+
+bootRun {
+    addResources = true
+}
+
+bootRepackage {
+    mainClassName = 'org.freezo.Application'
+}
+
+dependencies {
+    compile project(":freezo-website")
+    compile project(":freezo-admin")
+}

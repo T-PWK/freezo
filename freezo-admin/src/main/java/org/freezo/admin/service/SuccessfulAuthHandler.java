@@ -2,9 +2,9 @@ package org.freezo.admin.service;
 
 import java.util.Date;
 
-import org.freezo.core.domain.Account;
-import org.freezo.core.domain.AccountRepository;
-import org.freezo.core.domain.User;
+import org.freezo.domain.Account;
+import org.freezo.domain.AccountRepository;
+import org.freezo.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;

@@ -15,7 +15,7 @@
 	}
 
 	angular.module('tbs', ['ngRoute', 'ngResource', 'ngMessages'])
-		.config(['$routeProvider', function ($routeProvider) {
+		.config(['$routeProvider', '$httpProvider', 'CsrfToken', function ($routeProvider, $httpProvider, CsrfToken) {
 			$routeProvider
 				.when('/dashboard', { templateUrl: '/admin/partial/dashboard' })
 				.when('/user/profile', { templateUrl: '/admin/partial/user-profile' })
@@ -29,6 +29,8 @@
 				.when('/admin/themes', { templateUrl: '/admin/partial/themes' })
 				.when('/admin/plugins', { templateUrl: '/admin/partial/plugins' })
 				.otherwise('/dashboard');
+				
+				console.log("helllo ddfd")
 		}])
 		.directive('compareTo', function () {
 			return {
@@ -151,6 +153,9 @@
 				}
 			}])
 		.controller('WebsitesCtrl', ['$scope', 'Website', function ($scope, Website) {
+			
+			console.log('infoarm masldfk lkasdjf ')
+			
 			$scope.loading = true;
 			$scope.request = { page: 0 };
 

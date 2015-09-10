@@ -1,4 +1,4 @@
-package org.freezo.core.domain;
+package org.freezo.domain;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

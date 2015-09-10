@@ -5,9 +5,9 @@ import java.net.URL;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.freezo.core.domain.Website;
-import org.freezo.core.domain.WebsiteRepository;
-import org.freezo.core.web.ResourceNotFoundException;
+import org.freezo.domain.Website;
+import org.freezo.domain.WebsiteRepository;
+import org.freezo.web.ResourceNotFoundException;
 import org.freezo.website.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
