@@ -11,10 +11,16 @@
 	<div class="column"></div>
 	<div class="fourteen wide column">
 		<div class="ui basic segment" ng-class="{loading:loading}">
-			<div class="ui horizontal list">
-				<div class="item" ng-show="websites.totalElements>0">Showing {{websites.number*websites.size+1}}-{{websites.number*websites.size+websites.numberOfElements}} out of {{websites.totalElements}} website(s)</div>
-				<a class="item" ng-class="{disabled:websites.first}" href="" ng-click="pageAt(websites.number)"><i class="icon angle double left"></i>Previous</a>
-				<a class="item" ng-class="{disabled:websites.last}" href="" ng-click="pageAt(websites.number+2)">Next<i class="icon angle double right"></i></a>
+			
+			<div class="ui two column grid">
+				<div class="column"></div>
+				<div class="column">
+					<div class="ui right floated horizontal list">
+						<div class="item" ng-show="websites.totalElements>0">SHOWING {{websites.number*websites.size+1}}-{{websites.number*websites.size+websites.numberOfElements}} OF {{websites.totalElements}}</div>
+						<a class="item" ng-class="{disabled:websites.first}" href="" ng-click="pageAt(websites.number)"><i class="icon angle double left"></i>Previous</a>
+						<a class="item" ng-class="{disabled:websites.last}" href="" ng-click="pageAt(websites.number+2)">Next<i class="icon angle double right"></i></a>
+					</div>
+				</div>
 			</div>
 			<div class="ui divider"></div>
 			<div class="ui very relaxed list divided">
@@ -25,8 +31,8 @@
 						<div class="description">{{website.description}}</div>
 						<div class="description"></div>
 						<div class="ui list">
-							<div class="item"><span class="ui red label" ng-if="website.status=='PENDING_REMOVE'"><i class="icon calendar"></i> Website deletion at {{(website.deleteRequestedAt+604800000)|date:'medium'}}</span></div>
-							<div class="item" ng-if="website.status=='DISABLED'"><span class="ui orange label">Website disabled</span></div>
+							<div class="item"><span class="ui red basic label" ng-if="website.status=='PENDING_REMOVE'"><i class="icon calendar"></i> Website deletion at {{(website.deleteRequestedAt+604800000)|date:'medium'}}</span></div>
+							<div class="item" ng-if="website.status=='DISABLED'"><span class="ui orange basic label">Website disabled</span></div>
 							<div class="item" ng-if="website.status=='ENABLED'" ng-repeat="host in website.hosts"><i class="icon globe"></i>{{host}}</div>
 						</div>
 					</div>

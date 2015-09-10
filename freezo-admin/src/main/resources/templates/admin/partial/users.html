@@ -63,7 +63,7 @@
 			<div class="ui medium text loader" th:text="#{label.loading}">Loading</div>
 		</div>
 		<div class="ui two column grid">
-			<div class="column" ng-show="details.totalElements>0">Showing {{details.number*details.size+1}}-{{details.number*details.size+details.numberOfElements}} out of {{details.totalElements}} user(s)</div>
+			<div class="column" ng-show="details.totalElements>0" th:text="#{txt.showingNumberOfUsers}">Showing {{details.number*details.size+1}}-{{details.number*details.size+details.numberOfElements}} out of {{details.totalElements}}</div>
 			<div class="column right floated">
 				<div class="ui right floated horizontal list">
 					<a class="item" ng-class="{disabled:details.first}" href="" ng-click="pageAt(details.number)"><i class="icon angle double left"></i>Previous</a>
@@ -214,7 +214,7 @@
 	<div class="ui icon header" ng-switch="action">
 		<span ng-switch-when="disable">
 				<i class="remove icon"></i>
-				<span th:text="#{label.disableAccount.head}" th:remove="tag">Disable User Account</span>
+				<span th:text="#{label.disableAccount.head}" th:remove="tag">Disable User account</span>
 		</span>
 		<span ng-switch-when="enable">
 				<i class="checkmark icon"></i>
@@ -234,21 +234,29 @@
 		</span>
 	</div>
 	<div class="content" ng-switch="action">
-		<p ng-switch-when="disable" th:utext="#{label.disableAccount.msg}">Are you sure?</p>
-		<p ng-switch-when="enable" th:utext="#{label.enableAccount.msg}">Are you sure?</p>
-		<p ng-switch-when="lock" th:utext="#{label.lockAccount.msg}">Are you sure?</p>
-		<p ng-switch-when="unlock" th:utext="#{label.unlockAccount.msg}">Are you sure?</p>
-		<p ng-switch-when="delete" th:utext="#{label.deleteAccount.msg}">Are you sure?</p>
+		<div ng-switch-when="disable" th:utext="#{label.disableAccount.msg}">Are you sure?</div>
+		<div ng-switch-when="enable" th:utext="#{label.enableAccount.msg}">Are you sure?</div>
+		<div ng-switch-when="lock" th:utext="#{label.lockAccount.msg}">Are you sure?</div>
+		<div ng-switch-when="unlock" th:utext="#{label.unlockAccount.msg}">Are you sure?</div>
+		<div ng-switch-when="delete" th:utext="#{label.deleteAccount.msg}">Are you sure?</div>
+		
+		
+		<form class="ui inverted form" novalidate="" ng-class="{loading:loading}" ng-if="action=='delete'">
+			<div class="ui divider hidden"></div>
+			<div class="field">
+				<label>To delete website "{{website.name}}", type your website ID: {{website.id}}</label>
+				<input type="text" name="name" placeholder="Website ID" ng-model="websiteId" />
+			</div>
+		</form>
 	</div>
 	<div class="actions">
-		<div class="ui red basic inverted button cancel">
+		<button class="ui red basic inverted button ok">
+			<i class="checkmark icon"></i>Confirm
+		</button>
+		<button class="ui basic inverted button cancel">
 			<i class="remove icon"></i>
-			<span th:text="#{label.no}" th:remove="tag">No</span>
-		</div>
-		<div class="ui green basic inverted button ok">
-			<i class="checkmark icon"></i>
-			<span th:text="#{label.yes}" th:remove="tag">Yes</span>
-		</div>
+			Cancel
+		</button>
 	</div>
 </div>
 
