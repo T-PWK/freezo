@@ -163,25 +163,49 @@
 					angular.copy(website, $scope.original);
 				}
 			}])
+		.controller('WebsitesTestCtrl', ['$scope', function ($scope) {
+			console.log($scope.$parent)
+		}])
 		.controller('WebsitesCtrl', ['$scope', 'Website', function ($scope, Website) {
 			$scope.loading = true;
-			$scope.request = { page: 0, status: undefined };
+			$scope.page = 0;
+			$scope.status = $scope.sort = $scope.asc = undefined;
 
-			$scope.$watchCollection('request', load);
+			$scope.$watchGroup(['page', 'status', 'sort', 'asc'], load);
 			$scope.reload = load;
-			$scope.filterBy = function(status) {
-				$scope.request.status = status;	
+			$scope.filterBy = function (status) {
+				$scope.status = status;
+				$scope.sort = null;
+				$scope.page = 0;
 			};
-			$scope.filterCls = function(status) {
-				return $scope.request.status == status ? 'active' : null;
+			$scope.sortBy = function (sort) {
+				if ($scope.sort == sort) {
+					$scope.asc = !$scope.asc;
+				} else {
+					$scope.sort = sort;
+					$scope.asc = true;
+				}
+				$scope.page = 0;
+			};
+			$scope.isSortBy = function (sort) {
+				return $scope.sort == sort;
+			};
+			$scope.isFilterBy = function (filter) {
+				return $scope.status == filter;
+			};
+			$scope.filterCls = function (status) {
+				return $scope.status == status ? 'active' : null;
 			};
 
-			$scope.next = function () { $scope.request.page += 1 };
-			$scope.prev = function () { $scope.request.page -= 1; };
-			
-			function load () {
+			$scope.next = function () { $scope.page += 1 };
+			$scope.prev = function () { $scope.page -= 1; };
+
+			function load() {
 				$scope.loading = true;
-				Website.get($scope.request, function (data) {
+				Website.get({
+					sort: $scope.sort ? ($scope.sort + ',' + ($scope.asc ? 'asc' : 'desc')) : null,
+					page: $scope.page > 0 ? $scope.page : null, status: $scope.status
+				}, function (data) {
 					$scope.loading = false;
 					$scope.websites = data;
 				});
@@ -196,7 +220,7 @@
 		.controller('DashboardCtrl', ['$scope', function ($scope) {
 		}])
 		.controller('NewUserCtrl', ['$scope', '$timeout', 'User', function ($scope, $timeout, User) {
-			$('.ui.dropdown').dropdown();
+			$('.ui.dropdown.roles').dropdown();
 			$scope.reset = function (form) {
 				if (form) {
 					form.$setPristine();
@@ -224,13 +248,14 @@
 		.controller('EditUserCtrl', ['$scope', 'User', function ($scope, User) {
 		}])
 		.controller('UsersCtrl', ['$scope', '$timeout', 'User', function ($scope, $timeout, User) {
-			$('.main .dropdown').dropdown();
-
 			$scope.filter = null;
 			$scope.sort = null;
 			$scope.asc = true;
 			$scope.pageNumber = 0;
 
+			$scope.isActive = function(user) {
+				return user.account.enabled && user.account.nonLocked && user.account.nonExpired && user.account.credentialsNonExpired;
+			};
 			$scope.filterBy = function (filter) {
 				$scope.filter = filter;
 				$scope.sort = null;
@@ -256,9 +281,6 @@
 				}, function (details) {
 					$scope.details = details;
 					$scope.users = details.content;
-					$timeout(function () {
-						$('.ui.dropdown').dropdown({ action: 'hide' });
-					});
 				});
 			};
 			$scope.modify = function (action, user) {
@@ -282,13 +304,6 @@
 			};
 			$scope.filterCls = function (filter) {
 				return $scope.isFilterBy(filter) ? 'active' : null;
-			};
-			$scope.pagination = function () {
-				var pages = [], count = ($scope.details && $scope.details.totalPages) || 0;
-				for (var i = 2; i < count + 1; i++) {
-					pages.push(i);
-				}
-				return pages;
 			};
 			$scope.$watchGroup(['filter', 'sort', 'asc', 'pageNumber'], $scope.reload);
 

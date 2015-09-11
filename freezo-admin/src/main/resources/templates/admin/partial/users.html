@@ -62,17 +62,19 @@
 			<div class="column right floated">
 				<div class="ui right floated horizontal list">
 					<a class="item" ng-class="{disabled:details.first}" href="" ng-click="pageAt(details.number)"><i class="icon angle double left"></i>Previous</a>
-					<a class="item" ng-class="{disabled:details.last}" href=""  ng-click="pageAt(details.number+2)">Next<i class="icon angle double right"></i></a>
+					<a class="item" ng-class="{disabled:details.last}" href="" ng-click="pageAt(details.number+2)">Next<i class="icon angle double right"></i></a>
 				</div>
 			</div>
 		</div>
 		<div class="ui divider"></div>
 		<div class="ui very relaxed list divided fz-users">
 			<div class="item" ng-repeat="user in users">
-				<img class="ui tiny bordered circular image" ng-src="{{user.picture || '/images/profile-pic-300px.jpg'}}" />
+				<div class="image">
+					<img class="ui tiny bordered circular image" ng-src="{{user.picture || '/images/profile-pic-300px.jpg'}}" />
+				</div>
 				<div class="content">
-					<div class="header">
-						<div class="text">{{user.firstName}} {{user.lastName}}</div>
+					<div class="ui header" ng-class="{disabled:!isActive(user)}">
+						<div class="text">{{user.firstName}} {{user.lastName}} <i class="warning circle red icon" ng-hide="isActive(user)"></i></div>
 					</div>
 					<div class="description">
 						<div class="ui list">
@@ -80,35 +82,13 @@
 								<i class="user icon"></i>
 								<div class="content">{{user.account.username}}</div>
 							</div>
-							<div class="item" ng-if="user.email">
+							<div class="item" ng-class="{disabled:!user.email}">
 								<i class="mail icon"></i>
-								<div class="content">{{user.email}}</div>
+								<div class="content">{{user.email}} <em ng-if="!user.email">Unspecified</em></div>
 							</div>
-							<div class="item" ng-if="user.website">
-								<i class="linkify icon"></i>
-								<div class="content">
-									<a ng-href="{{user.website}}" target="_blank">{{user.website}}</a>
-								</div>
-							</div>
-							<div class="item" ng-if="user.account.authorities.length">
+							<div class="item" ng-class="{disabled:!user.account.authorities.length}">
 								<i class="users icon"></i>
-								<div class="content">{{(user.account.authorities|roleNames).join(', ')}}</div>
-							</div>
-							<div class="item" ng-if="!user.account.enabled">
-								<i class="red remove icon"></i>
-								<div class="content" th:text="#{label.accountDisabled}">Account disabled</div>
-							</div>
-							<div class="item" ng-if="!user.account.nonLocked">
-								<i class="red lock icon"></i>
-								<div class="content" th:text="#{label.accountLocked}">Account locked</div>
-							</div>
-							<div class="item" ng-if="!user.account.nonExpired">
-								<i class="red calendar icon"></i>
-								<div class="content" th:text="#{label.accountExpired}">Account expired</div>
-							</div>
-							<div class="item" ng-if="!user.account.credentialsNonExpired">
-								<i class="red calendar icon"></i>
-								<div class="content" th:text="#{label.accountCredExpired}">Account credentials expired</div>
+								<div class="content">{{(user.account.authorities|roleNames).join(', ')}} <em ng-if="!user.account.authorities.length">Unspecified</em></div>
 							</div>
 							<div class="item">
 								<div class="ui horizontal bulleted link list">
@@ -130,77 +110,6 @@
 				<div class="header">No user profiles found!</div>
 				<p>There is no user profiles meeting your search or filter criteria.</p>
 			</div>
-		</div>
-	</div>
-</div>
-<div class="ui modal create" ng-controller="NewUserCtrl">
-	<i class="close icon"></i>
-	<div class="header">Create New User</div>
-	<div class="content">
-		<form class="ui form">
-			<h4 class="ui dividing header">Login Information</h4>
-			<div class="two fields">
-				<div class="six field wide">
-					<label>Username</label>
-					<input type="text" name="username" placeholder="Username" ng-model="user.username" />
-				</div>
-				<div class="ten field wide">
-					<label>Password</label>
-					<div class="two fields">
-						<div class="field">
-							<input type="password" name="password" placeholder="Password" ng-model="user.password" />
-						</div>
-						<div class="field">
-							<input type="password" name="passwordConfirm" placeholder="Password Confirmation" ng-model="user.passwordConfirm" />
-						</div>
-					</div>
-				</div>
-			</div>
-			<h4 class="ui dividing header">User Information</h4>
-			<div class="field">
-				<label>Name</label>
-				<div class="two fields">
-					<div class="field">
-						<input type="text" name="firstName" placeholder="First Name" ng-model="user.firstName" />
-					</div>
-					<div class="field">
-						<input type="text" name="lastName" placeholder="Last Name" ng-model="user.lastName" />
-					</div>
-				</div>
-			</div>
-			<div class="field">
-				<label>Email Address</label>
-				<input type="email" name="email" placeholder="Email Address" ng-model="user.email" />
-			</div>
-			<div class="field">
-				<label>Location</label>
-				<input type="text" name="location" placeholder="Location" ng-model="user.location" />
-			</div>
-			<div class="field">
-				<label>Website</label>
-				<input type="url" name="website" placeholder="Website" ng-model="user.website" />
-			</div>
-			<div class="field">
-				<label>Bio</label>
-				<textarea rows="3" ng-model="user.bio"></textarea>
-			</div>
-			<h4 class="ui dividing header">Roles Information</h4>
-			<div class="field">
-				<label>Roles</label>
-				<select multiple="" class="ui dropdown">
-					<option value="">Select Roles</option>
-					<option value="ROLE_ADMIN">Administrator</option>
-					<option value="ROLE_API">API Consumer</option>
-					<option value="ROLE_USER">User</option>
-				</select>
-			</div>
-		</form>
-	</div>
-	<div class="actions">
-		<div class="ui buttons">
-			<button class="ui negative button" ng-click="cancel()">Cancel</button>
-			<div class="or"></div>
-			<button class="ui positive button" ng-click="save()">Save</button>
 		</div>
 	</div>
 </div>
@@ -233,8 +142,8 @@
 		<div ng-switch-when="lock" th:utext="#{label.lockAccount.msg}">Are you sure?</div>
 		<div ng-switch-when="unlock" th:utext="#{label.unlockAccount.msg}">Are you sure?</div>
 		<div ng-switch-when="delete" th:utext="#{label.deleteAccount.msg}">Are you sure?</div>
-		
-		
+
+
 		<form class="ui inverted form" novalidate="" ng-class="{loading:loading}" ng-if="action=='delete'">
 			<div class="ui divider hidden"></div>
 			<div class="field">
@@ -248,8 +157,7 @@
 			<i class="checkmark icon"></i>Confirm
 		</button>
 		<button class="ui basic inverted button cancel">
-			<i class="remove icon"></i>
-			Cancel
+			<i class="remove icon"></i> Cancel
 		</button>
 	</div>
 </div>
