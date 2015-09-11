@@ -1,5 +1,7 @@
 package org.freezo.admin.web.api;
 
+import static org.freezo.admin.web.ControllerUtil.updatePageable;
+
 import java.util.Date;
 
 import javax.validation.Valid;
@@ -15,9 +17,11 @@ import org.freezo.web.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -44,6 +48,9 @@ public class WebsitesController
 	@Autowired
 	private ModelMapper mapper;
 
+	@Value("${freezo.admin.domain.website.items-per-page:20}")
+	private int itemsPerPage;
+
 	/**
 	 * Registers customer converters for incoming data
 	 *
@@ -59,19 +66,23 @@ public class WebsitesController
 	@Transactional(readOnly = true)
 	public Page<Website> websites(final Pageable pageable) throws InterruptedException
 	{
-		LOG.debug("Websites listing: {}", pageable);
+		final Pageable pageInfo = updatePageable(pageable, itemsPerPage);
 
-		return repository.findAll(pageable);
+		LOG.debug("Websites listing: {}", pageInfo);
+
+		return repository.findAll(pageInfo);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, params = "status")
 	@Transactional(readOnly = true)
 	public Page<Website> websitesByStatus(@RequestParam("status") final Website.Status status,
-			final Pageable pageable) throws InterruptedException
+			@PageableDefault(size = 10) final Pageable pageable) throws InterruptedException
 	{
-		LOG.debug("Websites listing filtered by status: {}, {} ", status, pageable);
+		final Pageable pageInfo = updatePageable(pageable, itemsPerPage);
 
-		return repository.findByStatus(status, pageable);
+		LOG.debug("Websites listing filtered by status: {}, {} ", status, pageInfo);
+
+		return repository.findByStatus(status, pageInfo);
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)

@@ -1,5 +1,7 @@
 package org.freezo.admin.web.api;
 
+import static org.freezo.admin.web.ControllerUtil.updatePageable;
+
 import javax.validation.Valid;
 
 import org.freezo.admin.bind.CaseInsentiveEnumEditor;
@@ -13,10 +15,10 @@ import org.freezo.web.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
@@ -44,11 +46,11 @@ import org.springframework.web.bind.annotation.RestController;
  * <li>{@code filter}: <strong>nonexpired</strong> - fetch non-expired users</li>
  * </ul>
  * </li>
- * <li>{@code GET /api/v1/users/{user_id}} - finds a user by an identifier</li>
- * <li>{@code GET /api/v1/users/available/{username}} - checks if the given username is available (200 Available, 404 Not
- * available)</li>
+ * <li>{@code GET /api/v1/users/ user_id}} - finds a user by an identifier</li>
+ * <li>{@code GET /api/v1/users/available/ username}} - checks if the given username is available (200 Available, 404
+ * Not available)</li>
  * <li>{@code POST /api/v1/users} - creates user</li>
- * <li>{@code PATCH /api/v1/users/{user_id}/{action}} - updates user</li>
+ * <li>{@code PATCH /api/v1/users/ user_id}/{action}} - updates user</li>
  * </ul>
  *
  * @author tomasz.pawlak
@@ -70,6 +72,9 @@ public class UsersController
 
 	@Autowired
 	private PasswordEncoder encoder;
+
+	@Value("${freezo.admin.domain.user.items-per-page:20}")
+	private int itemsPerPage;
 
 	/**
 	 * Registers customer converters for incoming data
@@ -95,9 +100,11 @@ public class UsersController
 
 	@RequestMapping(method = RequestMethod.GET)
 	@Transactional(readOnly = true)
-	public Page<User> searchUsersByType(@PageableDefault(size = 10) final Pageable pageable,
+	public Page<User> searchUsersByType(final Pageable pageInfo,
 			@RequestParam(value = "filter", required = false, defaultValue = "ALL") final UserFilterByType type)
 	{
+		final Pageable pageable = updatePageable(pageInfo, itemsPerPage);
+
 		switch (type)
 		{
 		case ENABLED:
