@@ -1,6 +1,6 @@
 package org.freezo.admin.web.api;
 
-import static org.freezo.admin.web.ControllerUtil.updatePageable;
+import static org.freezo.admin.web.WebUtil.updatePageable;
 
 import javax.validation.Valid;
 
