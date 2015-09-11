@@ -3,9 +3,9 @@ package org.freezo.admin.web;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-public final class ControllerUtil
+public final class WebUtil
 {
-	private ControllerUtil()
+	private WebUtil()
 	{
 	}
 
