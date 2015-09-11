@@ -1,0 +1,18 @@
+freezo:
+  admin:
+    urls:
+      app: /admin
+      api: /api/v1
+    domain:
+      website: 
+        items-per-page: 5
+      user: 
+        items-per-page: 5
+  security:
+    authentiation:
+      account:
+        maxBadCredentials: 5
+        updateOnSuccess: true
+        updateOnFailure: true
+      password:
+        strength: 10        
