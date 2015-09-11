@@ -1,4 +1,4 @@
-package org.freezo.admin.controller.api;
+package org.freezo.admin.web.api;
 
 import org.freezo.domain.PostReporitory;
 import org.freezo.domain.UserRepository;

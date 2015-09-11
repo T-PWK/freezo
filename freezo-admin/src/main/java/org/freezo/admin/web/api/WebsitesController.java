@@ -1,15 +1,16 @@
-package org.freezo.admin.controller.api;
+package org.freezo.admin.web.api;
 
 import java.util.Date;
 
 import javax.validation.Valid;
 
-import org.freezo.admin.controller.ResourceConflictException;
+import org.freezo.admin.bind.CaseInsentiveEnumEditor;
 import org.freezo.admin.domain.WebsiteForm;
 import org.freezo.admin.service.ModelMapper;
+import org.freezo.admin.web.ResourceConflictException;
 import org.freezo.domain.Website;
-import org.freezo.domain.WebsiteRepository;
 import org.freezo.domain.Website.Status;
+import org.freezo.domain.WebsiteRepository;
 import org.freezo.web.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +21,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Profile("admin")
@@ -40,6 +44,17 @@ public class WebsitesController
 	@Autowired
 	private ModelMapper mapper;
 
+	/**
+	 * Registers customer converters for incoming data
+	 *
+	 * @param binder web data binder
+	 */
+	@InitBinder
+	public void init(final WebDataBinder binder)
+	{
+		binder.registerCustomEditor(Website.Status.class, new CaseInsentiveEnumEditor<>(Website.Status.class));
+	}
+
 	@RequestMapping(method = RequestMethod.GET)
 	@Transactional(readOnly = true)
 	public Page<Website> websites(final Pageable pageable) throws InterruptedException
@@ -47,6 +62,16 @@ public class WebsitesController
 		LOG.debug("Websites listing: {}", pageable);
 
 		return repository.findAll(pageable);
+	}
+
+	@RequestMapping(method = RequestMethod.GET, params = "status")
+	@Transactional(readOnly = true)
+	public Page<Website> websitesByStatus(@RequestParam("status") final Website.Status status,
+			final Pageable pageable) throws InterruptedException
+	{
+		LOG.debug("Websites listing filtered by status: {}, {} ", status, pageable);
+
+		return repository.findByStatus(status, pageable);
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)

@@ -1,4 +1,4 @@
-package org.freezo.admin.controller.api;
+package org.freezo.admin.web.api;
 
 import java.util.Set;
 

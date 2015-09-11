@@ -1,4 +1,4 @@
-package org.freezo.admin.controller;
+package org.freezo.admin.web;
 
 import java.util.UUID;
 
