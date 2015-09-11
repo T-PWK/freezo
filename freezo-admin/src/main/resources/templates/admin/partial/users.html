@@ -10,11 +10,6 @@
 <div class="ui stackable grid">
 	<div class="six wide tablet four wide computer column">
 		<div class="ui vertical menu">
-			<div class="item">
-				<div class="ui input">
-					<input type="text" placeholder="Filter users..." />
-				</div>
-			</div>
 			<a class="item" ng-click="reload()"><span th:text="#{label.refresh.users}" th:remove="tag" /><i class="icon refresh"></i></a>
 			<a class="item" href="#/admin/users/new"><span th:text="#{label.newUser}" th:remove="tag" /><i class="icon add"></i></a>
 			<div class="item">
@@ -120,7 +115,6 @@
 									<a class="item" href="#/admin/users/{{user.id}}"><i class="edit icon"></i><span th:text="#{label.edit}" th:remove="tag"/></a>
 									<a class="item" ng-click="modify('disable', user)" ng-if="user.account.enabled"><i class="remove icon"></i><span th:text="#{label.disable}" th:remove="tag"/></a>
 									<a class="item" ng-click="modify('enable', user)" ng-if="!user.account.enabled"><i class="checkmark icon"></i><span th:text="#{label.enable}" th:remove="tag"/></a>
-									<a class="item" ng-click="modify('lock', user)" ng-if="user.account.nonLocked"><i class="lock icon"></i><span th:text="#{label.lock}" th:remove="tag"/></a>
 									<a class="item" ng-click="modify('unlock', user)" ng-if="!user.account.nonLocked"><i class="unlock icon"></i><span th:text="#{label.unlock}" th:remove="tag"/></a>
 									<a class="item" ng-click="delete(user)"><i class="remove red icon"></i><span th:text="#{label.delete}" th:remove="tag"/></a>
 								</div>

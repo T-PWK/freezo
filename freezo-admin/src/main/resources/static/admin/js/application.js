@@ -30,6 +30,12 @@
 				.when('/admin/plugins', { templateUrl: '/admin/partial/plugins' })
 				.otherwise('/dashboard');
 			$httpProvider.defaults.headers.common = { 'X-CSRF-TOKEN': CsrfToken }
+			$httpProvider.interceptors.push('httpForbiddenInterceptor');
+		}])
+		.run(['$rootScope', '$window', function ($scope, $window) {
+			$scope.$on('auth:required', function () {
+				$window.location.reload();
+			});
 		}])
 		.directive('compareTo', function () {
 			return {
@@ -59,13 +65,16 @@
 				}
 			}
 		}])
-		.factory('httpForbiddenInterceptor', function () {
+		.factory('httpForbiddenInterceptor', ['$q', '$rootScope', function ($q, $scope) {
 			return {
-				'responseError': function(rejection) {
-					return null;
+				'responseError': function (rejection) {
+					if (rejection.status == 403) {
+						$scope.$emit('auth:required');
+					}
+					return $q.reject(rejection);
 				}
 			};
-		})
+		}])
 		.factory('User', ['$resource', function ($resource) {
 			return $resource('/api/v1/users/:user_id/:action', { user_id: '@id', action: '@action' },
 				{
@@ -156,18 +165,27 @@
 			}])
 		.controller('WebsitesCtrl', ['$scope', 'Website', function ($scope, Website) {
 			$scope.loading = true;
-			$scope.request = { page: 0 };
+			$scope.request = { page: 0, status: undefined };
 
-			$scope.$watch('request.page', function () {
+			$scope.$watchCollection('request', load);
+			$scope.reload = load;
+			$scope.filterBy = function(status) {
+				$scope.request.status = status;	
+			};
+			$scope.filterCls = function(status) {
+				return $scope.request.status == status ? 'active' : null;
+			};
+
+			$scope.next = function () { $scope.request.page += 1 };
+			$scope.prev = function () { $scope.request.page -= 1; };
+			
+			function load () {
 				$scope.loading = true;
 				Website.get($scope.request, function (data) {
 					$scope.loading = false;
 					$scope.websites = data;
-				})
-			})
-
-			$scope.next = function () { $scope.request.page += 1 };
-			$scope.prev = function () { $scope.request.page -= 1; };
+				});
+			}
 		}])
 		.controller('AdminCtrl', ['$scope', '$http', function ($scope, $http) {
 			$scope.stats = {};
@@ -264,7 +282,7 @@
 			};
 			$scope.filterCls = function (filter) {
 				return $scope.isFilterBy(filter) ? 'active' : null;
-			}
+			};
 			$scope.pagination = function () {
 				var pages = [], count = ($scope.details && $scope.details.totalPages) || 0;
 				for (var i = 2; i < count + 1; i++) {
